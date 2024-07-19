@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.exceptions import ValidationError
 from .managers import CustomUserManager
+from .data import role_choises
 
 
 class User(AbstractUser):
@@ -26,12 +27,12 @@ class UserProfile(models.Model):
         ('Other', 'Other'),
         ('Prefer not to say', 'Prefer not to say'),
     ]
-    birthdate = models.DateField(null=True, blank=True)
-    gender = models.CharField(max_length=20, choices=GENDER_CHOICES)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    gender = models.CharField(max_length=20, choices=GENDER_CHOICES, null=True, blank=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_profile')
     birth_date = models.DateField(null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
     roles = models.ManyToManyField('Role', related_name='user_profiles')
+    goal = models.ManyToManyField('Goal', related_name='user_profiles')
     profile_picture = models.ImageField(upload_to='profile_picture/', blank=True, null=True)
 
     def __str__(self):
@@ -45,50 +46,18 @@ class UserProfile(models.Model):
         return True
 
 
-ROLE_GROUPS = {
-    'Family': [
-        ('Father', 'Father'),
-        ('Mother', 'Mother'),
-        ('Husband', 'Husband'),
-        ('Wife', 'Wife'),
-        ('Son', 'Son'),
-        ('Daughter', 'Daughter'),
-        ('Brother', 'Brother'),
-        ('Sister', 'Sister'),
-        ('Partner', 'Partner')
-    ],
-    'Professional': [
-        ('Colleague', 'Colleague'),
-        ('Mentor', 'Mentor'),
-        ('Mentee', 'Mentee'),
-        ('Leader', 'Leader'),
-        ('Planner', 'Planner'),
-        ('Collaborator', 'Collaborator'),
-        ('Communicator', 'Communicator'),
-        ('Learner', 'Learner'),
-    ],
-    'Other': [
-        ('Friend', 'Friend'),
-        ('Other', 'Other'),
-    ]
-}
-
-
-ROLE_CHOICES = [(role, name) for group in ROLE_GROUPS.values() for role, name in group]
-
-
 class Role(models.Model):
-    role_name = models.CharField(max_length=50, choices=ROLE_CHOICES)
-    role_group = models.CharField(max_length=50, choices=[(group, group) for group in ROLE_GROUPS.keys()])
+    role_name = models.CharField(max_length=50)
+    role_group = models.CharField(max_length=50)
     custom_role_name = models.CharField(max_length=25, blank=True, null=True)
     is_custom = models.BooleanField(default=False)
 
     def clean(self):
         # Validation to ensure custom_role_name does not match any predefined role_name
         if self.custom_role_name:
-            predefined_role_names = [choice[0] for choice in ROLE_CHOICES]
+            predefined_role_names = [choice[0] for choice in role_choises.ROLE_CHOICES]
             if self.custom_role_name in predefined_role_names:
-                raise ValidationError({'custom_role_name': 'This role already exists as a predefined role.'})
+                raise ValidationError({'custom_role_name': 'This role already exists in our data.'})
 
     def save(self, *args, **kwargs):
         self.clean()
@@ -96,3 +65,20 @@ class Role(models.Model):
 
     def __str__(self):
         return self.custom_role_name if self.is_custom else self.role_name
+
+
+class Goal(models.Model):
+    PERSONAL = 'Personal'
+    PROFESSIONAL = 'Professional'
+
+    GOAL_TYPES = [
+        (PERSONAL, 'Personal'),
+        (PROFESSIONAL, 'Professional'),
+    ]
+
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    goal_type = models.CharField(max_length=20, choices=GOAL_TYPES)
+
+    def __str__(self):
+        return f'{self.title} ({self.goal_type})'
