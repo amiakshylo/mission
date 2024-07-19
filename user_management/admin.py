@@ -10,5 +10,5 @@ class UserAdmin(admin.ModelAdmin):
 @admin.register(models.UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ['user']
-    filter_horizontal = ['roles']
+    filter_horizontal = ['role']
 

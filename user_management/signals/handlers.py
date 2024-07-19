@@ -10,9 +10,9 @@ def create_customer_for_new_user(sender, **kwargs):
         UserProfile.objects.create(user=kwargs['instance'])
 
 
-@receiver(post_migrate)
-def add_predefined_roles(sender, **kwargs):
-    if sender.name == 'user_management':
-        for group, roles in Role.ROLE_GROUPS.items():
-            for role_name, role_display in roles:
-                Role.objects.get_or_create(role_name=role_name, role_group=group)
+# @receiver(post_migrate)
+# def add_predefined_roles(sender, **kwargs):
+#     if sender.name == 'user_management':
+#         for group, roles in Role.ROLE_GROUPS.items():
+#             for role_name, role_display in roles:
+#                 Role.objects.get_or_create(role_name=role_name, role_group=group)
