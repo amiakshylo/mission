@@ -5,7 +5,7 @@ from core.models import TimeStampedModel, ProgressModel, CompletedModel
 
 class MainCategory(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return self.name
@@ -13,8 +13,8 @@ class MainCategory(models.Model):
 
 class SubCategory(TimeStampedModel):
     name = models.CharField(max_length=255, unique=True, blank=False)
-    description = models.TextField()
-    main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE)
+    description = models.TextField(blank=True)
+    main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE, related_name='subcategory')
 
     def __str__(self):
         return self.name
