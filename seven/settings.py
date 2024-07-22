@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 
 
@@ -28,11 +29,36 @@ INSTALLED_APPS = [
     'django_extensions',
     'debug_toolbar',
     'rest_framework',
+    'rest_framework_simplejwt',
     'djoser',
-    'user_management',
     'category',
     'goal_task_habit',
+    'user_management.apps.UserManagementConfig',
 ]
+
+REST_FRAMEWORK = {
+    "COERCE_DECIMAL_TO_STRING": False,
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+}
+
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ("JWT",),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
+}
+
+DJOSER = {
+    'SERIALIZERS': {
+        'user_create': 'user_management.serializers.UserCreateSerializer',
+        'user': 'user_management.serializers.UserSerializer',
+        'current_user': 'user_management.serializers.UserSerializer'
+    },
+    'USER_ID_FIELD': 'email',
+}
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
