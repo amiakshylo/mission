@@ -1,8 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.core.exceptions import ValidationError
 from .managers import CustomUserManager
-from .data import role_choises
+from core.models import TimeStampedModel
 
 
 class User(AbstractUser):
@@ -13,6 +12,11 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+    def save(self, *args, **kwargs):
+        if not self.username:
+            self.username = self.email
+        super().save(*args, **kwargs)
 
     def get_full_name_or_email(self):
         if self.first_name and self.last_name:
@@ -140,7 +144,7 @@ class UserOnboardingStatus(models.Model):
         return f'Onboarding Status for {self.user.email}'
 
 
-class UserSatisfaction(models.Model):
+class UserSatisfaction(TimeStampedModel):
     CATEGORY_CHOICES = [
         ('health', 'Health'),
         ('finance', 'Finance'),
@@ -152,8 +156,6 @@ class UserSatisfaction(models.Model):
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='satisfaction_scores')
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
     score = models.PositiveIntegerField(default=5)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ('user_profile', 'category')
