@@ -10,48 +10,50 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('category', '0001_initial'),
+        ('category', '0002_initial'),
+        ('goal_task_habit', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='maincategorycompletion',
+            model_name='goal',
             name='user',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='subcategory',
-            name='main_category',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='subcategory', to='category.maincategory'),
-        ),
-        migrations.AddField(
-            model_name='subcategorycompletion',
+            model_name='habit',
             name='sub_category',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='category.subcategory'),
         ),
         migrations.AddField(
-            model_name='subcategorycompletion',
+            model_name='habit',
             name='user',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='usercategoryprogress',
-            name='category',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='category.maincategory'),
-        ),
-        migrations.AddField(
-            model_name='usercategoryprogress',
-            name='sub_category',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='category.subcategory'),
-        ),
-        migrations.AddField(
-            model_name='usercategoryprogress',
+            model_name='subtask',
             name='user',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
-        migrations.AlterUniqueTogether(
-            name='usercategoryprogress',
-            unique_together={('user', 'category')},
+        migrations.AddField(
+            model_name='task',
+            name='goal',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='goal_task_habit.goal'),
+        ),
+        migrations.AddField(
+            model_name='task',
+            name='habit',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='goal_task_habit.habit'),
+        ),
+        migrations.AddField(
+            model_name='task',
+            name='user',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='subtask',
+            name='task',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='goal_task_habit.task'),
         ),
     ]

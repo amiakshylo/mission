@@ -60,30 +60,26 @@ class PredefinedRole(models.Model):
     A model representing predefined roles that users can choose from.
     """
     title = models.CharField(max_length=50, unique=True)
-    group = models.CharField(max_length=50)
+    description = models.TextField(blank=True, null=True)
+    group = models.CharField(max_length=50, choices=[('Family', 'Family'), ('Professional', 'Professional'), ('Personal', 'Personal')])
+    goal = models.ManyToManyField('PredefinedGoal', related_name='roles')
 
     def __str__(self):
         return self.title
+
 
 
 class PredefinedGoal(models.Model):
     """
     A model representing predefined goals that users can choose from.
     """
-    PERSONAL = 'Personal'
-    PROFESSIONAL = 'Professional'
-
-    GOAL_TYPES = [
-        (PERSONAL, 'Personal'),
-        (PROFESSIONAL, 'Professional'),
-    ]
-
-    title = models.CharField(max_length=255, unique=True)
+    title = models.CharField(max_length=50, unique=True)
     description = models.TextField(blank=True, null=True)
-    goal_type = models.CharField(max_length=20, choices=GOAL_TYPES)
+    type = models.CharField(max_length=50,choices=[('Personal', 'Personal'), ('Professional', 'Professional')])
+    role = models.ManyToManyField('PredefinedRole', related_name='goals')
 
     def __str__(self):
-        return f'{self.title} ({self.goal_type})'
+        return f'{self.title} ({self.type})'
 
 
 class UserRole(models.Model):
@@ -96,6 +92,7 @@ class UserRole(models.Model):
     custom_title = models.CharField(max_length=50, blank=True, null=True)
     custom_group = models.CharField(max_length=50, blank=True, null=True)
     is_custom = models.BooleanField(default=False)
+
 
     def __str__(self):
         if self.is_custom:
@@ -113,6 +110,7 @@ class UserGoal(models.Model):
     custom_title = models.CharField(max_length=255, blank=True, null=True)
     custom_description = models.TextField(blank=True, null=True)
     is_initial = models.BooleanField(default=False)
+    is_custom = models.BooleanField(default=False)
 
     def __str__(self):
         if self.predefined_goal:

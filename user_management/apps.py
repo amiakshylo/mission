@@ -7,3 +7,4 @@ class UserManagementConfig(AppConfig):
 
     def ready(self):
         import user_management.serializers
+        import user_management.signals.handlers

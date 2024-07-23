@@ -1,0 +1,2099 @@
+[
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 1,
+        "fields": {
+            "title": "quality_time",
+            "description": "Spend Quality Time with Children",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 2,
+        "fields": {
+            "title": "life_skills",
+            "description": "Teach Life Skills",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 3,
+        "fields": {
+            "title": "support_education",
+            "description": "Support Education",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 4,
+        "fields": {
+            "title": "healthy_habits",
+            "description": "Foster Healthy Habits",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 5,
+        "fields": {
+            "title": "family_traditions",
+            "description": "Create Family Traditions",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 6,
+        "fields": {
+            "title": "emotional_wellbeing",
+            "description": "Nurture Emotional Well-being",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 7,
+        "fields": {
+            "title": "read_together",
+            "description": "Read Together",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 8,
+        "fields": {
+            "title": "outdoor_activities",
+            "description": "Plan Regular Outdoor Activities",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 9,
+        "fields": {
+            "title": "encourage_creativity",
+            "description": "Encourage Creativity",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 10,
+        "fields": {
+            "title": "teach_responsibility",
+            "description": "Teach Responsibility",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 11,
+        "fields": {
+            "title": "support_goals",
+            "description": "Support Partner’s Goals",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 12,
+        "fields": {
+            "title": "communicate_effectively",
+            "description": "Communicate Effectively",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 13,
+        "fields": {
+            "title": "share_responsibilities",
+            "description": "Share Responsibilities",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 14,
+        "fields": {
+            "title": "plan_date_nights",
+            "description": "Plan Date Nights",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 15,
+        "fields": {
+            "title": "show_appreciation",
+            "description": "Show Appreciation",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 16,
+        "fields": {
+            "title": "conflict_resolution",
+            "description": "Work on Conflict Resolution",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 17,
+        "fields": {
+            "title": "shared_dreams",
+            "description": "Build Shared Dreams",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 18,
+        "fields": {
+            "title": "emotional_support",
+            "description": "Support Emotional Well-being",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 19,
+        "fields": {
+            "title": "personal_growth",
+            "description": "Encourage Personal Growth",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 20,
+        "fields": {
+            "title": "respect_parents",
+            "description": "Respect and Help Parents",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 21,
+        "fields": {
+            "title": "focus_education",
+            "description": "Focus on Education",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 22,
+        "fields": {
+            "title": "develop_life_skills",
+            "description": "Develop Life Skills",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 23,
+        "fields": {
+            "title": "quality_family_time",
+            "description": "Spend Quality Time with Family",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 24,
+        "fields": {
+            "title": "stay_active",
+            "description": "Stay Physically Active",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 25,
+        "fields": {
+            "title": "personal_goals",
+            "description": "Set Personal Goals",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 26,
+        "fields": {
+            "title": "family_activities",
+            "description": "Participate in Family Activities",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 27,
+        "fields": {
+            "title": "show_gratitude",
+            "description": "Show Gratitude",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 28,
+        "fields": {
+            "title": "financial_literacy",
+            "description": "Learn Financial Literacy",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 29,
+        "fields": {
+            "title": "support_siblings",
+            "description": "Support Siblings",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 30,
+        "fields": {
+            "title": "respect_understanding",
+            "description": "Show Respect and Understanding",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 31,
+        "fields": {
+            "title": "encourage_goals",
+            "description": "Encourage Sibling’s Goals",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 32,
+        "fields": {
+            "title": "develop_communication",
+            "description": "Develop Communication Skills",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 33,
+        "fields": {
+            "title": "team_activities",
+            "description": "Participate in Team Activities",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 34,
+        "fields": {
+            "title": "celebrate_achievements",
+            "description": "Celebrate Achievements Together",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 35,
+        "fields": {
+            "title": "collaborate_projects",
+            "description": "Collaborate on Projects",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 36,
+        "fields": {
+            "title": "share_knowledge",
+            "description": "Share Knowledge",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 37,
+        "fields": {
+            "title": "constructive_feedback",
+            "description": "Provide Constructive Feedback",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 38,
+        "fields": {
+            "title": "enhance_communication",
+            "description": "Enhance Communication Skills",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 39,
+        "fields": {
+            "title": "professional_development",
+            "description": "Participate in Professional Development",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 40,
+        "fields": {
+            "title": "support_team_goals",
+            "description": "Support Team Goals",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 41,
+        "fields": {
+            "title": "positive_relationships",
+            "description": "Build Positive Relationships",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 42,
+        "fields": {
+            "title": "problem_solving",
+            "description": "Engage in Problem-Solving",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 43,
+        "fields": {
+            "title": "respect_diversity",
+            "description": "Respect Diversity",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 44,
+        "fields": {
+            "title": "celebrate_success",
+            "description": "Celebrate Team Successes",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 45,
+        "fields": {
+            "title": "career_development",
+            "description": "Guide Career Development",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 46,
+        "fields": {
+            "title": "regular_checkins",
+            "description": "Offer Regular Check-ins",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 47,
+        "fields": {
+            "title": "networking",
+            "description": "Facilitate Networking",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 48,
+        "fields": {
+            "title": "share_experiences",
+            "description": "Share Personal Experiences",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 49,
+        "fields": {
+            "title": "lifelong_learning",
+            "description": "Encourage Lifelong Learning",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 50,
+        "fields": {
+            "title": "goal_setting",
+            "description": "Support Goal Setting",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 51,
+        "fields": {
+            "title": "work_life_balance",
+            "description": "Promote Work-Life Balance",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 52,
+        "fields": {
+            "title": "role_model",
+            "description": "Act as a Role Model",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 53,
+        "fields": {
+            "title": "recognize_achievements",
+            "description": "Recognize Achievements",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 54,
+        "fields": {
+            "title": "seek_feedback",
+            "description": "Seek Feedback Regularly",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 55,
+        "fields": {
+            "title": "set_goals",
+            "description": "Set Clear Goals",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 56,
+        "fields": {
+            "title": "engage_learning",
+            "description": "Engage in Learning Opportunities",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 57,
+        "fields": {
+            "title": "implement_feedback",
+            "description": "Implement Feedback",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 58,
+        "fields": {
+            "title": "reflect_progress",
+            "description": "Reflect on Progress",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 59,
+        "fields": {
+            "title": "take_initiative",
+            "description": "Take Initiative",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 60,
+        "fields": {
+            "title": "develop_soft_skills",
+            "description": "Develop Soft Skills",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 61,
+        "fields": {
+            "title": "stay_updated",
+            "description": "Stay Updated with Industry Trends",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 62,
+        "fields": {
+            "title": "maintain_balance",
+            "description": "Maintain Work-Life Balance",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 63,
+        "fields": {
+            "title": "develop_team_skills",
+            "description": "Develop Team Skills",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 64,
+        "fields": {
+            "title": "set_clear_goals",
+            "description": "Set Clear Goals",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 65,
+        "fields": {
+            "title": "positive_environment",
+            "description": "Foster a Positive Work Environment",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 66,
+        "fields": {
+            "title": "lead_by_example",
+            "description": "Lead by Example",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 67,
+        "fields": {
+            "title": "encourage_innovation",
+            "description": "Encourage Innovation",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 68,
+        "fields": {
+            "title": "effective_communication",
+            "description": "Communicate Effectively",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 69,
+        "fields": {
+            "title": "resolve_conflicts",
+            "description": "Resolve Conflicts",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 70,
+        "fields": {
+            "title": "recognize_reward",
+            "description": "Recognize and Reward",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 71,
+        "fields": {
+            "title": "delegate_responsibilities",
+            "description": "Delegate Responsibilities",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 72,
+        "fields": {
+            "title": "provide_development",
+            "description": "Provide Professional Development",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 73,
+        "fields": {
+            "title": "set_strategic_goals",
+            "description": "Set Strategic Goals",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 74,
+        "fields": {
+            "title": "develop_action_plans",
+            "description": "Develop Action Plans",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 75,
+        "fields": {
+            "title": "monitor_progress",
+            "description": "Monitor Progress",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 38,
+        "fields": {
+            "title": "enhance_communication",
+            "description": "Enhance Communication Skills",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 39,
+        "fields": {
+            "title": "professional_development",
+            "description": "Participate in Professional Development",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 40,
+        "fields": {
+            "title": "support_team_goals",
+            "description": "Support Team Goals",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 41,
+        "fields": {
+            "title": "positive_relationships",
+            "description": "Build Positive Relationships",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 42,
+        "fields": {
+            "title": "problem_solving",
+            "description": "Engage in Problem-Solving",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 43,
+        "fields": {
+            "title": "respect_diversity",
+            "description": "Respect Diversity",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 44,
+        "fields": {
+            "title": "celebrate_success",
+            "description": "Celebrate Team Successes",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 45,
+        "fields": {
+            "title": "career_development",
+            "description": "Guide Career Development",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 46,
+        "fields": {
+            "title": "regular_checkins",
+            "description": "Offer Regular Check-ins",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 47,
+        "fields": {
+            "title": "networking",
+            "description": "Facilitate Networking",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 48,
+        "fields": {
+            "title": "share_experiences",
+            "description": "Share Personal Experiences",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 49,
+        "fields": {
+            "title": "lifelong_learning",
+            "description": "Encourage Lifelong Learning",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 50,
+        "fields": {
+            "title": "goal_setting",
+            "description": "Support Goal Setting",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 51,
+        "fields": {
+            "title": "work_life_balance",
+            "description": "Promote Work-Life Balance",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 52,
+        "fields": {
+            "title": "role_model",
+            "description": "Act as a Role Model",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 53,
+        "fields": {
+            "title": "recognize_achievements",
+            "description": "Recognize Achievements",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 54,
+        "fields": {
+            "title": "seek_feedback",
+            "description": "Seek Feedback Regularly",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 55,
+        "fields": {
+            "title": "set_goals",
+            "description": "Set Clear Goals",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 56,
+        "fields": {
+            "title": "engage_learning",
+            "description": "Engage in Learning Opportunities",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 57,
+        "fields": {
+            "title": "implement_feedback",
+            "description": "Implement Feedback",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 58,
+        "fields": {
+            "title": "reflect_progress",
+            "description": "Reflect on Progress",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 59,
+        "fields": {
+            "title": "take_initiative",
+            "description": "Take Initiative",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 60,
+        "fields": {
+            "title": "develop_soft_skills",
+            "description": "Develop Soft Skills",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 61,
+        "fields": {
+            "title": "stay_updated",
+            "description": "Stay Updated with Industry Trends",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 62,
+        "fields": {
+            "title": "maintain_balance",
+            "description": "Maintain Work-Life Balance",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 63,
+        "fields": {
+            "title": "develop_team_skills",
+            "description": "Develop Team Skills",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 64,
+        "fields": {
+            "title": "set_clear_goals",
+            "description": "Set Clear Goals",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 65,
+        "fields": {
+            "title": "positive_environment",
+            "description": "Foster a Positive Work Environment",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 66,
+        "fields": {
+            "title": "lead_by_example",
+            "description": "Lead by Example",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 67,
+        "fields": {
+            "title": "encourage_innovation",
+            "description": "Encourage Innovation",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 68,
+        "fields": {
+            "title": "effective_communication",
+            "description": "Communicate Effectively",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 69,
+        "fields": {
+            "title": "resolve_conflicts",
+            "description": "Resolve Conflicts",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 70,
+        "fields": {
+            "title": "recognize_reward",
+            "description": "Recognize and Reward",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 71,
+        "fields": {
+            "title": "delegate_responsibilities",
+            "description": "Delegate Responsibilities",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 72,
+        "fields": {
+            "title": "provide_development",
+            "description": "Provide Professional Development",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 73,
+        "fields": {
+            "title": "set_strategic_goals",
+            "description": "Set Strategic Goals",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 74,
+        "fields": {
+            "title": "develop_action_plans",
+            "description": "Develop Action Plans",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 75,
+        "fields": {
+            "title": "monitor_progress",
+            "description": "Monitor Progress",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 76,
+        "fields": {
+            "title": "allocate_resources",
+            "description": "Allocate Resources",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 77,
+        "fields": {
+            "title": "risk_assessment",
+            "description": "Conduct Risk Assessments",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 78,
+        "fields": {
+            "title": "team_collaboration",
+            "description": "Facilitate Team Collaboration",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 79,
+        "fields": {
+            "title": "optimize_processes",
+            "description": "Optimize Processes",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 80,
+        "fields": {
+            "title": "review_performance",
+            "description": "Review Performance",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 81,
+        "fields": {
+            "title": "align_goals",
+            "description": "Align Goals with Vision",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 82,
+        "fields": {
+            "title": "foster_innovation",
+            "description": "Foster Innovation",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 83,
+        "fields": {
+            "title": "cross_functional_teams",
+            "description": "Participate in Cross-Functional Teams",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 84,
+        "fields": {
+            "title": "share_best_practices",
+            "description": "Share Best Practices",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 85,
+        "fields": {
+            "title": "support_initiatives",
+            "description": "Support Team Initiatives",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 86,
+        "fields": {
+            "title": "build_relationships",
+            "description": "Build Strong Relationships",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 87,
+        "fields": {
+            "title": "effective_communication",
+            "description": "Communicate Effectively",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 88,
+        "fields": {
+            "title": "promote_teamwork",
+            "description": "Facilitate Teamwork",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 89,
+        "fields": {
+            "title": "manage_conflicts",
+            "description": "Manage Conflicts",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 90,
+        "fields": {
+            "title": "peer_learning",
+            "description": "Encourage Peer Learning",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 91,
+        "fields": {
+            "title": "team_goals",
+            "description": "Contribute to Team Goals",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 92,
+        "fields": {
+            "title": "celebrate_success",
+            "description": "Celebrate Team Successes",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 93,
+        "fields": {
+            "title": "improve_verbal_communication",
+            "description": "Improve Verbal Communication",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 94,
+        "fields": {
+            "title": "develop_presentation_skills",
+            "description": "Develop Presentation Skills",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 95,
+        "fields": {
+            "title": "enhance_written_communication",
+            "description": "Enhance Written Communication",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 96,
+        "fields": {
+            "title": "practice_active_listening",
+            "description": "Practice Active Listening",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 97,
+        "fields": {
+            "title": "facilitate_meetings",
+            "description": "Facilitate Meetings",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 98,
+        "fields": {
+            "title": "tailor_communication",
+            "description": "Tailor Communication to Audience",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 99,
+        "fields": {
+            "title": "clear_instruction",
+            "description": "Provide Clear Instructions",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 100,
+        "fields": {
+            "title": "effective_feedback",
+            "description": "Give Effective Feedback",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 101,
+        "fields": {
+            "title": "internal_communication",
+            "description": "Improve Internal Communication",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 102,
+        "fields": {
+            "title": "continuous_learning",
+            "description": "Engage in Continuous Learning",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 103,
+        "fields": {
+            "title": "attend_workshops",
+            "description": "Attend Workshops and Seminars",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 104,
+        "fields": {
+            "title": "read_professional_books",
+            "description": "Read Professional Books and Journals",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 105,
+        "fields": {
+            "title": "online_courses",
+            "description": "Complete Online Courses",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 106,
+        "fields": {
+            "title": "network_professionals",
+            "description": "Network with Industry Professionals",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 107,
+        "fields": {
+            "title": "develop_skills",
+            "description": "Develop New Skills",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 108,
+        "fields": {
+            "title": "mentor_guidance",
+            "description": "Seek Guidance from Mentors",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 109,
+        "fields": {
+            "title": "practice_skills",
+            "description": "Practice Newly Learned Skills",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 110,
+        "fields": {
+            "title": "stay_updated",
+            "description": "Stay Updated with Industry Trends",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 111,
+        "fields": {
+            "title": "apply_knowledge",
+            "description": "Apply Knowledge to Projects",
+            "type": "Professional"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 112,
+        "fields": {
+            "title": "quality_time",
+            "description": "Spend Quality Time Together",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 113,
+        "fields": {
+            "title": "support",
+            "description": "Support Friends in Need",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 114,
+        "fields": {
+            "title": "celebrate_milestones",
+            "description": "Celebrate Milestones and Achievements",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 115,
+        "fields": {
+            "title": "active_listener",
+            "description": "Be an Active Listener",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 116,
+        "fields": {
+            "title": "positive_influence",
+            "description": "Be a Positive Influence",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 117,
+        "fields": {
+            "title": "shared_interests",
+            "description": "Engage in Shared Interests and Hobbies",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 118,
+        "fields": {
+            "title": "trust",
+            "description": "Build and Maintain Trust",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 119,
+        "fields": {
+            "title": "encourage_growth",
+            "description": "Encourage Personal Growth",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 120,
+        "fields": {
+            "title": "honesty",
+            "description": "Practice Honesty and Transparency",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 121,
+        "fields": {
+            "title": "conflict_resolution",
+            "description": "Resolve Conflicts Amicably",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 122,
+        "fields": {
+            "title": "community_events",
+            "description": "Participate in Community Events",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 123,
+        "fields": {
+            "title": "help",
+            "description": "Offer Help and Support",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 124,
+        "fields": {
+            "title": "communication",
+            "description": "Maintain Open Communication",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 125,
+        "fields": {
+            "title": "respect_privacy",
+            "description": "Respect Each Other’s Privacy",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 126,
+        "fields": {
+            "title": "shared_resources",
+            "description": "Share Resources and Tools",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 127,
+        "fields": {
+            "title": "watch_out",
+            "description": "Watch Out for Each Other’s Safety",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 128,
+        "fields": {
+            "title": "positive_relationships",
+            "description": "Build Positive Relationships",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 129,
+        "fields": {
+            "title": "welcome_newcomers",
+            "description": "Welcome New Neighbors",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 130,
+        "fields": {
+            "title": "keep_in_touch",
+            "description": "Keep in Touch Regularly",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 131,
+        "fields": {
+            "title": "neighborhood_projects",
+            "description": "Engage in Neighborhood Projects",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 132,
+        "fields": {
+            "title": "shared_responsibilities",
+            "description": "Share Household Responsibilities",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 133,
+        "fields": {
+            "title": "communicate_effectively",
+            "description": "Communicate Effectively",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 134,
+        "fields": {
+            "title": "respect_boundaries",
+            "description": "Respect Each Other’s Boundaries",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 135,
+        "fields": {
+            "title": "cleanliness",
+            "description": "Maintain Cleanliness",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 136,
+        "fields": {
+            "title": "budgeting",
+            "description": "Manage Shared Budgeting",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 137,
+        "fields": {
+            "title": "socialize_together",
+            "description": "Socialize Together Occasionally",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 138,
+        "fields": {
+            "title": "resolve_conflicts",
+            "description": "Resolve Conflicts Amicably",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 139,
+        "fields": {
+            "title": "shared_chores",
+            "description": "Create a Chore Schedule",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 140,
+        "fields": {
+            "title": "support",
+            "description": "Support Each Other’s Personal Goals",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 141,
+        "fields": {
+            "title": "respect_personal_space",
+            "description": "Respect Personal Space and Time",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 142,
+        "fields": {
+            "title": "small_talk",
+            "description": "Engage in Small Talk",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 143,
+        "fields": {
+            "title": "politeness",
+            "description": "Practice Politeness and Respect",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 144,
+        "fields": {
+            "title": "shared_interests",
+            "description": "Discover Shared Interests",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 145,
+        "fields": {
+            "title": "networking",
+            "description": "Use as Networking Opportunities",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 146,
+        "fields": {
+            "title": "occasional_meetups",
+            "description": "Plan Occasional Meetups",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 147,
+        "fields": {
+            "title": "mutual_support",
+            "description": "Offer Mutual Support",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 148,
+        "fields": {
+            "title": "stay_in_touch",
+            "description": "Stay in Touch Regularly",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 149,
+        "fields": {
+            "title": "kind_gestures",
+            "description": "Perform Kind Gestures",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 150,
+        "fields": {
+            "title": "exchange_ideas",
+            "description": "Exchange Ideas and Opinions",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 151,
+        "fields": {
+            "title": "respect",
+            "description": "Respect Different Perspectives",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 152,
+        "fields": {
+            "title": "deep_conversations",
+            "description": "Have Deep Conversations",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 153,
+        "fields": {
+            "title": "unconditional_support",
+            "description": "Offer Unconditional Support",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 154,
+        "fields": {
+            "title": "celebrate_together",
+            "description": "Celebrate Successes Together",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 155,
+        "fields": {
+            "title": "adventure",
+            "description": "Plan Adventures and Trips",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 156,
+        "fields": {
+            "title": "shared_secrets",
+            "description": "Share Secrets and Trust",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 157,
+        "fields": {
+            "title": "life_milestones",
+            "description": "Support Life Milestones",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 158,
+        "fields": {
+            "title": "companionship",
+            "description": "Spend Quality Time Together",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 159,
+        "fields": {
+            "title": "support",
+            "description": "Offer Emotional Support",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 160,
+        "fields": {
+            "title": "shared_activities",
+            "description": "Engage in Shared Activities",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 161,
+        "fields": {
+            "title": "communication",
+            "description": "Communicate Openly",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 162,
+        "fields": {
+            "title": "trust_building",
+            "description": "Build Trust",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 163,
+        "fields": {
+            "title": "adventures",
+            "description": "Go on Adventures Together",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 164,
+        "fields": {
+            "title": "shared_goals",
+            "description": "Set and Achieve Shared Goals",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 165,
+        "fields": {
+            "title": "fun",
+            "description": "Have Fun and Enjoy Each Other’s Company",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 166,
+        "fields": {
+            "title": "support_personal_growth",
+            "description": "Support Personal Growth",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 167,
+        "fields": {
+            "title": "trust",
+            "description": "Build and Maintain Trust",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 168,
+        "fields": {
+            "title": "support",
+            "description": "Offer Emotional Support",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 169,
+        "fields": {
+            "title": "listening",
+            "description": "Be an Active Listener",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 170,
+        "fields": {
+            "title": "share_secrets",
+            "description": "Share and Keep Secrets",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 171,
+        "fields": {
+            "title": "guidance",
+            "description": "Provide Guidance and Advice",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 172,
+        "fields": {
+            "title": "honesty",
+            "description": "Practice Honesty and Transparency",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 173,
+        "fields": {
+            "title": "encouragement",
+            "description": "Encourage Each Other",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 174,
+        "fields": {
+            "title": "shared_experiences",
+            "description": "Share Personal Experiences",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 175,
+        "fields": {
+            "title": "celebrate_successes",
+            "description": "Celebrate Successes Together",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 176,
+        "fields": {
+            "title": "guidance",
+            "description": "Offer Personal Guidance",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 177,
+        "fields": {
+            "title": "regular_meetings",
+            "description": "Hold Regular Meetings",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 178,
+        "fields": {
+            "title": "goal_setting",
+            "description": "Help with Goal Setting",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 179,
+        "fields": {
+            "title": "feedback",
+            "description": "Provide Constructive Feedback",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 180,
+        "fields": {
+            "title": "personal_development",
+            "description": "Support Personal Development",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 181,
+        "fields": {
+            "title": "trust_building",
+            "description": "Build and Maintain Trust",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 182,
+        "fields": {
+            "title": "confidentiality",
+            "description": "Maintain Confidentiality",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 183,
+        "fields": {
+            "title": "networking",
+            "description": "Facilitate Networking Opportunities",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 184,
+        "fields": {
+            "title": "motivation",
+            "description": "Keep Each Other Motivated",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 185,
+        "fields": {
+            "title": "celebrate_successes",
+            "description": "Celebrate Milestones and Successes",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 186,
+        "fields": {
+            "title": "care",
+            "description": "Provide Proper Care and Nutrition",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 187,
+        "fields": {
+            "title": "exercise",
+            "description": "Ensure Regular Exercise",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 188,
+        "fields": {
+            "title": "vet_visits",
+            "description": "Schedule Regular Vet Visits",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 189,
+        "fields": {
+            "title": "training",
+            "description": "Train for GoodBehavior”",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 190,
+        "fields": {
+            "title": "companionship",
+            "description": "Spend Quality Time Together",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 191,
+        "fields": {
+            "title": "grooming",
+            "description": "Maintain Grooming and Hygiene",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 192,
+        "fields": {
+            "title": "safety",
+            "description": "Ensure Safety and Security",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 193,
+        "fields": {
+            "title": "play",
+            "description": "Engage in Play and Activities",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 194,
+        "fields": {
+            "title": "socialization",
+            "description": "Socialize with Other Pets",
+            "type": "Personal"
+        }
+    },
+    {
+        "model": "user_management.PredefinedGoal",
+        "pk": 195,
+        "fields": {
+            "title": "love",
+            "description": "Show Love and Affection",
+            "type": "Personal"
+        }
+    }
+]
