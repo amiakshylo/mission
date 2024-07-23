@@ -1,5 +1,9 @@
+import datetime
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from rest_framework.exceptions import ValidationError
+
 from .managers import CustomUserManager
 from core.models import TimeStampedModel
 
@@ -28,11 +32,23 @@ class UserProfile(models.Model):
     """
     A model representing additional profile information for the user.
     """
+    GENDER_MALE = 'M'
+    GENDER_FEMALE = 'F'
+    GENDER_OTHER = 'O'
+    GENDER_NOT_TO_SAY = 'PNS'
+
     GENDER_CHOICES = [
-        ('Male', 'Male'),
-        ('Female', 'Female'),
-        ('Other', 'Other'),
-        ('Prefer not to say', 'Prefer not to say'),
+        (GENDER_MALE, 'Male'),
+        (GENDER_FEMALE, 'Female'),
+        (GENDER_OTHER, 'Other'),
+        (GENDER_NOT_TO_SAY, 'Prefer not to say'),
+    ]
+
+    ASSISTANT_MODEL_CHOICES = [
+        ('spouse', 'Spouse'),
+        ('friend', 'Friend'),
+        ('coach', 'Coach'),
+        ('therapist', 'Therapist')
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_profile')
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES, null=True, blank=False)
@@ -41,11 +57,21 @@ class UserProfile(models.Model):
     profile_picture = models.ImageField(upload_to='profile_picture/', blank=True, null=True)
     current_habits = models.TextField(blank=True, null=True)
     notification_preferences = models.CharField(max_length=255, default='Push notifications')
-    ai_assistant_model = models.CharField(max_length=255, default='coach')
+    ai_assistant_model = models.CharField(choices=ASSISTANT_MODEL_CHOICES, max_length=255)
     dashboard_customization = models.TextField(blank=True, null=True)
+    roles = models.ManyToManyField('UserRole', blank=True)
+    goals = models.ManyToManyField('UserGoal', blank=True)
 
     def __str__(self):
         return f'{self.user.email} Profile'
+
+    def clean(self):
+        super().clean()
+        if self.birth_date:
+            if not isinstance(self.birth_date, datetime.date):
+                raise ValidationError("Birth date must be a valid date in YYYY-MM-DD format.")
+            if self.birth_date > datetime.date.today():
+                raise ValidationError("Birth date cannot be in the future.")
 
     def is_profile_complete(self):
         required_fields = ['birth_date', 'location', 'profile_picture']
@@ -86,7 +112,6 @@ class UserRole(models.Model):
     """
     A model representing user roles, either predefined or custom.
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_roles')
     predefined_role = models.ForeignKey(PredefinedRole, on_delete=models.SET_NULL, null=True, blank=True,
                                         related_name='user_roles')
     custom_title = models.CharField(max_length=50, blank=True, null=True)
@@ -104,7 +129,6 @@ class UserGoal(models.Model):
     """
     A model representing goals that users have chosen or created.
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_goals')
     predefined_goal = models.ForeignKey(PredefinedGoal, on_delete=models.SET_NULL, null=True, blank=True,
                                         related_name='user_goals')
     custom_title = models.CharField(max_length=255, blank=True, null=True)
@@ -122,7 +146,7 @@ class OnboardingStep(models.Model):
     """
     A model representing a step in the onboarding process.
     """
-    step_number = models.PositiveIntegerField()
+    step_number = models.PositiveIntegerField(unique=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
 
