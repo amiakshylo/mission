@@ -3,7 +3,7 @@ import datetime
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from rest_framework.exceptions import ValidationError
-
+from .validators import validate_profile_image
 from .managers import CustomUserManager
 from core.models import TimeStampedModel
 
@@ -54,7 +54,8 @@ class UserProfile(models.Model):
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES, null=True, blank=False)
     birth_date = models.DateField(null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_picture/', blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_picture/', blank=True, null=True,
+                                        validators=[validate_profile_image])
     current_habits = models.TextField(blank=True, null=True)
     notification_preferences = models.CharField(max_length=255, default='Push notifications')
     ai_assistant_model = models.CharField(choices=ASSISTANT_MODEL_CHOICES, max_length=255)
