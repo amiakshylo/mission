@@ -944,15 +944,7 @@
             "type": "Professional"
         }
     },
-    {
-        "model": "user_management.PredefinedGoal",
-        "pk": 68,
-        "fields": {
-            "title": "effective_communication",
-            "description": "Communicate Effectively",
-            "type": "Professional"
-        }
-    },
+
     {
         "model": "user_management.PredefinedGoal",
         "pk": 69,
@@ -1115,15 +1107,7 @@
             "type": "Professional"
         }
     },
-    {
-        "model": "user_management.PredefinedGoal",
-        "pk": 87,
-        "fields": {
-            "title": "effective_communication",
-            "description": "Communicate Effectively",
-            "type": "Professional"
-        }
-    },
+
     {
         "model": "user_management.PredefinedGoal",
         "pk": 88,

@@ -1,3 +1,4 @@
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -122,6 +123,54 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'file': {
+            'level': 'DEBUG',  # Set to DEBUG if you want to capture detailed logs in the file
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'problems.log'),
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'WARNING',  # Only capture WARNING and above for Django
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['console', 'file'],
+            'level': 'ERROR',  # Only capture ERROR and above for Django requests
+            'propagate': False,
+        },
+        'myapp': {  # Adjust 'myapp' to your actual app name
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',  # Capture all logs for your application
+            'propagate': False,
+        },
+        '': {  # Root logger
+            'handlers': ['console', 'file'],
+            'level': 'WARNING',  # Capture WARNING and above for all other loggers
+            'propagate': False,
+        },
+    },
+}
 
 INTERNAL_IPS = ['127.0.0.1']
 
@@ -138,6 +187,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

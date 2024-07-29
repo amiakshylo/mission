@@ -54,25 +54,18 @@ class UserProfile(models.Model):
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES, null=True, blank=False)
     birth_date = models.DateField(null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_picture/', blank=True, null=True,
+    profile_picture = models.ImageField(upload_to='profile_picture/', blank=True, null=False,
                                         validators=[validate_profile_image])
     current_habits = models.TextField(blank=True, null=True)
     notification_preferences = models.CharField(max_length=255, default='Push notifications')
     ai_assistant_model = models.CharField(choices=ASSISTANT_MODEL_CHOICES, max_length=255)
     dashboard_customization = models.TextField(blank=True, null=True)
-    roles = models.ManyToManyField('UserRole', blank=True)
-    goals = models.ManyToManyField('UserGoal', blank=True)
+    bio = models.TextField(max_length=200, blank=True)
+    roles = models.ManyToManyField('UserRole', blank=True, related_name='user_profiles')
+    goals = models.ManyToManyField('UserGoal', blank=True, related_name='user_profiles')
 
     def __str__(self):
         return f'{self.user.email} Profile'
-
-    def clean(self):
-        super().clean()
-        if self.birth_date:
-            if not isinstance(self.birth_date, datetime.date):
-                raise ValidationError("Birth date must be a valid date in YYYY-MM-DD format.")
-            if self.birth_date > datetime.date.today():
-                raise ValidationError("Birth date cannot be in the future.")
 
     def is_profile_complete(self):
         required_fields = ['birth_date', 'location', 'profile_picture']
@@ -81,6 +74,9 @@ class UserProfile(models.Model):
                 return False
         return True
 
+    def is_owner(self, user):
+        return self.user == user or user.is_staff
+
 
 class PredefinedRole(models.Model):
     """
@@ -88,12 +84,12 @@ class PredefinedRole(models.Model):
     """
     title = models.CharField(max_length=50, unique=True)
     description = models.TextField(blank=True, null=True)
-    group = models.CharField(max_length=50, choices=[('Family', 'Family'), ('Professional', 'Professional'), ('Personal', 'Personal')])
+    group = models.CharField(max_length=50,
+                             choices=[('Family', 'Family'), ('Professional', 'Professional'), ('Personal', 'Personal')])
     goal = models.ManyToManyField('PredefinedGoal', related_name='roles')
 
     def __str__(self):
         return self.title
-
 
 
 class PredefinedGoal(models.Model):
@@ -102,7 +98,7 @@ class PredefinedGoal(models.Model):
     """
     title = models.CharField(max_length=50, unique=True)
     description = models.TextField(blank=True, null=True)
-    type = models.CharField(max_length=50,choices=[('Personal', 'Personal'), ('Professional', 'Professional')])
+    type = models.CharField(max_length=50, choices=[('Personal', 'Personal'), ('Professional', 'Professional')])
     role = models.ManyToManyField('PredefinedRole', related_name='goals')
 
     def __str__(self):
@@ -113,34 +109,38 @@ class UserRole(models.Model):
     """
     A model representing user roles, either predefined or custom.
     """
-    predefined_role = models.ForeignKey(PredefinedRole, on_delete=models.SET_NULL, null=True, blank=True,
-                                        related_name='user_roles')
-    custom_title = models.CharField(max_length=50, blank=True, null=True)
+    role = models.OneToOneField(PredefinedRole, on_delete=models.SET_NULL, unique=True, null=True, blank=True,
+                                related_name='user_roles')
+    custom_role = models.CharField(max_length=50, blank=True, null=True, unique=True, )
     custom_group = models.CharField(max_length=50, blank=True, null=True)
     is_custom = models.BooleanField(default=False)
 
-
     def __str__(self):
         if self.is_custom:
-            return self.custom_title
-        return self.predefined_role.title if self.predefined_role else 'Custom Role'
+            return self.custom_role
+        return self.role.title if self.role else 'Custom Role'
+
+    def is_owner(self, user):
+        return self.user_profiles.filter(user=user).exists() or user.is_staff
 
 
 class UserGoal(models.Model):
     """
     A model representing goals that users have chosen or created.
     """
-    predefined_goal = models.ForeignKey(PredefinedGoal, on_delete=models.SET_NULL, null=True, blank=True,
-                                        related_name='user_goals')
+    goal_title = models.ForeignKey(PredefinedGoal, on_delete=models.SET_NULL, null=True, blank=True,
+                                   related_name='user_goals')
     custom_title = models.CharField(max_length=255, blank=True, null=True)
     custom_description = models.TextField(blank=True, null=True)
     is_initial = models.BooleanField(default=False)
     is_custom = models.BooleanField(default=False)
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_goals')
 
     def __str__(self):
-        if self.predefined_goal:
-            return f'{self.predefined_goal.title} ({self.user.email})'
-        return f'{self.custom_title} ({self.user.email})'
+        user_email = self.user_profile.user.email if self.user_profile else 'No User'
+        if self.goal_title:
+            return f'{self.goal_title.title} ({user_email})'
+        return f'{self.custom_title} ({user_email})'
 
 
 class OnboardingStep(models.Model):

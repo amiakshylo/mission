@@ -1,40 +1,43 @@
 from datetime import datetime, date
+
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from .permissions import IsAdminOrReadOnly
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 
 from .models import UserProfile, OnboardingStep, UserOnboardingStatus, UserRole, UserGoal, PredefinedRole, \
     PredefinedGoal
 from .serializers import (UserProfileSerializer, EditUserProfileSerializer, OnboardingStepSerializer,
-                          OnboardingStep1Serializer, OnboardingStep2Serializer, OnboardingStep3Serializer,
-                          OnboardingStep4Serializer, UserGoalSerializer, UserRoleSerializer, PredefinedRoleSerializer,
-                          PredefinedGoalSerializer)
+                          OnboardingStep2Serializer, OnboardingStep3Serializer,
+                          OnboardingStep4Serializer, CreateUserRoleSerializer, PredefinedRoleSerializer,
+                          PredefinedGoalSerializer, UserRoleSerializer)
 
 
-class UserProfileSet(ModelViewSet):
+class UserProfileSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     serializer_class = UserProfileSerializer
-    queryset = (UserProfile.objects.select_related('user', ).
-                prefetch_related('roles', 'goals').
+    queryset = (UserProfile.objects.select_related('user').
+                prefetch_related('roles__role', 'goals').
                 all())
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsAdminUser]
 
     @action(detail=False, methods=['GET', 'PUT', 'DELETE'], permission_classes=[IsAuthenticated])
     def me(self, request):
-        queryset = UserProfile.objects.select_related('user').prefetch_related('roles', 'goals')
+        queryset = UserProfile.objects.select_related('user').prefetch_related('roles__role', 'goals')
         user_profile = get_object_or_404(queryset, user=request.user)
-        print(user_profile)
         if self.request.method == 'GET':
             serializer = UserProfileSerializer(user_profile)
             return Response(serializer.data)
         if self.request.method == 'PUT':
-            serializer = EditUserProfileSerializer(user_profile, data=request.data)
+            partial = request.method == 'PATCH'
+            serializer = EditUserProfileSerializer(user_profile, data=request.data, partial=partial)
             serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data)
+            changed_data = serializer.save()
+            return Response(changed_data)
         if self.request.method == 'DELETE':
             user_profile.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
@@ -180,3 +183,27 @@ class OnboardingViewSet(ModelViewSet):
 
         return Response({"message": "Step 4 completed successfully and onboarding completed"},
                         status=status.HTTP_200_OK)
+
+
+class UserRoleViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return CreateUserRoleSerializer
+        return UserRoleSerializer
+
+    def get_queryset(self):
+        current_user = self.request.user.id
+        requested_user = self.kwargs.get('user_profile_pk')
+        if int(requested_user) == current_user:
+            roles = UserRole.objects.filter(user_profiles=current_user).select_related('role').all()
+            return roles
+        else:
+            raise PermissionDenied("You do not have permission to view this user's roles.")
+
+    def get_serializer_context(self):
+        userprofile_pk = self.kwargs['user_profile_pk']
+        return {'user_profile_id': userprofile_pk}
+
