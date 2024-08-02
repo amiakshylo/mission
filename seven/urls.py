@@ -7,12 +7,11 @@ import debug_toolbar
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/', include('user_management.urls')),
-    path('gth/', include('goal_task_habit.urls')),
-    path('category/', include('category.urls')),
+    path('gth/', include('goal_task_management.urls')),
+    path('category_management/', include('category_management.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
-    path("auth/", include("djoser.urls")),
+    path('auth/', include("djoser.urls")),
     path("auth/", include("djoser.urls.jwt")),
-    path("playground/", include("playground.urls"))
 ]
 
 if settings.DEBUG:

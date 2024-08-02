@@ -5,8 +5,9 @@ from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer
 from djoser.serializers import UserSerializer as BaseUserSerializer
 from rest_framework import serializers
 
-from .models import User, UserProfile, OnboardingStep, UserOnboardingStatus, UserSatisfaction, PredefinedRole, UserRole, \
-    PredefinedGoal, UserGoal
+from goal_task_management.models import Goal
+from habit_management.serializers import UserHabitSerializer
+from .models import User, UserProfile, UserRole, UserGoal
 
 
 class UserCreateSerializer(BaseUserCreateSerializer):
@@ -23,78 +24,85 @@ class UserSerializer(BaseUserSerializer):
         fields = ['id', 'email', 'username']
 
 
-class OnboardingStepSerializer(serializers.ModelSerializer):
+class UserGoalSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OnboardingStep
-        fields = ['step_number', 'title', 'description']
+        model = UserGoal
+        fields = ['id', 'goal', 'custom_goal', 'progress', 'is_completed', 'is_active']
 
 
-class UserOnboardingStatusSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserOnboardingStatus
-        fields = ['user', 'current_step', 'is_completed']
 
 
-class UserSatisfactionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserSatisfaction
-        fields = ['user_profile', 'category', 'score']
-
-
-class OnboardingStep1Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = ['gender', 'location']
-
-
-class OnboardingStep2Serializer(serializers.ModelSerializer):
-    birth_date = serializers.DateField(format="%Y-%m-%d", input_formats=["%Y-%m-%d"])
+class CreateUserGoalSerializer(serializers.ModelSerializer):
+    goal = serializers.PrimaryKeyRelatedField(queryset=Goal.objects.all(), required=False, allow_null=True)
 
     class Meta:
-        model = UserProfile
-        fields = ['birth_date']
+        model = UserGoal
+        fields = ['id', 'goal', 'custom_goal', 'is_custom']
 
 
-class OnboardingStep4Serializer(serializers.Serializer):
-    goals = serializers.ListField(
-        child=serializers.IntegerField(), allow_empty=True
-    )
-    custom_goals = serializers.ListField(
-        child=serializers.DictField(
-            child=serializers.CharField()
-        ),
-        allow_empty=True
-    )
+    def validate_custom_goal(self, value):
+        if not isinstance(value, str):
+            raise serializers.ValidationError("Custom goal must be a string.")
+        return value.capitalize()
+
+    def validate(self, data):
+        goal = data.get('goal')
+        custom_goal = data.get('custom_goal')
+
+        if not goal and not custom_goal:
+            raise serializers.ValidationError("Either 'goal' or 'custom_goal' must be provided.")
+        if goal and custom_goal:
+            raise serializers.ValidationError("'goal' and 'custom_goal' cannot both be provided simultaneously.")
+        if UserGoal.objects.filter(goal__exact=goal).exists():
+            raise serializers.ValidationError(
+                {'duplicated': "A goal with that title already exists, select from list."})
+
+        return data
+
+    def create(self, validated_data):
+        with transaction.atomic():
+            user_profile_id = self.context['user_profile_id']
+            user_profile = UserProfile.objects.get(user=user_profile_id)
+            goal_id = validated_data.pop('goal', None)
+            custom_goal = validated_data.pop('custom_goal', None)
+
+            if goal_id:
+                goal = UserGoal.objects.get(id=goal_id)
+                user_goal = UserGoal.objects.create(
+                    user_profile=user_profile,
+                    goal=goal,
+                    is_initial=validated_data.get('is_initial', False),
+
+                )
+            else:
+                user_goal = UserGoal.objects.create(
+                    user_profile=user_profile,
+                    custom_goal=custom_goal,
+                    is_custom=True,
+
+                )
+            user_profile.goals.add(user_goal)
+            user_profile.save()
+
+            return user_goal
 
 
-class PredefinedRoleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PredefinedRole
-        fields = ['id', 'title', 'description', 'group']
 
 
 class UserRoleSerializer(serializers.ModelSerializer):
-    role = serializers.SerializerMethodField()
-
     class Meta:
         model = UserRole
-        fields = ['id', 'role']
+        fields = ['id', 'role', 'group_name', 'custom_role']
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        # Remove fields that are None
-        return {key: value for key, value in representation.items() if value is not None}
 
-    def get_role(self, obj):
-        if obj.role:
-            return obj.role.title
-        return obj.custom_role
 
 
 class CreateUserRoleSerializer(serializers.ModelSerializer):
+    role = serializers.PrimaryKeyRelatedField(queryset=UserRole.objects.all(), required=False, allow_null=True)
+
     class Meta:
         model = UserRole
-        fields = ['id', 'role', 'custom_role', 'is_custom']
+        fields = ['role', 'custom_role']
 
     def validate_custom_role(self, value):
         return value.capitalize()
@@ -108,61 +116,69 @@ class CreateUserRoleSerializer(serializers.ModelSerializer):
         if role and custom_role:
             raise serializers.ValidationError("'Predefined role' and 'custom_role' cannot both be provided "
                                               "simultaneously.")
-        if UserRole.objects.filter(custom_role__iexact=custom_role).exists():
-            raise serializers.ValidationError({'duplicated': "A role with that title already exists, "
-                                                             "select from list"})
+        if custom_role and UserRole.objects.filter(custom_role__iexact=custom_role).exists():
+            raise serializers.ValidationError({'duplicated': "A role with that title already exists, select from list"})
 
         return data
 
     def create(self, validated_data):
-
         with transaction.atomic():
-            user_profile_id = self.context['user_profile_id']
-            role = self.validated_data['role']
-            custom_title = self.validated_data['custom_role']
+            user_profile_id = self.context.get('user_profile_id')
+
+            try:
+                user_profile = UserProfile.objects.get(pk=user_profile_id)
+            except UserProfile.DoesNotExist:
+                raise serializers.ValidationError("UserProfile does not exist.")
+
+            role = validated_data.get('role')
+            custom_role = validated_data.get('custom_role')
+            group_name = validated_data.get('group_name')
+
             if role:
-                user_role = UserRole.objects.create(role=role)
+                user_profile.user_roles.add(role)
+                user_role = role
             else:
-                predefined_role = PredefinedRole.objects.create(title=custom_title)
-                user_role = UserRole.objects.create(custom_role=custom_title, role_id=predefined_role.id,
-                                                    is_custom=True)
-            user_profile = UserProfile.objects.get(id=user_profile_id)
-            user_profile.roles.add(user_role)
+                user_role = UserRole.objects.create(
+                    custom_role=custom_role,
+                    group_name=group_name,
+                    is_custom=True,
+                )
+                user_profile.user_roles.add(user_role)
             user_profile.save()
 
             return user_role
 
-    def get_roles(self, obj):
-        if obj.role:
-            return obj.role.title
-        return None
+
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    roles = UserRoleSerializer(many=True)
+    user_roles = UserRoleSerializer(many=True, read_only=True)
+    user_habits = UserHabitSerializer(many=True, read_only=True)
     user = UserSerializer(read_only=True)
 
     class Meta:
         model = UserProfile
-        fields = ['user', 'gender', 'location', 'profile_picture', 'ai_assistant_model', 'birth_date',
-                  'current_habits', 'dashboard_customization', 'notification_preferences', 'bio', 'roles', 'goals',
+        fields = ['user', 'gender', 'location', 'profile_picture', 'birth_date',
+                  'bio', 'user_roles',
+                  'user_habits'
                   ]
 
 
 class EditUserProfileSerializer(serializers.ModelSerializer):
+    user_roles = UserRoleSerializer(many=True)
+    user_habits = UserHabitSerializer(many=True)
+
     class Meta:
         model = UserProfile
-        fields = ['gender', 'location', 'profile_picture', 'ai_assistant_model', 'birth_date',
-                  'current_habits', 'dashboard_customization', 'notification_preferences', 'bio', 'roles', 'goals',
+        fields = ['gender', 'location', 'profile_picture', 'birth_date',
+                  'bio',
+
                   ]
 
     def update(self, instance, validated_data):
         initial_data = UserProfileSerializer(instance).data
         instance = super().update(instance, validated_data)
         updated_data = UserProfileSerializer(instance).data
-        # profile_picture = validated_data.pop('profile_picture', None)
-        # if profile_picture is not None:
-        #     instance.profile_picture = profile_picture
 
         '''returning only changed data
         '''
@@ -174,27 +190,3 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
         if value > datetime.date.today():
             raise serializers.ValidationError("Birth date cannot be in the future.")
         return value
-
-
-class OnboardingStep3Serializer(serializers.Serializer):
-    roles = serializers.ListField(
-        child=serializers.IntegerField(), allow_empty=True
-    )
-    custom_roles = serializers.ListField(
-        child=serializers.DictField(
-            child=serializers.CharField()
-        ),
-        allow_empty=True
-    )
-
-
-class PredefinedGoalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PredefinedGoal
-        fields = ['id', 'title', 'description', 'type']
-
-
-class UserGoalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserGoal
-        fields = ['id', 'goal_title', 'custom_title', 'custom_description', 'is_initial', 'is_custom']

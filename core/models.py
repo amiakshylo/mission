@@ -27,33 +27,28 @@ class StartEndModel(models.Model):
 
 
 class CompletedModel(models.Model):
-    completed_at = models.DateTimeField(auto_now_add=True)
-    completed = models.BooleanField(default=False)
+    completed_at = models.DateTimeField(auto_now_add=True, null=True)
+    is_completed = models.BooleanField(default=False)
     paused = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+
 
     class Meta:
         abstract = True
 
     def update_status_to_complete(self):
         """Mark the item as complete if it's not already."""
-        if not self.completed:
+        if not self.is_completed:
             self.completed = True
             self.completed_at = timezone.now()
             self.save(update_fields=['completes', 'completed_at'])
 
-    def calculate_duration(self):
-        """Calculate the duration from item creation to completion."""
-        if self.completed and self.completed_at:
-            duration = self.completed_at - self.created_at
-            return duration.total_seconds() / 3600
-        return None
+
 
 
 class ProgressModel(models.Model):
     progress = models.FloatField(default=0.0, validators=[
         MinValueValidator(0.0),
-        MaxValueValidator(100.0)
+        MaxValueValidator(100.0),
     ])
 
     class Meta:

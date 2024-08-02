@@ -1,11 +1,11 @@
-import datetime
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models import UniqueConstraint
 from rest_framework.exceptions import ValidationError
 from .validators import validate_profile_image
 from .managers import CustomUserManager
-from core.models import TimeStampedModel
+from core.models import TimeStampedModel, CompletedModel, ProgressModel, PriorityModel
 
 
 class User(AbstractUser):
@@ -56,19 +56,17 @@ class UserProfile(models.Model):
     location = models.CharField(max_length=255, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profile_picture/', blank=True, null=False,
                                         validators=[validate_profile_image])
-    current_habits = models.TextField(blank=True, null=True)
     notification_preferences = models.CharField(max_length=255, default='Push notifications')
     ai_assistant_model = models.CharField(choices=ASSISTANT_MODEL_CHOICES, max_length=255)
     dashboard_customization = models.TextField(blank=True, null=True)
     bio = models.TextField(max_length=200, blank=True)
-    roles = models.ManyToManyField('UserRole', blank=True, related_name='user_profiles')
-    goals = models.ManyToManyField('UserGoal', blank=True, related_name='user_profiles')
 
     def __str__(self):
         return f'{self.user.email} Profile'
 
     def is_profile_complete(self):
-        required_fields = ['birth_date', 'location', 'profile_picture']
+        required_fields = ['birth_date', 'location', 'profile_picture', 'notification_preferences',
+                           'user_profile__user_role', 'user_profile__user_goal']
         for field in required_fields:
             if not getattr(self, field):
                 return False
@@ -78,110 +76,65 @@ class UserProfile(models.Model):
         return self.user == user or user.is_staff
 
 
-class PredefinedRole(models.Model):
-    """
-    A model representing predefined roles that users can choose from.
-    """
-    title = models.CharField(max_length=50, unique=True)
-    description = models.TextField(blank=True, null=True)
-    group = models.CharField(max_length=50,
-                             choices=[('Family', 'Family'), ('Professional', 'Professional'), ('Personal', 'Personal')])
-    goal = models.ManyToManyField('PredefinedGoal', related_name='roles')
-
-    def __str__(self):
-        return self.title
-
-
-class PredefinedGoal(models.Model):
-    """
-    A model representing predefined goals that users can choose from.
-    """
-    title = models.CharField(max_length=50, unique=True)
-    description = models.TextField(blank=True, null=True)
-    type = models.CharField(max_length=50, choices=[('Personal', 'Personal'), ('Professional', 'Professional')])
-    role = models.ManyToManyField('PredefinedRole', related_name='goals')
-
-    def __str__(self):
-        return f'{self.title} ({self.type})'
 
 
 class UserRole(models.Model):
     """
     A model representing user roles, either predefined or custom.
     """
-    role = models.OneToOneField(PredefinedRole, on_delete=models.SET_NULL, unique=True, null=True, blank=True,
-                                related_name='user_roles')
-    custom_role = models.CharField(max_length=50, blank=True, null=True, unique=True, )
-    custom_group = models.CharField(max_length=50, blank=True, null=True)
+    role = models.CharField(max_length=50, blank=True, null=True)
+    user_profiles = models.ManyToManyField(UserProfile, related_name='user_roles')
+    custom_role = models.CharField(max_length=50, blank=True, null=True, unique=True)
+    group_name = models.CharField(max_length=50, blank=True, null=True)
     is_custom = models.BooleanField(default=False)
 
     def __str__(self):
         if self.is_custom:
             return self.custom_role
-        return self.role.title if self.role else 'Custom Role'
+        return self.role
 
     def is_owner(self, user):
         return self.user_profiles.filter(user=user).exists() or user.is_staff
 
 
-class UserGoal(models.Model):
+class UserGoal(TimeStampedModel, CompletedModel, ProgressModel):
     """
     A model representing goals that users have chosen or created.
     """
-    goal_title = models.ForeignKey(PredefinedGoal, on_delete=models.SET_NULL, null=True, blank=True,
-                                   related_name='user_goals')
-    custom_title = models.CharField(max_length=255, blank=True, null=True)
-    custom_description = models.TextField(blank=True, null=True)
-    is_initial = models.BooleanField(default=False)
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='goals')
+    goal = models.ForeignKey('goal_task_management.Goal', on_delete=models.CASCADE, null=True, blank=True)
+    custom_goal = models.CharField(max_length=255, blank=True, null=True)
     is_custom = models.BooleanField(default=False)
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_goals')
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         user_email = self.user_profile.user.email if self.user_profile else 'No User'
-        if self.goal_title:
-            return f'{self.goal_title.title} ({user_email})'
-        return f'{self.custom_title} ({user_email})'
-
-
-class OnboardingStep(models.Model):
-    """
-    A model representing a step in the onboarding process.
-    """
-    step_number = models.PositiveIntegerField(unique=True)
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-
-    def __str__(self):
-        return f'Step {self.step_number}: {self.title}'
-
-
-class UserOnboardingStatus(models.Model):
-    """
-    A model representing the user's progress through the onboarding process.
-    """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='onboarding_status')
-    current_step = models.ForeignKey(OnboardingStep, on_delete=models.SET_NULL, null=True, blank=True)
-    is_completed = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f'Onboarding Status for {self.user.email}'
-
-
-class UserSatisfaction(TimeStampedModel):
-    CATEGORY_CHOICES = [
-        ('health', 'Health'),
-        ('finance', 'Finance'),
-        ('relationships', 'Relationships'),
-        ('mental_health', 'Mental Health'),
-        ('career', 'Career'),
-        ('personal_development', 'Personal Development'),
-    ]
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='satisfaction_scores')
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
-    score = models.PositiveIntegerField(default=5)
+        if self.goal:
+            return f'{self.goal.title} ({user_email})'
+        return f'{self.custom_goal} ({user_email})'
 
     class Meta:
-        unique_together = ('user_profile', 'category')
+        constraints = [
+            UniqueConstraint(fields=['user_profile', 'goal'], name='unique_user_goal'),
+            UniqueConstraint(fields=['user_profile', 'custom_goal'], name='unique_user_custom_goal'),
+        ]
+
+    def clean(self):
+        if not self.goal and not self.custom_goal:
+            raise ValidationError("Either goal or custom_goal must be set.")
+        if self.goal and self.custom_goal:
+            raise ValidationError("Both goal and custom_goal cannot be set at the same time.")
+
+
+class UserTask(TimeStampedModel, CompletedModel, PriorityModel):
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_tasks')
+    task = models.ForeignKey('goal_task_management.Task', on_delete=models.CASCADE)
+    custom_name = models.CharField(max_length=255, blank=True, null=True)
+    progress = models.FloatField(default=0)
+    is_active = models.BooleanField(default=True)
+    is_repetitive = models.BooleanField(default=False)
+    repetition_interval = models.CharField(max_length=50, default='daily')
+    completion_count = models.IntegerField(default=0)
 
     def __str__(self):
-        return f'{self.user_profile.user.email} - {self.category} Satisfaction'
+        return self.custom_name if self.custom_name else self.task.name
