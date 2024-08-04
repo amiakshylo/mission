@@ -1,6 +1,8 @@
 import os
 from datetime import timedelta
 from pathlib import Path
+import logging
+
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -125,54 +127,36 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple',
-        },
-        'file': {
-            'level': 'DEBUG',  # Set to DEBUG if you want to capture detailed logs in the file
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'problems.log'),
-            'formatter': 'verbose',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console', 'file'],
-            'level': 'WARNING',  # Only capture WARNING and above for Django
-            'propagate': True,
-        },
-        'django.request': {
-            'handlers': ['console', 'file'],
-            'level': 'ERROR',  # Only capture ERROR and above for Django requests
-            'propagate': False,
-        },
-        'myapp': {  # Adjust 'myapp' to your actual app name
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',  # Capture all logs for your application
-            'propagate': False,
-        },
-        '': {  # Root logger
-            'handlers': ['console', 'file'],
-            'level': 'WARNING',  # Capture WARNING and above for all other loggers
-            'propagate': False,
-        },
-    },
-}
+
+
+# settings.py
+
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#         'file': {
+#             'class': 'logging.FileHandler',
+#             'filename': '/Users/andrewdev/PycharmProjects/7habits/problems.log',  # Specify the path to your log file
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console', 'file'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#         'user_management': {  # Replace 'user_management' with your app name
+#             'handlers': ['console', 'file'],
+#             'level': 'DEBUG',
+#             'propagate': False,
+#         },
+#     },
+# }
 
 INTERNAL_IPS = ['127.0.0.1']
 

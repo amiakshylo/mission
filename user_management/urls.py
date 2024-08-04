@@ -19,7 +19,6 @@ router.register('user_goal', views.UserGoalViewSet, basename='user_goal')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('user/user_goal/goals_by_category/', views.UserGoalViewSet.as_view({'get': 'suggest_goals'}),
-         name='goals_by_category'),
+
     # path('', include(user_profiles_router.urls))
 ]
