@@ -1,7 +1,6 @@
 import datetime
 
 from django.db import transaction
-
 from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer
 from djoser.serializers import UserSerializer as BaseUserSerializer
 from rest_framework import serializers
@@ -42,7 +41,7 @@ class UserGoalSerializer(serializers.ModelSerializer):
 
 class GoalSuggestionInputSerializer(serializers.Serializer):
     category = serializers.PrimaryKeyRelatedField(queryset=SubCategory.objects.all())
-    custom_goal = serializers.CharField(required=False)
+    user_input = serializers.CharField(required=False)
 
 
 class GoalAutocompleteSerializer(serializers.Serializer):

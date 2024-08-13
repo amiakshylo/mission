@@ -1,14 +1,15 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
+
 from core.models import TimeStampedModel, CompletedModel, PriorityModel
 
 
 class Goal(models.Model):
     title = models.CharField(max_length=255, blank=False)
     description = models.TextField()
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     sub_category = models.ForeignKey('category_management.SubCategory', on_delete=models.CASCADE)
-    is_predefined = models.BooleanField(default=True, null=True, blank=True)
+    is_predefined = models.BooleanField(default=False)  # Distinguishes predefined from user-created goals
     impact_score = models.IntegerField(null=True, blank=True)
     goal_type = models.CharField(max_length=255, blank=False, null=True)
     user_role = models.ManyToManyField('user_management.UserRole', related_name='goals')
@@ -32,7 +33,7 @@ class Task(TimeStampedModel, CompletedModel, PriorityModel):
 class SubTask(TimeStampedModel, CompletedModel, PriorityModel):
     name = models.CharField(max_length=255, unique=True, blank=False)
     description = models.TextField()
-    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='sub_tasks')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):

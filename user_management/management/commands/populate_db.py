@@ -1,7 +1,9 @@
 import csv
+
 from django.core.management.base import BaseCommand
-from user_management.models import UserRole
+
 from goal_task_management.models import Goal
+from user_management.models import UserRole
 
 
 class Command(BaseCommand):

@@ -4,20 +4,15 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import action
-
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 
-from goal_task_management.models import Goal
 from category_management.models import SubCategory
-
-
+from goal_task_management.models import Goal
 from goal_task_management.serializers import GoalSerializer
 from .models import UserProfile, UserRole, UserGoal
-
 from .serializers import (UserProfileSerializer, EditUserProfileSerializer,
 
                           CreateUserRoleSerializer,
@@ -91,6 +86,8 @@ class UserGoalViewSet(ModelViewSet):
         context = super().get_serializer_context()
         context['user_profile'] = self.request.user.user_profile
         return context
+
+
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

@@ -1,8 +1,7 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
-from django.utils import timezone
 from django.core.exceptions import ValidationError
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.utils import timezone
 
 
 class TimeStampedModel(models.Model):
@@ -49,7 +48,7 @@ class ProgressModel(models.Model):
     progress = models.FloatField(default=0.0, validators=[
         MinValueValidator(0.0),
         MaxValueValidator(100.0),
-    ])
+    ], help_text='Progress in percentage')
 
     class Meta:
         abstract = True

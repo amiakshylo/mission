@@ -3,9 +3,11 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models import UniqueConstraint
 from rest_framework.exceptions import ValidationError
-from .validators import validate_profile_image
-from .managers import CustomUserManager
+
 from core.models import TimeStampedModel, CompletedModel, ProgressModel, PriorityModel
+from principle_management.models import Principle
+from .managers import CustomUserManager
+from .validators import validate_profile_image
 
 
 class User(AbstractUser):
@@ -76,9 +78,18 @@ class UserProfile(models.Model):
         return self.user == user or user.is_staff
 
 
+class UserMission(TimeStampedModel):
+    user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name='user_mission')
+    mission_statement = models.TextField(blank=True, null=True)
+    tailored_by_ai = models.BooleanField(default=False)  # Indicates if the mission was tailored by AI
+    is_active = models.BooleanField(default=True)
 
 
-class UserRole(models.Model):
+    def __str__(self):
+        return f"Mission for {self.user_profile.user.email}"
+
+
+class UserRole(TimeStampedModel):
     """
     A model representing user roles, either predefined or custom.
     """
@@ -138,3 +149,43 @@ class UserTask(TimeStampedModel, CompletedModel, PriorityModel):
 
     def __str__(self):
         return self.custom_name if self.custom_name else self.task.name
+
+
+class UserHabit(TimeStampedModel, ProgressModel):
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_habits')
+    habit = models.ForeignKey('habit_management.Habit', on_delete=models.CASCADE)
+    custom_name = models.CharField(max_length=255, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    is_custom = models.BooleanField(default=False)
+    is_repetitive = models.BooleanField(default=False)
+    repetition_interval = models.CharField(max_length=50, default='daily')
+    completion_count = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.custom_name if self.custom_name else self.habit.title
+
+
+class UserPrinciple(TimeStampedModel):
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_principles')
+    principle = models.ForeignKey(Principle, on_delete=models.CASCADE, null=True, blank=True)
+    custom_principle = models.CharField(max_length=255, blank=True, null=True)
+    is_custom = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        user_email = self.user_profile.user.email if self.user_profile else 'No User'
+        if self.principle:
+            return f'{self.principle.title} ({user_email})'
+        return f'{self.custom_principle} ({user_email})'
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['user_profile', 'principle'], name='unique_user_principle'),
+            UniqueConstraint(fields=['user_profile', 'custom_principle'], name='unique_user_custom_principle'),
+        ]
+
+    def clean(self):
+        if not self.principle and not self.custom_principle:
+            raise ValidationError("Either principle or custom_principle must be set.")
+        if self.principle and self.custom_principle:
+            raise ValidationError("Both principle and custom_principle cannot be set at the same time.")
