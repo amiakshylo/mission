@@ -8,7 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from onboarding.models import OnboardingStep, UserOnboardingStatus
 from onboarding.serializers import OnboardingStepSerializer, OnboardingStep2Serializer
-from user_management.models import UserRole, UserProfile
+from user_management.models import Role, UserProfile
 from user_management.permissions import IsAdminOrReadOnly
 from user_management.serializers import UserRoleSerializer, OnboardingStep3Serializer
 
@@ -26,7 +26,7 @@ class OnboardingViewSet(ModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='predefined-roles')
     def predefined_roles(self, request):
-        predefined_roles = UserRole.objects.all()
+        predefined_roles = Role.objects.all()
         serializer = UserRoleSerializer(predefined_roles, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

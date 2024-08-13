@@ -1,37 +1,30 @@
 import csv
 from django.core.management.base import BaseCommand
-from user_management.models import UserRole
 from goal_task_management.models import Goal
+from user_management.models import Role
 
 
 class Command(BaseCommand):
-    help = 'Populate the many-to-many relationship between Goal and UserRole from CSV'
+    help = 'Populate database with goals from a CSV file'
 
     def handle(self, *args, **kwargs):
-        csv_file_path = '/Users/andrewdev/PycharmProjects/7habits/!!!goals.csv'  # Update with your actual file path
+        file_path = '/Users/andrewdev/PycharmProjects/7habits/user_management/data/!!!goals.csv'
 
-        with open(csv_file_path, mode='r') as file:
+        with open(file_path, mode='r') as file:
             reader = csv.DictReader(file)
+
             for row in reader:
-                try:
-                    goal_id = int(row['id'])  # Assuming 'id' is the goal_id in your CSV
-                    role_ids = [int(role_id) for role_id in
-                                row['role_id'].split(',')]  # Assuming comma-separated role_ids
+                # Assuming role_id exists in your database
+                role = Role.objects.get(id=row['role_ids'])
+                goal = Goal(
+                    title=row['title'],
+                    description=row['description'],
+                    is_custom=row['is_custom'] == 'True',
+                    impact_score=int(row['impact_score']),
+                    goal_type=row['goal_type'],
+                )
+                goal.save()
+                goal.role.add(role)
+                self.stdout.write(self.style.SUCCESS(f'Successfully added goal: {row["title"]}'))
 
-                    # Fetch the Goal instance
-                    goal = Goal.objects.get(id=goal_id)
-
-                    # Add each role to the goal
-                    for role_id in role_ids:
-                        role = UserRole.objects.get(id=role_id)
-                        goal.user_role.add(role)
-
-                    goal.save()
-                    self.stdout.write(self.style.SUCCESS(f'Successfully added roles to Goal ID {goal_id}'))
-
-                except Goal.DoesNotExist:
-                    self.stdout.write(self.style.ERROR(f'Goal with ID "{goal_id}" does not exist'))
-                except UserRole.DoesNotExist:
-                    self.stdout.write(self.style.ERROR(f'UserRole with ID {role_id} does not exist'))
-
-        self.stdout.write(self.style.SUCCESS('Finished populating the Goal-UserRole relationship'))
+        self.stdout.write(self.style.SUCCESS('Database population complete!'))

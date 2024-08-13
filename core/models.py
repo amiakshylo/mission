@@ -1,8 +1,7 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
-from django.utils import timezone
 from django.core.exceptions import ValidationError
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.utils import timezone
 
 
 class TimeStampedModel(models.Model):
@@ -27,7 +26,7 @@ class StartEndModel(models.Model):
 
 
 class CompletedModel(models.Model):
-    completed_at = models.DateTimeField(auto_now_add=True, null=True)
+    completed_at = models.DateTimeField(null=True)
     is_completed = models.BooleanField(default=False)
     paused = models.BooleanField(default=False)
 
@@ -49,14 +48,14 @@ class ProgressModel(models.Model):
     progress = models.FloatField(default=0.0, validators=[
         MinValueValidator(0.0),
         MaxValueValidator(100.0),
-    ])
+    ], help_text='Progress in percentage')
 
     class Meta:
         abstract = True
 
 
 class DueDateModel(models.Model):
-    due_date = models.DateTimeField(validators=[validate_start_due_date])
+    due_date = models.DateField(validators=[validate_start_due_date], null=True, blank=True)
 
     class Meta:
         abstract = True

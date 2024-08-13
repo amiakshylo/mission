@@ -1,28 +1,23 @@
+from django.db import transaction
 
+from django_filters.rest_framework import DjangoFilterBackend
 
-from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import action
-
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 
 from goal_task_management.models import Goal
-from category_management.models import SubCategory
 
-
-from goal_task_management.serializers import GoalSerializer
-from .models import UserProfile, UserRole, UserGoal
-
+from .models import UserProfile, UserGoal
 from .serializers import (UserProfileSerializer, EditUserProfileSerializer,
 
                           CreateUserRoleSerializer,
                           UserRoleSerializer, UserGoalSerializer, CreateUserGoalSerializer,
-                          GoalSuggestionInputSerializer, GoalAutocompleteSerializer)
+                          EditUserGoalSerializer)
 
 
 class UserProfileSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
@@ -58,7 +53,7 @@ class UserRoleViewSet(ModelViewSet):
 
     def get_queryset(self):
         user_profile = self.request.user.user_profile
-        return UserRole.objects.prefetch_related('user_profiles').filter(user_profiles=user_profile).distinct()
+        return user_profile.roles.all()
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -71,97 +66,51 @@ class UserRoleViewSet(ModelViewSet):
 
 
 class UserGoalViewSet(ModelViewSet):
-    # logger = logging.getLogger('user_management')
+    permission_classes = [IsAuthenticated]
+
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['goal_type', 'is_active', 'is_completed']
 
     def get_serializer_class(self):
-        if self.action == 'goal_suggestions_autocomplete':
-            if self.request.method == 'POST':
-                return GoalSuggestionInputSerializer
-            else:
-                return GoalAutocompleteSerializer
-        if self.request.method in ['POST', 'PUT']:
+        if self.request.method in ['POST']:
             return CreateUserGoalSerializer
+        if self.request.method in ['PUT', 'PATCH']:
+            return EditUserGoalSerializer
         return UserGoalSerializer
 
     def get_queryset(self):
         user_profile = self.request.user.user_profile
-        return UserGoal.objects.filter(user_profile=user_profile)
+        return user_profile.goals.prefetch_related('goal')
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context['user_profile'] = self.request.user.user_profile
-        return context
+    def get_serializer_context(self, *args, **kwargs):
+        user_profile = self.request.user.user_profile.id
+        return {'user_profile': user_profile}
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        category_id = request.data.get('category')
-        role_ids = request.data.getlist('role_ids')
-
-        try:
-            # Fetch the category and roles
-            category = SubCategory.objects.get(id=category_id)
-            roles = UserRole.objects.filter(id__in=role_ids)
-
-            # Suggest goals based on the selected category and user's roles
-            suggested_goals = Goal.objects.filter(category=category, roles__in=roles).distinct()
-
-            if not suggested_goals.exists() and not serializer.validated_data.get('goal'):
-                return Response({'error': 'No goals available for the selected category and roles.'}, status=status.HTTP_400_BAD_REQUEST)
-
-            # If a goal is provided and valid, save it
-            user_goal = serializer.save(user=request.user)
-            return Response(UserGoalSerializer(user_goal).data, status=status.HTTP_201_CREATED)
-
-        except SubCategory.DoesNotExist:
-            return Response({'error': 'Category not found.'}, status=status.HTTP_404_NOT_FOUND)
-
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=False, methods=['post'], url_path='goal-suggestions-autocomplete')
-    def goal_suggestions_autocomplete(self, request):
-        # Step 1: Handle the goal suggestion based on category
-        suggestion_serializer = GoalSuggestionInputSerializer(data=request.data, context={'request': request})
-        suggestion_serializer.is_valid(raise_exception=True)
-
-        category = suggestion_serializer.validated_data['category']
         user_profile = request.user.user_profile
-        roles = UserRole.objects.filter(user_profiles=user_profile)
+        goal = serializer.validated_data.get('goal')
+        custom_goal_title = serializer.validated_data.get('custom_goal')
+        category = serializer.validated_data.get('category')
+        goal_type = serializer.validated_data.get('goal_type')
+        due_date = serializer.validated_data.get('due_date')
 
-        # Step 2: Filter Goals based on the selected category and user's roles
-        suggested_goals = Goal.objects.filter(sub_category=category, user_role__in=roles).distinct()
+        with transaction.atomic():
+            if custom_goal_title:
+                # Create a new Goal if it's a custom goal
+                goal = Goal.objects.create(
+                    sub_category=category,
+                    title=custom_goal_title,
+                    description=custom_goal_title,
+                    due_date=due_date,
+                    is_custom=True,
+                    created_by=request.user,
 
-        # # Step 3: Handle custom goal query (if provided)
-        # custom_goal_query = request.data.get('custom_goal', None)
-        # if custom_goal_query:
-        #     # Get AI-generated suggestions
-        #     ai_suggestions = get_goal_suggestions(custom_goal_query)
-        #     # Add AI suggestions to the existing suggested goals
-        #     suggested_goals = ai_suggestions
-        #
-        # # Return the suggested goals (whether from the database or based on the query)
-        # goal_serializer = GoalSerializer(suggested_goals, many=True)
-        # return Response({'suggested_goals': goal_serializer.data}, status=status.HTTP_200_OK)
+                )
 
-        # Step 3: Handle custom goal query (if provided)
-        custom_goal_query = request.data.get('custom_goal', None)
-        if custom_goal_query:
-            autocomplete_serializer = GoalAutocompleteSerializer(data=request.data)
-            autocomplete_serializer.is_valid(raise_exception=True)
+            # Create the UserGoal record
+            user_goal = UserGoal.objects.create(user_profile=user_profile, goal=goal, goal_type=goal_type, due_date=due_date, **kwargs)
 
-            query = autocomplete_serializer.validated_data['custom_goal']
-            query_words = query.split()  # Split the query into individual words
-
-            # Create a Q object for each word in the query and combine them with AND logic
-            query_filter = Q()
-            for word in query_words:
-                query_filter &= Q(title__icontains=word)
-
-            suggested_goals = Goal.objects.filter(query_filter)
-
-        # Return the suggested goals (whether from the database or based on the query)
-        goal_serializer = GoalSerializer(suggested_goals, many=True)
-        return Response({'suggested_goals': goal_serializer.data}, status=status.HTTP_200_OK)
-
+        return Response(UserGoalSerializer(user_goal).data, status=status.HTTP_201_CREATED)

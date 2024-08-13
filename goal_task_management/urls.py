@@ -1,6 +1,13 @@
-from django.urls import path
+from django.urls import include, path
+from rest_framework_nested import routers
+
 from . import views
 
+router = routers.DefaultRouter()
+router.register('goal_suggestion', views.GoalSuggestionsViewset, basename='goal_suggestion')
+
+
+
 urlpatterns = [
-    # Example pattern: path('profile/', views.profile, name='profile'),
+    path('', include(router.urls)),
 ]

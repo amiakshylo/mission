@@ -1,3 +1,15 @@
 from django.contrib import admin
 
-# Register your models here.
+from . import models
+
+
+@admin.register(models.Goal)
+class GoalAdmin(admin.ModelAdmin):
+    list_display = ['title', 'description']
+    list_filter = ['role']
+
+
+
+
+
+
