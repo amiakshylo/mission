@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('user_management', '0023_alter_usergoal_goal_type'),
     ]
@@ -18,7 +17,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='userrole',
             name='user_profiles',
-            field=models.ForeignKey(default=2, on_delete=django.db.models.deletion.CASCADE, related_name='user_roles', to='user_management.userprofile'),
+            field=models.ForeignKey(default=2, on_delete=django.db.models.deletion.CASCADE, related_name='user_roles',
+                                    to='user_management.userprofile'),
             preserve_default=False,
         ),
     ]

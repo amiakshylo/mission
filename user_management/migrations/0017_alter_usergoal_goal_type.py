@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('user_management', '0016_alter_usergoal_completed_at_and_more'),
     ]

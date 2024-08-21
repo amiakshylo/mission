@@ -3,7 +3,8 @@ layout: page
 title: Direct Chat Components
 ---
 
-The direct chat widget extends the card component to create a beautiful chat interface. This widget consists of a required messages pane and an __optional__ contacts pane. Examples:
+The direct chat widget extends the card component to create a beautiful chat interface. This widget consists of a
+required messages pane and an __optional__ contacts pane. Examples:
 
 <div class="row">
   <div class="col-md-6">
@@ -498,12 +499,15 @@ The direct chat widget extends the card component to create a beautiful chat int
 </div>
 <!--/.direct-chat -->
 ```
+
 {: .max-height-300}
 
 ##### Outline Direct Chat
+
 {: .text-bold .text-dark .mt-5}
 
-Of course you can use direct chat with a outline card by adding the class `.card-outline` to the card. Here are a couple of examples: 
+Of course you can use direct chat with a outline card by adding the class `.card-outline` to the card. Here are a couple
+of examples:
 
 <div class="row">
   <div class="col-md-6">

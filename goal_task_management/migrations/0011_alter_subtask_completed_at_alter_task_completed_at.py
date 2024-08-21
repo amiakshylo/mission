@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('goal_task_management', '0010_rename_is_predefined_goal_is_custom'),
     ]

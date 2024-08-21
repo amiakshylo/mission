@@ -1,4 +1,3 @@
-
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models import UniqueConstraint
@@ -61,7 +60,6 @@ class UserProfile(models.Model):
     notification_preferences = models.CharField(max_length=255, default='Push notifications')
     ai_assistant_model = models.CharField(choices=ASSISTANT_MODEL_CHOICES, max_length=255)
     dashboard_customization = models.TextField(blank=True, null=True)
-    bio = models.TextField(max_length=200, blank=True)
 
     def __str__(self):
         return f'{self.user.email} Profile'
@@ -84,46 +82,28 @@ class UserMission(TimeStampedModel):
     tailored_by_ai = models.BooleanField(default=False)  # Indicates if the mission was tailored by AI
     is_active = models.BooleanField(default=True)
 
-
     def __str__(self):
         return f"Mission for {self.user_profile.user.email}"
 
 
 class Role(TimeStampedModel):
-    GROUP_FAMILY = 'Family'
-    GROUP_WORK = 'Professional'
-    GROUP_PERSONAL = 'Personal'
-    GROUP_HEALTH = 'Health'
-    GROUP_FINANCE = 'Finance'
-    GROUP_SOCIAL = 'Social'
-    GROUP_SPIRITUAL = 'Spiritual'
-
-    GROUP_CHOICES = [
-        (GROUP_FAMILY, 'Family'),
-        (GROUP_WORK, 'Professional'),
-        (GROUP_PERSONAL, 'Personal'),
-        (GROUP_HEALTH, 'Health'),
-        (GROUP_FINANCE, 'Finance'),
-        (GROUP_SOCIAL, 'Social'),
-        (GROUP_SPIRITUAL, 'Spiritual'),
-    ]
-
-
 
     """
     A model representing user roles, either predefined or custom.
     """
-    role = models.CharField(max_length=50, blank=True, null=True)
-    user_profiles = models.ManyToManyField(UserProfile, related_name='roles')
-    custom_role = models.CharField(max_length=50, blank=True, null=True, unique=True)
-    group_name = models.CharField(choices=GROUP_CHOICES, max_length=50, blank=True, null=True)
+    title = models.CharField(max_length=50, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    user_profile = models.ManyToManyField(UserProfile, related_name='roles')
+    custom_title = models.CharField(max_length=50, blank=True, null=True, unique=True)
     is_custom = models.BooleanField(default=False)
+    category = models.ForeignKey('category_management.Category', on_delete=models.CASCADE, null=True, blank=True,
+                                 related_name='roles')
 
     def __str__(self):
-        return self.role
+        return self.title
 
     def is_owner(self, user):
-        return self.user_profiles.filter(user=user).exists() or user.is_staff
+        return self.user_profile.filter(user=user).exists() or user.is_staff
 
 
 class UserGoal(TimeStampedModel, CompletedModel, ProgressModel, DueDateModel):
@@ -136,7 +116,6 @@ class UserGoal(TimeStampedModel, CompletedModel, ProgressModel, DueDateModel):
     GOAL_TYPE_CHOICES = ((TYPE_SHORT_TERM, 'Short-term'),
                          (TYPE_LONG_TERM, 'Long-term')
                          )
-
 
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='goals')
     goal = models.ForeignKey('goal_task_management.Goal', on_delete=models.CASCADE, null=True, blank=True)

@@ -3,7 +3,7 @@ layout: page
 title: Timeline Component
 ---
 
-The timeline component displays an event history. 
+The timeline component displays an event history.
 You can use it for descriptions of events that occurred in a particular time section.
 
 ##### Default
@@ -44,11 +44,12 @@ You can use it for descriptions of events that occurred in a particular time sec
   </div>
 </div>
 ```
+
 {: .max-height-300}
 
 ##### Extra style
 
-There is an additional class for styling. 
+There is an additional class for styling.
 It darkens the elements, highlighting it against the general background.
 You can use it with adding `.timeline-inverse` to `.timeline`.
 

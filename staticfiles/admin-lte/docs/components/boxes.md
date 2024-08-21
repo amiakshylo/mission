@@ -3,10 +3,10 @@ layout: page
 title: Boxes Components
 ---
 
-There are two types of boxes, info boxes & small boxes. Both boxes are used to display statistical snippets. 
-
+There are two types of boxes, info boxes & small boxes. Both boxes are used to display statistical snippets.
 
 ##### Info Box
+
 {: .text-bold .text-dark .mt-4}
 
 <div class="row">
@@ -73,6 +73,7 @@ There are two types of boxes, info boxes & small boxes. Both boxes are used to d
 </div>
 
 ##### Info Box with Progress Bar
+
 {: .text-bold .text-dark .mt-4}
 
 <div class="row">
@@ -174,8 +175,8 @@ There are two types of boxes, info boxes & small boxes. Both boxes are used to d
 {: .col-md-4 .col-sm-6 .col-12 .max-height-300}
 </div>
 
-
 ##### Small Box
+
 {: .text-bold .text-dark .mt-4}
 
 <div class="row">
@@ -242,15 +243,15 @@ There are two types of boxes, info boxes & small boxes. Both boxes are used to d
 {: .col-md-4 .col-sm-6 .col-12 .max-height-300}
 </div>
 
-
-
 ##### Loading Style
+
 {: .text-bold .text-dark .mt-5}
-To simulate a loading state, simply place this code before the `.info-box` / `.small-box` closing tag. 
+To simulate a loading state, simply place this code before the `.info-box` / `.small-box` closing tag.
 
 > ##### Tip!
-> We recommend `.fa-2x` for Info Boxes and `.fa-3x` for Small Boxes to get a nicely sized loading icon, <br> like in this documentation. 
-{: .quote-info}
+> We recommend `.fa-2x` for Info Boxes and `.fa-3x` for Small Boxes to get a nicely sized loading icon, <br> like in
+> this documentation.
+> {: .quote-info}
 
 ```html
 <div class="overlay">
@@ -310,6 +311,7 @@ To simulate a loading state, simply place this code before the `.info-box` / `.s
 
 
 You can also use a dark loading style with adding `.dark` to `.overlay` like this code.
+
 ```html
 <div class="overlay dark">
   <i class="fas fa-2x fa-sync-alt fa-spin"></i>

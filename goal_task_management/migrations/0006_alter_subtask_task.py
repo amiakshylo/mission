@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('goal_task_management', '0005_alter_goal_title'),
     ]
@@ -14,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='subtask',
             name='task',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sub_tasks', to='goal_task_management.task'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sub_tasks',
+                                    to='goal_task_management.task'),
         ),
     ]

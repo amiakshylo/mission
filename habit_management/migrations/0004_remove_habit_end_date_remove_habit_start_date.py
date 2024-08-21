@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('habit_management', '0003_alter_habit_user_profile'),
     ]

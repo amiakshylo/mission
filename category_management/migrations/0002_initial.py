@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -24,7 +23,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='subcategory',
             name='main_category',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='subcategory', to='category_management.maincategory'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='subcategory',
+                                    to='category_management.maincategory'),
         ),
         migrations.AddField(
             model_name='subcategorycompletion',

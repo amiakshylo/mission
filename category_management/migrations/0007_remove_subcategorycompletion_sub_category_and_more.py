@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('category_management', '0006_alter_maincategorycompletion_completed_at_and_more'),
         ('goal_task_management', '0013_rename_user_role_goal_role_remove_goal_sub_category'),

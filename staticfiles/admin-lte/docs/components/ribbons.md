@@ -3,11 +3,16 @@ layout: page
 title: Ribbons Component
 ---
 
-The ribbons component is a easy way to display informations above any content. The `.ribbon-warpper` needs to be inside a element with _position:relative;_. In this docs page we place the ribbon always inside `<div class="position-relative p-3 bg-gray" style="height: 180px"></div>` for demo purpose but it can placed inside cards, table rows & many more.
+The ribbons component is a easy way to display informations above any content. The `.ribbon-warpper` needs to be inside
+a element with _position:relative;_. In this docs page we place the ribbon always
+inside `<div class="position-relative p-3 bg-gray" style="height: 180px"></div>` for demo purpose but it can placed
+inside cards, table rows & many more.
 
-The ribbon comes in three sizes to display more text or use larger font sizes, default (only `.ribbon-wrapper`), large (`.ribbon-wrapper` with `.ribbon-lg`), extra large (`.ribbon-wrapper` with `.ribbon-xl`).
+The ribbon comes in three sizes to display more text or use larger font sizes, default (only `.ribbon-wrapper`),
+large (`.ribbon-wrapper` with `.ribbon-lg`), extra large (`.ribbon-wrapper` with `.ribbon-xl`).
 
-##### Example Markup 
+##### Example Markup
+
 {: .text-bold .text-dark .mt-5}
 
 <div class="position-relative p-3 bg-gray" style="height: 180px">
@@ -27,9 +32,11 @@ The ribbon comes in three sizes to display more text or use larger font sizes, d
     </div>
   </div>
 ```
+
 {: .max-height-300}
 
 ##### Ribbon Size Variations
+
 {: .text-bold .text-dark .mt-5}
 <div class="row">
   <div class="col-sm-4">
@@ -97,6 +104,7 @@ The ribbon comes in three sizes to display more text or use larger font sizes, d
 </div>
 
 ##### Text Size Variations
+
 {: .text-bold .text-dark .mt-5}
 
 <div class="row">

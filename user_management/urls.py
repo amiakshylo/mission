@@ -8,7 +8,6 @@ router.register('user_profile', views.UserProfileSet, basename='user_profile')
 router.register('user_role', views.UserRoleViewSet, basename='user_role')
 router.register('user_goal', views.UserGoalViewSet, basename='user_goal')
 
-
 urlpatterns = [
-    path('', include(router.urls)),
+    path('user/', include(router.urls)),
 ]

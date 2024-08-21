@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('category_management', '0005_alter_usercategoryprogress_progress'),
     ]

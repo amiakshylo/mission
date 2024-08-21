@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('principle_management', '0001_initial'),
         ('user_management', '0012_userhabit'),
@@ -38,7 +37,9 @@ class Migration(migrations.Migration):
                 ('mission_statement', models.TextField(blank=True, null=True)),
                 ('tailored_by_ai', models.BooleanField(default=False)),
                 ('is_active', models.BooleanField(default=True)),
-                ('user_profile', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='user_mission', to='user_management.userprofile')),
+                ('user_profile',
+                 models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='user_mission',
+                                      to='user_management.userprofile')),
             ],
             options={
                 'abstract': False,
@@ -53,8 +54,11 @@ class Migration(migrations.Migration):
                 ('custom_principle', models.CharField(blank=True, max_length=255, null=True)),
                 ('is_custom', models.BooleanField(default=False)),
                 ('is_active', models.BooleanField(default=True)),
-                ('principle', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='principle_management.principle')),
-                ('user_profile', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_principles', to='user_management.userprofile')),
+                ('principle', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                                to='principle_management.principle')),
+                ('user_profile',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_principles',
+                                   to='user_management.userprofile')),
             ],
         ),
         migrations.AddConstraint(
@@ -63,6 +67,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='userprinciple',
-            constraint=models.UniqueConstraint(fields=('user_profile', 'custom_principle'), name='unique_user_custom_principle'),
+            constraint=models.UniqueConstraint(fields=('user_profile', 'custom_principle'),
+                                               name='unique_user_custom_principle'),
         ),
     ]

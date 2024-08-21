@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('goal_task_management', '0013_rename_user_role_goal_role_remove_goal_sub_category'),
     ]

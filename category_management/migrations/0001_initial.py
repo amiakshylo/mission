@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -50,7 +49,9 @@ class Migration(migrations.Migration):
             name='UserCategoryProgress',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('progress', models.FloatField(default=0.0, validators=[django.core.validators.MinValueValidator(0.0), django.core.validators.MaxValueValidator(100.0)])),
+                ('progress', models.FloatField(default=0.0, validators=[django.core.validators.MinValueValidator(0.0),
+                                                                        django.core.validators.MaxValueValidator(
+                                                                            100.0)])),
             ],
             options={
                 'abstract': False,
@@ -63,7 +64,8 @@ class Migration(migrations.Migration):
                 ('completed_at', models.DateTimeField(auto_now_add=True)),
                 ('is_completed', models.BooleanField(default=False)),
                 ('paused', models.BooleanField(default=False)),
-                ('main_category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='category_management.maincategory')),
+                ('main_category',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='category_management.maincategory')),
             ],
             options={
                 'abstract': False,

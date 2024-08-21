@@ -5,11 +5,10 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('onboarding', '0001_initial'),
+        ('journey', '0001_initial'),
         ('user_management', '0001_initial'),
     ]
 
@@ -17,6 +16,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='useronboardingstatus',
             name='user_profile',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='onboarding_status', to='user_management.userprofile'),
+            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='onboarding_status',
+                                       to='user_management.userprofile'),
         ),
     ]

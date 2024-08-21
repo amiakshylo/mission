@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -21,7 +20,8 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=255)),
                 ('description', models.TextField(blank=True)),
                 ('is_predefined', models.BooleanField(default=False)),
-                ('created_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                ('created_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                                 to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

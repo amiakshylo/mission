@@ -6,11 +6,13 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/', include('user_management.urls')),
+    path('', include('user_management.urls')),
     path('habit/', include('habit_management.urls')),
-    path('gtm/', include('goal_task_management.urls')),
+    path('', include('category_management.urls')),
+    path('goal_task/', include('goal_task_management.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
     path('auth/', include("djoser.urls")),
+    path('journey/', include('journey.urls')),
     path("auth/", include("djoser.urls.jwt")),
 ]
 

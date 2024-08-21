@@ -30,7 +30,6 @@ class CompletedModel(models.Model):
     is_completed = models.BooleanField(default=False)
     paused = models.BooleanField(default=False)
 
-
     class Meta:
         abstract = True
 
@@ -40,8 +39,6 @@ class CompletedModel(models.Model):
             self.completed = True
             self.completed_at = timezone.now()
             self.save(update_fields=['completes', 'completed_at'])
-
-
 
 
 class ProgressModel(models.Model):

@@ -3,13 +3,17 @@ layout: page
 title: Control Sidebar Plugin
 ---
 
-The control sidebar component is part of AdminLTE's layout as the right sidebar. 
+The control sidebar component is part of AdminLTE's layout as the right sidebar.
 
 ##### Usage
-This plugin can be activated as a jQuery plugin or using the data api. To activate the plugin, you must first add the HTML markup to your layout, then create the toggle button as shown below. 
+
+This plugin can be activated as a jQuery plugin or using the data api. To activate the plugin, you must first add the
+HTML markup to your layout, then create the toggle button as shown below.
 
 ###### HTML Markup
+
 {: .text-bold }
+
 ```html
 <!-- Control Sidebar -->
 <aside class="control-sidebar control-sidebar-dark">
@@ -19,6 +23,7 @@ This plugin can be activated as a jQuery plugin or using the data api. To activa
 ```
 
 ###### Data api
+
 {: .text-bold }
 Add `data-widget="control-sidebar"` to any button or a element to activate the plugin.
 
@@ -27,8 +32,11 @@ Add `data-widget="control-sidebar"` to any button or a element to activate the p
 ```
 
 ###### jQuery
+
 {: .text-bold }
-Just like all other AdminLTE plugins, you can also activate the toggle button using jQuery by running the following example. 
+Just like all other AdminLTE plugins, you can also activate the toggle button using jQuery by running the following
+example.
+
 ```js
 $("#my-toggle-button").ControlSidebar('toggle');
 ```
@@ -38,7 +46,8 @@ $("#my-toggle-button").ControlSidebar('toggle');
 |---
 | Name | Type | Default | Description
 |-|-|-|-
-|controlsidebarSlide | Boolean | TRUE | Whether the sidebar should slide over the content or push the content to make space for itself.
+|controlsidebarSlide | Boolean | TRUE | Whether the sidebar should slide over the content or push the content to make
+space for itself.
 |scrollbarTheme | Boolean | `os-theme-light` | Scrollbar Theme used while SideBar Fixed
 |scrollbarAutoHide | Boolean | `l` | Scrollbar auto-hide trigger
 {: .table .table-bordered .bg-light}
@@ -51,10 +60,11 @@ $("#my-toggle-button").ControlSidebar('toggle');
 {: .quote-info}
 
 ##### Events
+
 {: .mt-4}
 
 |---
-| Event Type | Description
+| Event Type | Description
 |-|-
 |expanded.lte.controlsidebar | Triggered after a control sidebar expands.
 |collapsed.lte.controlsidebar | Triggered after a control sidebar collapses.

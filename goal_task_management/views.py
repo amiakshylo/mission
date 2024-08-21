@@ -1,20 +1,22 @@
 from django.contrib.postgres.search import SearchVector, SearchQuery, TrigramSimilarity, SearchRank
 from django.db.models import Q
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
+from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.mixins import CreateModelMixin
+from rest_framework.mixins import CreateModelMixin, ListModelMixin
 
 from goal_task_management.models import Goal
 from goal_task_management.serializers import GoalSuggestionInputSerializer, GoalSerializer
-
 
 
 class GoalSuggestionsViewset(CreateModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = GoalSuggestionInputSerializer
     queryset = Goal.objects.all()
+
 
     def create(self, request, *args, **kwargs):
         # Fetch the roles associated with the user profile

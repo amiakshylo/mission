@@ -71,15 +71,15 @@ const $$ = {
 };
 
 function ajax(url, init) {
-    init = Object.assign({ credentials: "same-origin" }, init);
+    init = Object.assign({credentials: "same-origin"}, init);
     return fetch(url, init)
         .then(function (response) {
             if (response.ok) {
-                    return response.json().catch(function(error){
-                        return Promise.reject(
-                            new Error("The response  is a invalid Json object : " + error)
-                        );
-                    });
+                return response.json().catch(function (error) {
+                    return Promise.reject(
+                        new Error("The response  is a invalid Json object : " + error)
+                    );
+                });
             }
             return Promise.reject(
                 new Error(response.status + ": " + response.statusText)
@@ -139,4 +139,4 @@ function debounce(func, delay) {
     };
 }
 
-export { $$, ajax, ajaxForm, replaceToolbarState, debounce };
+export {$$, ajax, ajaxForm, replaceToolbarState, debounce};

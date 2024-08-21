@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('habit_management', '0008_remove_habit_unique_habit_per_user_and_more'),
         ('user_management', '0011_alter_usergoal_progress'),
@@ -19,14 +18,18 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('progress', models.FloatField(default=0.0, help_text='Progress in percentage', validators=[django.core.validators.MinValueValidator(0.0), django.core.validators.MaxValueValidator(100.0)])),
+                ('progress', models.FloatField(default=0.0, help_text='Progress in percentage',
+                                               validators=[django.core.validators.MinValueValidator(0.0),
+                                                           django.core.validators.MaxValueValidator(100.0)])),
                 ('custom_name', models.CharField(blank=True, max_length=255, null=True)),
                 ('is_active', models.BooleanField(default=True)),
                 ('is_repetitive', models.BooleanField(default=False)),
                 ('repetition_interval', models.CharField(default='daily', max_length=50)),
                 ('completion_count', models.IntegerField(default=0)),
                 ('habit', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='habit_management.habit')),
-                ('user_profile', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_habits', to='user_management.userprofile')),
+                ('user_profile',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_habits',
+                                   to='user_management.userprofile')),
             ],
             options={
                 'abstract': False,

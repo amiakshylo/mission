@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('goal_task_management', '0009_alter_goal_goal_type'),
     ]

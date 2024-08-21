@@ -3,9 +3,11 @@ layout: page
 title: Cards Component
 ---
 
-The card component is the most widely used component through out this template. You can use it for anything from displaying charts to just blocks of text. It comes in many different styles that we will explore below.
+The card component is the most widely used component through out this template. You can use it for anything from
+displaying charts to just blocks of text. It comes in many different styles that we will explore below.
 
 ##### Default Card Markup
+
 {: .text-bold .text-dark .mt-5}
 
 
@@ -47,13 +49,16 @@ The card component is the most widely used component through out this template. 
 </div>
 <!-- /.card -->
 ```
+
 {: .max-height-300}
 
 ##### Card Variants
+
 {: .text-bold .text-dark .mt-5}
 You can change the style of the card by adding any of the contextual classes.
 
 ###### Default
+
 {: .text-bold .text-dark}
 
 <div class="row">
@@ -177,6 +182,7 @@ You can change the style of the card by adding any of the contextual classes.
 ```
 
 ###### Outline
+
 {: .text-bold .text-dark}
 
 <div class="row">
@@ -285,8 +291,8 @@ You can change the style of the card by adding any of the contextual classes.
 <div class="card card-outline card-dark">...</div>
 ```
 
-
 ###### Background Color
+
 {: .text-bold .text-dark}
 
 <div class="row">
@@ -395,8 +401,8 @@ You can change the style of the card by adding any of the contextual classes.
 <div class="card bg-dark">...</div>
 ```
 
-
 ###### Gradient Background Color
+
 {: .text-bold .text-dark}
 
 <div class="row">
@@ -505,12 +511,14 @@ You can change the style of the card by adding any of the contextual classes.
 <div class="card bg-gradient-dark">...</div>
 ```
 
-
 ##### Card Tools
-{: .text-bold .text-dark .mt-5}
-Cards can contain tools to deploy a specific event or provide simple info. The following examples makes use of multiple AdminLTE components within the header of the card.
 
-AdminLTE data-card-widget attribute provides cards with the ability to collapse or be removed. The buttons are placed in the card-tools which is placed in the card-header. 
+{: .text-bold .text-dark .mt-5}
+Cards can contain tools to deploy a specific event or provide simple info. The following examples makes use of multiple
+AdminLTE components within the header of the card.
+
+AdminLTE data-card-widget attribute provides cards with the ability to collapse or be removed. The buttons are placed in
+the card-tools which is placed in the card-header.
 
 ```html
 <div class="card card-primary">
@@ -535,12 +543,13 @@ AdminLTE data-card-widget attribute provides cards with the ability to collapse 
 </div>
 <!-- /.card -->
 ```
+
 {: .max-height-300}
 
-
 ##### Loading Style
+
 {: .text-bold .text-dark .mt-5}
-To simulate a loading state, simply place this code before the `.card` closing tag. 
+To simulate a loading state, simply place this code before the `.card` closing tag.
 
 ```html
 <div class="overlay">
@@ -605,6 +614,7 @@ To simulate a loading state, simply place this code before the `.card` closing t
 
 
 You can also use a dark loading style with adding `.dark` to `.overlay` like this code.
+
 ```html
 <div class="overlay dark">
   <i class="fas fa-2x fa-sync-alt fa-spin"></i>

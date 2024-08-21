@@ -127,10 +127,12 @@ td ul.errorlist li {
     border-bottom: 1px solid #eee;
     background: none;
 }
-.form-row.errors ul.errorlist  {
+
+.form-row.errors ul.errorlist {
     margin-left: 0;
     padding-right: 10px;
 }
+
 .form-row.errors ul.errorlist li {
     padding-left: 0;
 }
@@ -254,11 +256,11 @@ a.deletelink:focus, a.deletelink:hover {
     background-color: #007bff;
 }
 
-.object-tools a:focus{
+.object-tools a:focus {
     text-decoration: none;
 }
 
-.object-tools a.viewsitelink, .object-tools a.golink,.object-tools a.addlink {
+.object-tools a.viewsitelink, .object-tools a.golink, .object-tools a.addlink {
     background-repeat: no-repeat;
     background-position: right 7px center;
     padding-right: 26px;
@@ -358,7 +360,7 @@ table#change-history tbody th {
     color: #fff;
 }
 
-#header a:focus , #header a:hover {
+#header a:focus, #header a:hover {
     text-decoration: underline;
 }
 

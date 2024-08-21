@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('user_management', '0007_remove_userrole_user_profile_userrole_user_profiles'),
     ]

@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('habit_management', '0002_initial'),
         ('user_management', '0001_initial'),
@@ -15,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='habit',
             name='user_profile',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_habits', to='user_management.userprofile'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_habits',
+                                    to='user_management.userprofile'),
         ),
     ]

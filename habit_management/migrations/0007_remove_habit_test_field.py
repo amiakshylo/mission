@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('habit_management', '0006_alter_habit_frequency_alter_habit_progress'),
     ]

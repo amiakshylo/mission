@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('habit_management', '0008_remove_habit_unique_habit_per_user_and_more'),
     ]

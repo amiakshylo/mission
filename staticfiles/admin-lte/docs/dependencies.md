@@ -2,8 +2,11 @@
 layout: page
 title: Dependencies & Plugins
 ---
+
 #### Dependencies
-AdminLTE depends on two main frameworks. The downloadable package contains both of these libraries, so you don't have to manually download them.
+
+AdminLTE depends on two main frameworks. The downloadable package contains both of these libraries, so you don't have to
+manually download them.
 {: .lead}
 
 - [Bootstrap 4](https://getbootstrap.com)
@@ -12,16 +15,19 @@ AdminLTE depends on two main frameworks. The downloadable package contains both 
 - [All other plugins are listed below](#plugins)
 
 <a id="plugins" class="anchor"></a>
+
 #### Plugins
+
 {: .mt-4 .anchor}
 
-AdminLTE makes use of the following plugins. For documentation, updates or license information, please visit the provided links.
+AdminLTE makes use of the following plugins. For documentation, updates or license information, please visit the
+provided links.
 {: .lead}
 
 > Note!
 > You need to load the js/css files of the plugin that you want to use.
 > AdminLTE doesn't load automatically all plugins, this would cause huge load times on every page load.
-{:.quote-warning}
+> {:.quote-warning}
 
 <div class="row px-3">
   <div class="col-sm-3">

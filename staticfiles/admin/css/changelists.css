@@ -9,7 +9,9 @@
     width: 100%;
 }
 
-.change-list .hiddenfields { display:none; }
+.change-list .hiddenfields {
+    display: none;
+}
 
 .change-list .filtered table {
     border-right: none;
@@ -30,7 +32,7 @@
 }
 
 #changelist-form .results {
-  overflow-x: auto;
+    overflow-x: auto;
 }
 
 #changelist .toplinks {
@@ -304,7 +306,7 @@
     border-bottom: none;
 }
 
- .aselect {
+.aselect {
     vertical-align: top;
     height: 24px;
     background: none;
@@ -327,7 +329,7 @@
 
 #changelist .actions .button {
     height: 30px;
-    padding: 0 10px 0 10px ;
+    padding: 0 10px 0 10px;
     margin: 0px;
 }
 

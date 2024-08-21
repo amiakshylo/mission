@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('user_management', '0010_alter_usergoal_completed_at_and_more'),
     ]
@@ -14,6 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='usergoal',
             name='progress',
-            field=models.FloatField(default=0.0, help_text='Progress in percentage', validators=[django.core.validators.MinValueValidator(0.0), django.core.validators.MaxValueValidator(100.0)]),
+            field=models.FloatField(default=0.0, help_text='Progress in percentage',
+                                    validators=[django.core.validators.MinValueValidator(0.0),
+                                                django.core.validators.MaxValueValidator(100.0)]),
         ),
     ]

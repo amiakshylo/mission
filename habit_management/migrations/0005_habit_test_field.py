@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('habit_management', '0004_remove_habit_end_date_remove_habit_start_date'),
     ]

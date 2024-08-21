@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('habit_management', '0007_remove_habit_test_field'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
@@ -36,7 +35,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='habit',
             name='created_by',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                    to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='habit',

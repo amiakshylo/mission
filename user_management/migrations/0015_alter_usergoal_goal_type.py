@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('user_management', '0014_usergoal_goal_type'),
     ]
@@ -13,6 +12,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='usergoal',
             name='goal_type',
-            field=models.CharField(blank=True, choices=[('short_term', 'Short-term'), ('long_term', 'Long-term')], default='not predefined'),
+            field=models.CharField(blank=True, choices=[('short_term', 'Short-term'), ('long_term', 'Long-term')],
+                                   default='not predefined'),
         ),
     ]

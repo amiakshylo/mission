@@ -6,10 +6,6 @@ from . import models
 @admin.register(models.Goal)
 class GoalAdmin(admin.ModelAdmin):
     list_display = ['title', 'description']
-    list_filter = ['role']
-
-
-
-
-
+    autocomplete_fields = ['category', 'role']
+    search_fields = ['title']
 

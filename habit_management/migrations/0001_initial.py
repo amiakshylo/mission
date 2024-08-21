@@ -8,7 +8,6 @@ import core.models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -24,11 +23,14 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('start_date', models.DateTimeField(validators=[core.models.validate_start_due_date])),
                 ('end_date', models.DateTimeField(blank=True, null=True)),
-                ('progress', models.FloatField(default=0.0, validators=[django.core.validators.MinValueValidator(0.0), django.core.validators.MaxValueValidator(100.0)])),
+                ('progress', models.FloatField(default=0.0, validators=[django.core.validators.MinValueValidator(0.0),
+                                                                        django.core.validators.MaxValueValidator(
+                                                                            100.0)])),
                 ('title', models.CharField(max_length=255)),
                 ('description', models.TextField()),
                 ('frequency', models.JSONField(default=dict)),
-                ('sub_category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='category_management.subcategory')),
+                ('sub_category',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='category_management.subcategory')),
             ],
         ),
     ]

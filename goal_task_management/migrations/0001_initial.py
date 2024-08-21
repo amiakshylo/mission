@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -22,7 +21,8 @@ class Migration(migrations.Migration):
                 ('completed_at', models.DateTimeField(auto_now_add=True)),
                 ('is_completed', models.BooleanField(default=False)),
                 ('paused', models.BooleanField(default=False)),
-                ('priority', models.CharField(choices=[('L', 'Low'), ('M', 'Medium'), ('H', 'High'), ('C', 'Critical')], default='M', max_length=1)),
+                ('priority', models.CharField(choices=[('L', 'Low'), ('M', 'Medium'), ('H', 'High'), ('C', 'Critical')],
+                                              default='M', max_length=1)),
                 ('name', models.CharField(max_length=255, unique=True)),
                 ('description', models.TextField()),
             ],
@@ -39,7 +39,8 @@ class Migration(migrations.Migration):
                 ('completed_at', models.DateTimeField(auto_now_add=True)),
                 ('is_completed', models.BooleanField(default=False)),
                 ('paused', models.BooleanField(default=False)),
-                ('priority', models.CharField(choices=[('L', 'Low'), ('M', 'Medium'), ('H', 'High'), ('C', 'Critical')], default='M', max_length=1)),
+                ('priority', models.CharField(choices=[('L', 'Low'), ('M', 'Medium'), ('H', 'High'), ('C', 'Critical')],
+                                              default='M', max_length=1)),
                 ('name', models.CharField(max_length=255)),
                 ('description', models.TextField()),
                 ('is_predefined', models.BooleanField(default=True)),
@@ -55,7 +56,8 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=255, unique=True)),
                 ('description', models.TextField()),
                 ('is_predefined', models.BooleanField(default=True)),
-                ('sub_category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='category_management.subcategory')),
+                ('sub_category',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='category_management.subcategory')),
             ],
         ),
     ]

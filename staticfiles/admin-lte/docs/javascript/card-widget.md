@@ -3,19 +3,23 @@ layout: page
 title: Card Widget Plugin
 ---
 
-The card widget plugin provides the functionality for collapsing, expanding and removing a card. 
+The card widget plugin provides the functionality for collapsing, expanding and removing a card.
 
 ##### Usage
-This plugin can be activated as a jQuery plugin or using the data api. 
+
+This plugin can be activated as a jQuery plugin or using the data api.
 
 ###### Data API
+
 {: .text-bold }
 
-This plugin provides two data-api attributes. Any element using one of the following attributes should be placed within the `.card-tools` div, which is usually in the card header. For more information about the [card HTML structure]({% link components/cards.md %}), visit the card component documentation 
+This plugin provides two data-api attributes. Any element using one of the following attributes should be placed within
+the `.card-tools` div, which is usually in the card header. For more information about the [card HTML structure]({% link
+components/cards.md %}), visit the card component documentation
 
 `data-card-widget="collapse"`
 <br />
-This attribute, when attached to a button, allows the box to be collapsed/expanded when clicked. 
+This attribute, when attached to a button, allows the box to be collapsed/expanded when clicked.
 <div class="row">
   <div class="col-12 col-md-4">
      <div class="card">
@@ -55,7 +59,7 @@ This attribute, when attached to a button, allows the box to be collapsed/expand
 
 `data-card-widget="remove"`
 <br />
-This attribute, when attached to a button, allows the box to be removed when clicked. 
+This attribute, when attached to a button, allows the box to be removed when clicked.
 <div class="row">
   <div class="col-12 col-md-4">
      <div class="card">
@@ -95,7 +99,7 @@ This attribute, when attached to a button, allows the box to be removed when cli
 
 `data-card-widget="maximize"`
 <br />
-This attribute, when attached to a button, allows the box to be maximize/minimize when clicked. 
+This attribute, when attached to a button, allows the box to be maximize/minimize when clicked.
 <div class="row">
   <div class="col-12 col-md-4">
      <div class="card">
@@ -133,25 +137,30 @@ This attribute, when attached to a button, allows the box to be maximize/minimiz
   </div>
 </div>
 
-
 ###### jQuery
+
 {: .text-bold }
-To activate any button using jQuery, you must provide the removeTrigger and collapseTrigger options. Otherwise, the plugin will assume the default `data-card-widget` selectors. 
+To activate any button using jQuery, you must provide the removeTrigger and collapseTrigger options. Otherwise, the
+plugin will assume the default `data-card-widget` selectors.
 
 ```js
 $('#my-card').CardWidget(options)
 ```
 
 ##### Options
+
 {: .mt-4}
 
 |---
 | Name | Type | Default | Description
 |-|-|-|-
-|animationSpeed | Number | 300 | Speed of slide down/up animation in milliseconds.
-|collapseTrigger | String | `[data-card-widget="collapse"]` | jQuery selector to the element responsible for collapsing the box.
-|removeTrigger | String | `[data-card-widget="remove"]` | jQuery selector to the element responsible for removing the box.
-|maximizeTrigger | String | `[data-card-widget="maximize"]` | jQuery selector to the element responsible for maximizing the box.
+|animationSpeed | Number | 300 | Speed of slide down/up animation in milliseconds.
+|collapseTrigger | String | `[data-card-widget="collapse"]` | jQuery selector to the element responsible for collapsing
+the box.
+|removeTrigger | String | `[data-card-widget="remove"]` | jQuery selector to the element responsible for removing the
+box.
+|maximizeTrigger | String | `[data-card-widget="maximize"]` | jQuery selector to the element responsible for maximizing
+the box.
 {: .table .table-bordered .bg-light}
 
 > ##### Tip!
@@ -162,22 +171,23 @@ $('#my-card').CardWidget(options)
 {: .quote-info}
 
 ##### Events
+
 {: .mt-4}
 
 |---
-| Event Type | Description
+| Event Type | Description
 |-|-
-|expanded.lte.cardwidget | Triggered after a card expanded.
-|collapsed.lte.cardwidget | Triggered after a card collapsed.
-|maximized.lte.cardwidget | Triggered after a card maximized.
-|minimized.lte.cardwidget | Triggered after a card minimized.
-|removed.lte.cardwidget | Triggered after a card removed.
+|expanded.lte.cardwidget | Triggered after a card expanded.
+|collapsed.lte.cardwidget | Triggered after a card collapsed.
+|maximized.lte.cardwidget | Triggered after a card maximized.
+|minimized.lte.cardwidget | Triggered after a card minimized.
+|removed.lte.cardwidget | Triggered after a card removed.
 {: .table .table-bordered .bg-light}
 
 Example: `$('#my-card').on('expanded.lte.cardwidget', handleExpandedEvent)`
 
-
 ##### Methods
+
 {: .mt-4}
 
 |---

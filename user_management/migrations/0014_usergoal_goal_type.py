@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('user_management', '0013_userhabit_is_custom_userrole_created_at_and_more'),
     ]
@@ -13,6 +12,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='usergoal',
             name='goal_type',
-            field=models.CharField(choices=[('short_term', 'Short-term'), ('long_term', 'Long-term')], default='not predefined'),
+            field=models.CharField(choices=[('short_term', 'Short-term'), ('long_term', 'Long-term')],
+                                   default='not predefined'),
         ),
     ]

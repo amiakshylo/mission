@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('goal_task_management', '0007_remove_goal_user_goal_created_by_and_more'),
     ]
@@ -13,7 +12,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='goal',
             name='goal_type',
-            field=models.CharField(choices=[('short_term', 'Short-term'), ('long_term', 'Long-term')], default='not predefined'),
+            field=models.CharField(choices=[('short_term', 'Short-term'), ('long_term', 'Long-term')],
+                                   default='not predefined'),
             preserve_default=False,
         ),
     ]

@@ -3,25 +3,31 @@ layout: page
 title: Push Menu Plugin
 ---
 
-The PushMenu plugin controls the toggle button of the main sidebar. 
+The PushMenu plugin controls the toggle button of the main sidebar.
 
 ##### Usage
-This plugin can be activated as a jQuery plugin or using the data api. 
+
+This plugin can be activated as a jQuery plugin or using the data api.
 
 ###### Data API
+
 {: .text-bold }
-Add `data-widget="pushmenu"` to a button to activate the plugin. 
+Add `data-widget="pushmenu"` to a button to activate the plugin.
+
 ```html
 <button class="btn btn-primary" data-widget="pushmenu">Toggle Sidebar</button>
 ```
 
 ###### jQuery
+
 {: .text-bold }
+
 ```js
 $('.sidebar-toggle-btn').PushMenu(options)
 ```
 
 ##### Options
+
 {: .mt-4}
 
 |---
@@ -39,12 +45,12 @@ $('.sidebar-toggle-btn').PushMenu(options)
 > ```
 {: .quote-info}
 
-
 ##### Events
+
 {: .mt-4}
 
 |---
-| Event Type | Description
+| Event Type | Description
 |-|-
 |collapsed.lte.pushmenu | Fired when the sidebar collapsed.
 |shown.lte.pushmenu | Fired when the sidebar shown.
@@ -52,14 +58,14 @@ $('.sidebar-toggle-btn').PushMenu(options)
 
 Example: `$(document).on('shown.lte.pushmenu', handleExpandedEvent)`
 
-
 ##### Methods
+
 {: .mt-4}
 
 |---
 | Method | Description
 |-|-
-|toggle | Toggles the state of the menu between expanded and collapsed.
+|toggle | Toggles the state of the menu between expanded and collapsed.
 |collapse | Collapses the sidebar menu.
 |expand | Expands the sidebar menu
 {: .table .table-bordered .bg-light}

@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('goal_task_management', '0003_alter_subtask_completed_at_alter_task_completed_at'),
     ]
