@@ -3,9 +3,16 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+import openai
+from dotenv import load_dotenv
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure--(0j420hh=@mx4rmo9qxmy+g!o55jw1hjh@*e%cq7o(q*zpf2$'
+load_dotenv()
+
+SECRET_KEY = os.getenv('SECRET_KEY')
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 DEBUG = True
 
