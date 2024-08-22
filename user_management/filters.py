@@ -6,5 +6,4 @@ from user_management.models import Role
 class RoleFilter(FilterSet):
     class Meta:
         model = Role
-        fields = {'category__id': ['exact'],
-                  }
+        fields = ['category']

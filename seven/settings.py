@@ -14,6 +14,7 @@ load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
+
 DEBUG = True
 
 ALLOWED_HOSTS = ['local-dev']

@@ -19,10 +19,10 @@ class Category(models.Model):
 
 class CategoryProgress(ProgressModel):
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    main_category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.user_profile.user} - {self.main_category.title} - {self.progress}%'
+        return f'{self.user_profile.user} - {self.category.title} - {self.progress}%'
 
     def is_significantly_engaged(self, threshold=75):
         """Check if the user's progress in the category_management meets or exceeds the threshold."""
@@ -31,7 +31,7 @@ class CategoryProgress(ProgressModel):
 
 class CategoryCompletion(CompletedModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    main_category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.user.name} - {self.main_category.title}'
+        return f'{self.user.name} - {self.category.title}'

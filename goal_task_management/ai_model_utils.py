@@ -1,12 +1,36 @@
+# from dotenv import load_dotenv
+# import os
 # from openai import OpenAI
-# client = OpenAI(api_key='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')
 #
-# completion = client.chat.completions.create(
-#   model="gpt-4o-mini",
-#   messages=[
-#     {"role": "system", "content": "You are a poetic assistant, skilled in explaining complex programming concepts with creative flair."},
-#     {"role": "user", "content": "Compose a poem that explains the concept of recursion in programming."}
-#   ]
-# )
 #
-# print(completion.choices[0].message)
+# load_dotenv()
+#
+# print("API Key:", os.getenv("OPENAI_API_KEY"))
+#
+# def test_openai_connection():
+#     api_key = os.getenv("OPENAI_API_KEY")
+#     print("API Key:", api_key)
+#
+#     try:
+#         # Initialize the OpenAI client with the api_key variable
+#         client = OpenAI(
+#             api_key=api_key,
+#         )
+#
+#         # Create a chat completion request
+#         chat_completion = client.chat.completions.create(
+#             messages=[
+#                 {
+#                     "role": "user",
+#                     "content": "Say this is a test",
+#                 }
+#             ],
+#             model="gpt-3.5-turbo",
+#         )
+#
+#         # Correct way to access the content of the response
+#         response_message = chat_completion.choices[0].message.content.strip()
+#         print("OpenAI connected. Response:", response_message)
+#
+#     except Exception as e:
+#         print("Error connecting to OpenAI:", e)

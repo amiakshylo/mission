@@ -26,6 +26,14 @@ class UserSerializer(BaseUserSerializer):
         fields = ['id', 'email', 'username']
 
 
+class RoleSerializer(serializers.ModelSerializer):
+
+
+    class Meta:
+        model = Role
+        fields = ['id', 'title']
+
+
 class UserRoleSerializer(serializers.ModelSerializer):
     category = serializers.StringRelatedField()
 
@@ -35,52 +43,63 @@ class UserRoleSerializer(serializers.ModelSerializer):
 
 
 class CreateUserRoleSerializer(serializers.ModelSerializer):
-    role = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all(), required=False, allow_null=True)
+    id = serializers.IntegerField(required=False)
+    custom_title = serializers.CharField(required=False)
 
     class Meta:
         model = Role
-        fields = ['role', 'custom_title']
+        fields = ['id', 'custom_title']
 
-    def validate_custom_role(self, value):
+    def validate_custom_title(self, value):
+        """Capitalize the custom title."""
         return value.capitalize()
 
     def validate(self, data):
-        role = data.get('role')
-        custom_role = data.get('custom_role')
+        """Validate the input data."""
+        role_id = data.get('id')
+        custom_title = data.get('custom_title')
 
-        if not role and not custom_role:
-            raise serializers.ValidationError("Either 'role' or 'custom_role' must be provided.")
-        if role and custom_role:
-            raise serializers.ValidationError("'Predefined role' and 'custom_role' cannot both be provided "
-                                              "simultaneously.")
-        if custom_role and Role.objects.filter(custom_role__iexact=custom_role).exists():
-            raise serializers.ValidationError({'duplicated': "A role with that title already exists, select from list"})
-
+        if not Role.objects.filter(pk=role_id).exists() and not custom_title:
+            raise serializers.ValidationError("Role does not exist.")
+        if self._role_already_exists(role_id):
+            raise serializers.ValidationError("You already have that role.")
+        if not role_id and not custom_title:
+            raise serializers.ValidationError("Either 'role' or 'custom_title' must be provided.")
+        if role_id and custom_title:
+            raise serializers.ValidationError("'Predefined role' and 'custom_title' cannot both be provided simultaneously.")
+        if custom_title and self._custom_title_exists(custom_title):
+            raise serializers.ValidationError({'duplicated': "A role with that title already exists, select from the list."})
 
         return data
 
+    def _role_already_exists(self, role_id):
+        """Check if the role already exists for the user."""
+        return role_id in [role.id for role in self.context.get('user_profile').roles.all()]
+
+    def _custom_title_exists(self, custom_title):
+        """Check if a role with the custom title already exists."""
+        return Role.objects.filter(title__iexact=custom_title).exists()
+
     def create(self, validated_data):
+        """Create a new role or assign an existing one to the user profile."""
         with transaction.atomic():
             user_profile = self.context.get('user_profile')
-            print(user_profile)
+            role_id = validated_data.get('id')
+            custom_title = validated_data.get('custom_title')
 
-
-            role = validated_data.get('role')
-            custom_role = validated_data.get('custom_role')
-
-
-            if role:
-                user_profile.roles.add(role)
-                user_role = role
-            else:
-                user_role = Role.objects.create(
-                    role=custom_role,
-                    is_custom=True,
-                )
+            if role_id:
+                user_role = Role.objects.get(id=role_id)
                 user_profile.roles.add(user_role)
-            user_profile.save()
+            else:
+                user_role = Role.objects.create(title=custom_title, is_custom=True)
+                user_profile.roles.add(user_role)
 
+            user_profile.save()
             return user_role
+
+
+
+
 
 
 class UserGoalSerializer(serializers.ModelSerializer):
@@ -113,9 +132,6 @@ class CreateUserGoalSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("This goal is already set up by you, please choose another goal or create"
                                               " a new one.")
         return data
-
-
-
 
 
 class UserProfileSerializer(serializers.ModelSerializer):

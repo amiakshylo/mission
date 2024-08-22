@@ -91,13 +91,14 @@ class Role(TimeStampedModel):
     """
     A model representing user roles, either predefined or custom.
     """
-    title = models.CharField(max_length=50, blank=True, null=True)
+    title = models.CharField(max_length=50, unique=True, null=True, blank=True)
+    type = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField(blank=True, null=True)
     user_profile = models.ManyToManyField(UserProfile, related_name='roles')
-    custom_title = models.CharField(max_length=50, blank=True, null=True, unique=True)
+    custom_title = models.CharField(max_length=50, unique=True, null=True, blank=True)
     is_custom = models.BooleanField(default=False)
-    category = models.ForeignKey('category_management.Category', on_delete=models.CASCADE, null=True, blank=True,
-                                 related_name='roles')
+    category = models.ForeignKey('category_management.Category', on_delete=models.CASCADE,
+                                 related_name='roles', null=True, blank=True)
 
     def __str__(self):
         return self.title

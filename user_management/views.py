@@ -2,7 +2,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 
 from django_filters.rest_framework import DjangoFilterBackend
-
+from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, DestroyModelMixin, CreateModelMixin
@@ -12,15 +12,17 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.filters import SearchFilter
 
+from category_management.models import Category
 from goal_task_management.models import Goal
 from .filters import RoleFilter
 
 from .models import UserProfile, UserGoal, Role
+from .pagination import DefaultPagination
 from .serializers import (UserProfileSerializer, EditUserProfileSerializer,
 
                           CreateUserRoleSerializer,
                           UserRoleSerializer, UserGoalSerializer, CreateUserGoalSerializer,
-                          EditUserGoalSerializer)
+                          EditUserGoalSerializer, RoleSerializer)
 
 
 class UserProfileSet(ListModelMixin, GenericViewSet):
@@ -46,11 +48,21 @@ class UserProfileSet(ListModelMixin, GenericViewSet):
         return Response(serializer.data)
 
 
+# ATTENTION REDUNDANT QUERIES >
+
+class RoleViewSet(ListModelMixin, GenericViewSet):
+    queryset = Role.objects.all().select_related('category')
+    serializer_class = RoleSerializer
+    pagination_class = DefaultPagination
+    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = RoleFilter
+
+
 class UserRoleViewSet(ListModelMixin, CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, GenericViewSet):
 
     permission_classes = [IsAuthenticated]
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['category__id']
+
 
     def get_queryset(self):
         user_profile = self.request.user.user_profile
@@ -68,6 +80,19 @@ class UserRoleViewSet(ListModelMixin, CreateModelMixin, RetrieveModelMixin, Dest
         context = super().get_serializer_context()
         context['user_profile'] = self.request.user.user_profile
         return context
+
+    def destroy(self, request, *args, **kwargs):
+        user_profile = self.request.user.user_profile
+        role = self.get_object()
+
+        # Remove the role from the user's profile without deleting the role
+        user_profile.roles.remove(role)
+
+        # Return a response indicating success
+        return Response({"detail": "Role removed from profile."}, status=status.HTTP_204_NO_CONTENT)
+
+
+
 
 
 class UserGoalViewSet(ModelViewSet):
