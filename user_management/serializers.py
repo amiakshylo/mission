@@ -4,6 +4,7 @@ from django.db import transaction
 from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer
 from djoser.serializers import UserSerializer as BaseUserSerializer
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from category_management.serializers import CategorySerializer
 from goal_task_management.models import Goal
@@ -27,28 +28,29 @@ class UserSerializer(BaseUserSerializer):
 
 
 class RoleSerializer(serializers.ModelSerializer):
+    type = serializers.CharField()
 
 
     class Meta:
         model = Role
-        fields = ['id', 'title']
+        fields = ['id', 'title', 'type']
 
 
 class UserRoleSerializer(serializers.ModelSerializer):
-    category = serializers.StringRelatedField()
 
     class Meta:
         model = Role
-        fields = ['id', 'title', 'category']
+        fields = ['id', 'title', 'type']
 
 
 class CreateUserRoleSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     custom_title = serializers.CharField(required=False)
+    title = serializers.CharField(read_only=True)
 
     class Meta:
         model = Role
-        fields = ['id', 'custom_title']
+        fields = ['id', 'title', 'custom_title', 'type']
 
     def validate_custom_title(self, value):
         """Capitalize the custom title."""
@@ -84,18 +86,33 @@ class CreateUserRoleSerializer(serializers.ModelSerializer):
         """Create a new role or assign an existing one to the user profile."""
         with transaction.atomic():
             user_profile = self.context.get('user_profile')
+            if not user_profile:
+                raise ValidationError("User profile is required.")
+
             role_id = validated_data.get('id')
             custom_title = validated_data.get('custom_title')
+            role_type = validated_data.get('type')
 
             if role_id:
-                user_role = Role.objects.get(id=role_id)
-                user_profile.roles.add(user_role)
-            else:
-                user_role = Role.objects.create(title=custom_title, is_custom=True)
-                user_profile.roles.add(user_role)
+                try:
+                    user_role = Role.objects.get(id=role_id)
+                except Role.DoesNotExist:
+                    raise ValidationError(f"Role with id {role_id} does not exist.")
 
-            user_profile.save()
-            return user_role
+                user_profile.roles.add(user_role)
+                user_profile.save()
+            else:
+                user_role = Role.objects.create(title=custom_title, is_custom=True, type=role_type)
+                user_profile.roles.add(user_role)
+                user_profile.save()
+
+            # Serialize the created/updated role and return the serialized data
+            serialized_data = CreateUserRoleSerializer(user_role).data
+            print(serialized_data)
+            return serialized_data
+
+
+
 
 
 

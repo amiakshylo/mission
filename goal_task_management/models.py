@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 
 from core.models import TimeStampedModel, CompletedModel, PriorityModel
+from user_management.models import UserProfile
 
 
 class Goal(models.Model):
@@ -23,6 +24,17 @@ class Goal(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class GoalSuggestionLog(models.Model):
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='suggestions')
+    goal = models.ForeignKey('goal_task_management.Goal', on_delete=models.CASCADE, null=True, blank=True)
+    suggestion_source = models.CharField(max_length=255)  # 'openai' or 'ml_model'
+    suggested_at = models.DateTimeField(auto_now_add=True)
+    user_feedback = models.CharField(max_length=255, null=True, blank=True)  # optional feedback from user
+
+    def __str__(self):
+        return f"Suggestion for {self.user_profile.user.email} from {self.suggestion_source}"
 
 
 class Task(TimeStampedModel, CompletedModel, PriorityModel):

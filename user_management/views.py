@@ -51,12 +51,13 @@ class UserProfileSet(ListModelMixin, GenericViewSet):
 # ATTENTION REDUNDANT QUERIES >
 
 class RoleViewSet(ListModelMixin, GenericViewSet):
-    queryset = Role.objects.all().select_related('category')
+    queryset = Role.objects.all()
     serializer_class = RoleSerializer
     pagination_class = DefaultPagination
     permission_classes = [IsAuthenticated]
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = RoleFilter
+    search_fields = ['title']
 
 
 class UserRoleViewSet(ListModelMixin, CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, GenericViewSet):
@@ -67,7 +68,7 @@ class UserRoleViewSet(ListModelMixin, CreateModelMixin, RetrieveModelMixin, Dest
     def get_queryset(self):
         user_profile = self.request.user.user_profile
 
-        return Role.objects.select_related('category').filter(user_profile=user_profile)
+        return Role.objects.filter(user_profile=user_profile)
 
 
 

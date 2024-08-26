@@ -53,6 +53,7 @@ class UserProfile(models.Model):
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_profile')
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES, null=True, blank=False)
+    age = models.CharField(max_length=20, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profile_picture/', blank=True, null=False,
@@ -60,6 +61,13 @@ class UserProfile(models.Model):
     notification_preferences = models.CharField(max_length=255, default='Push notifications')
     ai_assistant_model = models.CharField(choices=ASSISTANT_MODEL_CHOICES, max_length=255)
     dashboard_customization = models.TextField(blank=True, null=True)
+
+    def get_age(self):
+        if self.birth_date:
+            from datetime import date
+            today = date.today()
+            return today.year - self.birth_date.year - ((today.month, today.day) < (self.birth_date.month, self.birth_date.day))
+        return
 
     def __str__(self):
         return f'{self.user.email} Profile'
@@ -91,18 +99,29 @@ class Role(TimeStampedModel):
     """
     A model representing user roles, either predefined or custom.
     """
+    PROFESSIONAL = 'Professional Roles'
+    PERSONAL = 'Personal Roles'
+    SELF_IMPROVEMENT = 'Self-Improvement Roles'
+    COMMUNITY_SOCIAL_IMPACT = 'Community and Social Impact Roles'
+    WELLNESS_SPIRITUAL = 'Wellness and Spiritual Roles'
+
+    ROLE_TYPE_CHOICES = [
+        (PROFESSIONAL, 'Professional Roles'),
+        (PERSONAL, 'Personal Roles'),
+        (SELF_IMPROVEMENT, 'Self-Improvement Roles'),
+        (COMMUNITY_SOCIAL_IMPACT, 'Community and Social Impact Roles'),
+        (WELLNESS_SPIRITUAL, 'Wellness and Spiritual Roles'),
+    ]
+
     title = models.CharField(max_length=50, unique=True, null=True, blank=True)
-    type = models.CharField(max_length=50, null=True, blank=True)
+    type = models.CharField(max_length=50, choices=ROLE_TYPE_CHOICES)
     description = models.TextField(blank=True, null=True)
     user_profile = models.ManyToManyField(UserProfile, related_name='roles')
     custom_title = models.CharField(max_length=50, unique=True, null=True, blank=True)
     is_custom = models.BooleanField(default=False)
-    category = models.ForeignKey('category_management.Category', on_delete=models.CASCADE,
-                                 related_name='roles', null=True, blank=True)
 
     def __str__(self):
         return self.title
-
     def is_owner(self, user):
         return self.user_profile.filter(user=user).exists() or user.is_staff
 

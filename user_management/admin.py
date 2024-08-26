@@ -18,9 +18,9 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 @admin.register(models.Role)
 class RoleAdmin(admin.ModelAdmin):
-    list_display = ['title', 'description', 'category']
-    autocomplete_fields = ['category']
+    list_display = ['title', 'description']
+
     search_fields = ['title', 'description']
 
     def get_queryset(self, request):
-        return models.Role.objects.select_related('category').all()
+        return models.Role.objects.all()

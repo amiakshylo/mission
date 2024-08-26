@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'django_filters',
+    'drf_yasg',
     'adminlte3',
     'debug_toolbar',
     'rest_framework',

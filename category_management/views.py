@@ -11,7 +11,6 @@ class CategoryViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
-    filter_backends = [DjangoFilterBackend]
 
 
 
