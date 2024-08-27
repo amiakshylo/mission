@@ -1,5 +1,5 @@
-from django.contrib.postgres.search import SearchVector, SearchQuery, TrigramSimilarity, SearchRank
-from django.db.models import Q
+
+import torch
 
 from rest_framework import status
 
@@ -7,11 +7,15 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import CreateModelMixin
-from goal_task_management.openai.integration import generate_goal_with_openai
-from goal_task_management.ml.goal_suggestion_model import train_model, predict_goal
+
+from goal_task_management.ml.goal_suggestion_model import (load_trained_model, preprocess_user_data,
+                                                           train_pytorch_model,
+                                                           get_output_size, reverse_goal_mapping)
+
 from goal_task_management.models import Goal, GoalSuggestionLog
+from goal_task_management.openai.integration import generate_goal_with_openai
 from goal_task_management.serializers import GoalSuggestionInputSerializer, GoalSerializer
-from user_management.models import UserGoal
+from utils.text_utils import lemmatize_title, are_titles_similar, normalize_text
 
 
 class GoalSuggestionsViewset(CreateModelMixin, GenericViewSet):
@@ -25,7 +29,6 @@ class GoalSuggestionsViewset(CreateModelMixin, GenericViewSet):
         roles_queryset = user_profile.roles.all()
         print(f"User Profile: {user_profile}, Roles: {[role.title for role in roles_queryset]}")
 
-        # Initialize the serializer with the filtered queryset directly
         suggestion_serializer = self.get_serializer(
             data=request.data,
             context={'request': request}
@@ -36,96 +39,143 @@ class GoalSuggestionsViewset(CreateModelMixin, GenericViewSet):
             role = suggestion_serializer.validated_data['role']
             print(f"Role selected: {role.title}")
 
-            # Step 1: Train or load the ML model
-            model = self.load_model()
+            # Get the value of 'top_n' from the request data or default to 3
+            top_n = request.data.get('top_n', 5)
 
-            if model:
-                # Step 2: Predict a goal using the ML model
-                predicted_goal_id = self.predict_goal_with_logging(model, user_profile)
-                suggested_goals = Goal.objects.filter(id=predicted_goal_id)
-                print(f"Predicted goal ID: {predicted_goal_id}")
-            else:
-                # Fallback to your existing logic if no model or prediction available
-                print("Model loading failed or not available. Using fallback logic.")
-                suggested_goals = Goal.objects.filter(role=role)
+            # Ensure that 'top_n' is an integer
+            try:
+                top_n = int(top_n)
+            except ValueError:
+                print(f"Invalid value for top_n: '{top_n}', defaulting to 3")
+                top_n = 3
 
-            # Perform search filtering if a search query is provided
-            search_query = request.data.get('search', None)
-            if search_query:
-                print(f"Search query received: {search_query}")
-                suggested_goals = self.search_goals(suggested_goals, search_query)
-                print(f"Search filtering applied. {suggested_goals.count()} goals found.")
+            suggested_goals = self.suggest_goals(user_profile, role, top_n=top_n)
 
-            # If no suggested goals were found, fallback to OpenAI
-            if not suggested_goals.exists():
-                print("No goals found. Falling back to OpenAI.")
-                suggested_goals = self.generate_goal_with_openai_fallback(user_profile, role)
-
-            print(f"Returning {suggested_goals.count()} goals to the user.")
+            print(f"Returning {len(suggested_goals)} goals to the user.")
             return Response(GoalSerializer(suggested_goals, many=True).data)
 
         print("Suggestion serializer validation failed.")
         return Response(suggestion_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def load_model(self):
-        print("Loading the ML model.")
-        try:
-            model = train_model()
-            print("Model loaded successfully.")
-            return model
-        except Exception as e:
-            print(f"Error loading or training model: {e}")
-            return None
+    def suggest_goals(self, user_profile, role, top_n=3):
+        # Check the number of unique goals for the role
+        unique_goals_count = Goal.objects.filter(role=role).distinct().count()
 
-    def predict_goal_with_logging(self, model, user_profile):
-        print("Predicting goal using the ML model.")
-        try:
-            predicted_goal_id = predict_goal(model, user_profile)
-            print(f"Prediction successful. Goal ID: {predicted_goal_id}")
-            return predicted_goal_id
-        except Exception as e:
-            print(f"Error during prediction: {e}")
-            return None
+        if unique_goals_count < 50:  # Replace 50 with your desired threshold
+            print(f"Less than 50 unique goals for role '{role.title}'. Generating goals with AI.")
+            while unique_goals_count < 50:
+                generated_goals = generate_goal_with_openai(user_profile, selected_role=role.title)
+                if generated_goals:
+                    # Save only unique goals
+                    new_goals = self.save_generated_goals(user_profile, generated_goals, role)
+                    unique_goals_count += len(new_goals)
 
-    def search_goals(self, queryset, search_query):
-        print("Applying search filtering on goals.")
-        try:
-            # Creating a custom search vector for title and description
-            vector = SearchVector('title', weight='A') + SearchVector('description', weight='B')
-            query = SearchQuery(search_query, search_type='websearch')
+        # Proceed with ML model suggestion if enough data
+        return self.suggest_goals_with_ml(user_profile, role, top_n)
 
-            # Annotate the queryset with rank and trigram similarity
-            filtered_queryset = queryset.annotate(
-                rank=SearchRank(vector, query),
-                trigram_similarity=TrigramSimilarity('title', search_query)
-            ).filter(
-                Q(rank__gte=0.2) | Q(trigram_similarity__gt=0.2)
-            ).distinct().order_by('-rank', '-trigram_similarity')
+    def suggest_goals_with_ml(self, user_profile, role, top_n=3):
+        # Check if there are goals for the selected role
+        role_goal_count = Goal.objects.filter(role=role).count()
+        if role_goal_count == 0:
+            print(f"No goals found for role '{role.title}'. Proceeding with OpenAI fallback.")
+            return self.generate_goal_with_openai_fallback(user_profile, role)
 
-            print(f"Search completed. {filtered_queryset.count()} goals matched.")
-            return filtered_queryset
-        except Exception as e:
-            print(f"Error during search filtering: {e}")
-            return queryset
+        current_goal_count = Goal.objects.count()
+        model = load_trained_model()
+
+        # Check if the model needs to be retrained
+        if model is None or current_goal_count != get_output_size():
+            print("Number of goals has changed or model not loaded, retraining model.")
+            train_pytorch_model()
+            model = load_trained_model()
+
+        # If the model still cannot be loaded, fallback to OpenAI
+        if model is None:
+            print("Model could not be loaded. Proceeding with OpenAI fallback.")
+            return self.generate_goal_with_openai_fallback(user_profile, role)
+
+        # Preprocess user data
+        user_data_tensor = preprocess_user_data(user_profile)
+
+        if user_data_tensor is not None:
+            with torch.no_grad():
+                # Get top N predicted indices
+                prediction = model(user_data_tensor)
+                top_n_indices = torch.topk(prediction, k=top_n, dim=1)[1]
+
+                suggested_goals = []
+                for idx_tensor in top_n_indices[0]:
+                    idx = idx_tensor.item()
+                    if idx < current_goal_count:
+                        predicted_goal_id = reverse_goal_mapping(idx)
+                        goal = Goal.objects.filter(id=predicted_goal_id).first()
+                        if goal:
+                            suggested_goals.append({'title': goal.title, 'description': goal.description})
+                        else:
+                            print(f"Predicted goal ID {predicted_goal_id} not found.")
+                    else:
+                        print(f"Predicted index {idx} is out of bounds for current goal count {current_goal_count}.")
+
+                # Save and log the ML-suggested goals
+                return self.save_generated_goals(user_profile, suggested_goals, role, source='ml_model')
+
+        print("No valid user data for prediction. Using OpenAI fallback.")
+        return self.generate_goal_with_openai_fallback(user_profile, role)
 
     def generate_goal_with_openai_fallback(self, user_profile, role):
         print("Attempting to generate a goal using OpenAI.")
         try:
-            generated_goal = generate_goal_with_openai(user_profile, selected_role=role.title)
-            if generated_goal:
-                print(f"OpenAI generated a goal: {generated_goal['title']}")
-                goal = Goal.objects.create(
-                    title=generated_goal['title'],
-                    description=generated_goal['description'],
-                    is_custom=True,
-                    created_by=user_profile.user,
-                )
-                GoalSuggestionLog.objects.create(user_profile=user_profile, goal=goal, suggestion_source='openai')
-                return Goal.objects.filter(id=goal.id)
-            else:
-                print("OpenAI did not return a goal.")
+            generated_goals = generate_goal_with_openai(user_profile, selected_role=role.title)
+            if generated_goals:
+                return self.save_generated_goals(user_profile, generated_goals, role)
         except Exception as e:
             print(f"OpenAI request failed: {e}")
 
         print("Returning an empty queryset as no goals were found or generated.")
         return Goal.objects.none()
+
+    def save_generated_goals(self, user_profile, generated_goals, role, source='openai'):
+        created_goals = []
+        logged_goals = []
+
+        for goal_data in generated_goals:
+            # Normalize and lemmatize the title
+            lemmatized_title = lemmatize_title(normalize_text(goal_data['title']))
+
+            # Check against all existing goals
+            existing_goals = Goal.objects.all()
+            is_duplicate = False
+
+            for existing_goal in existing_goals:
+                existing_lemmatized_title = lemmatize_title(normalize_text(existing_goal.title))
+
+                if lemmatized_title == existing_lemmatized_title or are_titles_similar(lemmatized_title,
+                                                                                       existing_lemmatized_title):
+                    print(f"Similar goal found: '{lemmatized_title}', not saving.")
+                    created_goals.append(existing_goal)  # Add existing goal to the list
+                    logged_goals.append(existing_goal)  # Track for logging
+                    is_duplicate = True
+                    break
+
+            if not is_duplicate:
+                # Create and save a new goal with the original title and description
+                new_goal = Goal(
+                    title=goal_data['title'],
+                    description=goal_data['description'],
+                    is_custom=True,
+                    created_by=user_profile.user
+                )
+                new_goal.save()  # Save individually to get an ID
+                new_goal.role.set([role])  # Assign role after saving
+
+                created_goals.append(new_goal)
+                logged_goals.append(new_goal)
+
+        # Log all suggestions, including duplicates
+        GoalSuggestionLog.objects.bulk_create([
+            GoalSuggestionLog(user_profile=user_profile, goal=goal, suggestion_source=source, role=role)
+            for goal in logged_goals
+        ])
+
+        # Return all the goals, including those that weren't saved again because they were duplicates
+        return created_goals

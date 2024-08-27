@@ -30,7 +30,7 @@ class UserProfileSet(ListModelMixin, GenericViewSet):
     permission_classes = [IsAdminUser]
 
     def get_queryset(self):
-        return UserProfile.objects.all().select_related('user').prefetch_related('roles__category')
+        return UserProfile.objects.all().select_related('user')
 
     @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
     def me(self, request, *args, **kwargs):

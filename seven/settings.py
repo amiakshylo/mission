@@ -17,7 +17,7 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['local-dev']
+ALLOWED_HOSTS = ['*']
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
@@ -133,7 +133,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# settings.py
+
 
 
 # LOGGING = {
@@ -175,6 +175,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, '../../media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
