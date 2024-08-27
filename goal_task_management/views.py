@@ -8,12 +8,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import CreateModelMixin
 
-from goal_task_management.ml.goal_suggestion_model import (load_trained_model, preprocess_user_data,
-                                                           train_pytorch_model,
-                                                           get_output_size, reverse_goal_mapping)
+from goal_task_management.ml.goal_suggestion_ml import (load_trained_model, preprocess_user_data,
+                                                        train_pytorch_model,
+                                                        get_output_size, reverse_goal_mapping,
+                                                        validate_model_output_size)
 
 from goal_task_management.models import Goal, GoalSuggestionLog
-from goal_task_management.openai.integration import generate_goal_with_openai
+from goal_task_management.openai.goal_suggestion_ai import generate_goal_with_openai
 from goal_task_management.serializers import GoalSuggestionInputSerializer, GoalSerializer
 from utils.text_utils import lemmatize_title, are_titles_similar, normalize_text
 
@@ -39,15 +40,15 @@ class GoalSuggestionsViewset(CreateModelMixin, GenericViewSet):
             role = suggestion_serializer.validated_data['role']
             print(f"Role selected: {role.title}")
 
-            # Get the value of 'top_n' from the request data or default to 3
+            # Get the value of 'top_n' from the request data or default to 5
             top_n = request.data.get('top_n', 5)
 
             # Ensure that 'top_n' is an integer
             try:
                 top_n = int(top_n)
             except ValueError:
-                print(f"Invalid value for top_n: '{top_n}', defaulting to 3")
-                top_n = 3
+                print(f"Invalid value for top_n: '{top_n}', defaulting to 5")
+                top_n = 5
 
             suggested_goals = self.suggest_goals(user_profile, role, top_n=top_n)
 
@@ -57,9 +58,10 @@ class GoalSuggestionsViewset(CreateModelMixin, GenericViewSet):
         print("Suggestion serializer validation failed.")
         return Response(suggestion_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def suggest_goals(self, user_profile, role, top_n=3):
+    def suggest_goals(self, user_profile, role, top_n=5):
         # Check the number of unique goals for the role
-        unique_goals_count = Goal.objects.filter(role=role).distinct().count()
+        unique_goals_count = Goal.objects.filter(role=role).distinct('id').count()
+        print(f"Number of unique goals: {unique_goals_count}")
 
         if unique_goals_count < 50:  # Replace 50 with your desired threshold
             print(f"Less than 50 unique goals for role '{role.title}'. Generating goals with AI.")
@@ -73,51 +75,38 @@ class GoalSuggestionsViewset(CreateModelMixin, GenericViewSet):
         # Proceed with ML model suggestion if enough data
         return self.suggest_goals_with_ml(user_profile, role, top_n)
 
-    def suggest_goals_with_ml(self, user_profile, role, top_n=3):
-        # Check if there are goals for the selected role
-        role_goal_count = Goal.objects.filter(role=role).count()
-        if role_goal_count == 0:
-            print(f"No goals found for role '{role.title}'. Proceeding with OpenAI fallback.")
-            return self.generate_goal_with_openai_fallback(user_profile, role)
+    def suggest_goals_with_ml(self, user_profile, role, top_n=5):
+        model = validate_model_output_size()
 
-        current_goal_count = Goal.objects.count()
-        model = load_trained_model()
-
-        # Check if the model needs to be retrained
-        if model is None or current_goal_count != get_output_size():
-            print("Number of goals has changed or model not loaded, retraining model.")
-            train_pytorch_model()
-            model = load_trained_model()
-
-        # If the model still cannot be loaded, fallback to OpenAI
-        if model is None:
-            print("Model could not be loaded. Proceeding with OpenAI fallback.")
-            return self.generate_goal_with_openai_fallback(user_profile, role)
-
-        # Preprocess user data
-        user_data_tensor = preprocess_user_data(user_profile)
+        user_data_tensor = preprocess_user_data(user_profile, role)
 
         if user_data_tensor is not None:
             with torch.no_grad():
-                # Get top N predicted indices
                 prediction = model(user_data_tensor)
                 top_n_indices = torch.topk(prediction, k=top_n, dim=1)[1]
 
                 suggested_goals = []
+                used_indices = set()
                 for idx_tensor in top_n_indices[0]:
                     idx = idx_tensor.item()
-                    if idx < current_goal_count:
+                    if idx < Goal.objects.count() and idx not in used_indices:
                         predicted_goal_id = reverse_goal_mapping(idx)
-                        goal = Goal.objects.filter(id=predicted_goal_id).first()
+                        goal = Goal.objects.filter(id=predicted_goal_id, role=role).first()
                         if goal:
-                            suggested_goals.append({'title': goal.title, 'description': goal.description})
+                            suggested_goals.append(goal)
+                            used_indices.add(idx)
                         else:
                             print(f"Predicted goal ID {predicted_goal_id} not found.")
                     else:
-                        print(f"Predicted index {idx} is out of bounds for current goal count {current_goal_count}.")
+                        print(f"Predicted index {idx} is out of bounds for current goal count.")
 
-                # Save and log the ML-suggested goals
-                return self.save_generated_goals(user_profile, suggested_goals, role, source='ml_model')
+                # If not enough goals are suggested, fill the rest with random goals
+                if len(suggested_goals) < top_n:
+                    additional_goals = Goal.objects.filter(role=role).exclude(
+                        id__in=[goal.id for goal in suggested_goals])[:top_n - len(suggested_goals)]
+                    suggested_goals.extend(additional_goals)
+
+                return suggested_goals
 
         print("No valid user data for prediction. Using OpenAI fallback.")
         return self.generate_goal_with_openai_fallback(user_profile, role)
@@ -142,15 +131,14 @@ class GoalSuggestionsViewset(CreateModelMixin, GenericViewSet):
             # Normalize and lemmatize the title
             lemmatized_title = lemmatize_title(normalize_text(goal_data['title']))
 
-            # Check against all existing goals
-            existing_goals = Goal.objects.all()
+            # Check against all existing goals for the role
+            existing_goals = Goal.objects.filter(role=role)
             is_duplicate = False
 
             for existing_goal in existing_goals:
                 existing_lemmatized_title = lemmatize_title(normalize_text(existing_goal.title))
 
-                if lemmatized_title == existing_lemmatized_title or are_titles_similar(lemmatized_title,
-                                                                                       existing_lemmatized_title):
+                if lemmatized_title == existing_lemmatized_title or are_titles_similar(lemmatized_title, existing_lemmatized_title):
                     print(f"Similar goal found: '{lemmatized_title}', not saving.")
                     created_goals.append(existing_goal)  # Add existing goal to the list
                     logged_goals.append(existing_goal)  # Track for logging

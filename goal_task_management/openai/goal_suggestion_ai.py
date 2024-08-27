@@ -19,7 +19,7 @@ def generate_goal_with_openai(user_profile, selected_role):
 
     instructions = """
     1. Goal Title and Description:
-        • Generate a 50 unique goals with a concise title.
+        • Generate a 25 unique goals with a concise title.
         • Provide a straightforward description within one short sentence.
     2. Personalization Criteria:
         • The goal must be tailored to the user’s role, age, and sex.
