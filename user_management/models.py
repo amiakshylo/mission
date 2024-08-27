@@ -53,7 +53,6 @@ class UserProfile(models.Model):
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_profile')
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES, null=True, blank=False)
-    age = models.CharField(max_length=20, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profile_picture/', blank=True, null=False,

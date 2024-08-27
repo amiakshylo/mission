@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.db import models
+from torch import nn
 
 from core.models import TimeStampedModel, CompletedModel, PriorityModel
-from user_management.models import UserProfile
+from user_management.models import UserProfile, Role
 
 
 class Goal(models.Model):
@@ -21,14 +22,18 @@ class Goal(models.Model):
     goal_type = models.CharField(choices=GOAL_TYPE_CHOICES, null=True, blank=True)
     category = models.ManyToManyField('category_management.Category', related_name='goals')
     role = models.ManyToManyField('user_management.Role', related_name='goals')
+    hash = models.CharField(max_length=64, unique=True, null=True, blank=True)
 
     def __str__(self):
         return self.title
 
 
+
+
 class GoalSuggestionLog(models.Model):
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='suggestions')
     goal = models.ForeignKey('goal_task_management.Goal', on_delete=models.CASCADE, null=True, blank=True)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True, blank=True)
     suggestion_source = models.CharField(max_length=255)  # 'openai' or 'ml_model'
     suggested_at = models.DateTimeField(auto_now_add=True)
     user_feedback = models.CharField(max_length=255, null=True, blank=True)  # optional feedback from user
