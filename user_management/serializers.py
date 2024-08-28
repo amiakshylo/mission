@@ -6,7 +6,7 @@ from djoser.serializers import UserSerializer as BaseUserSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from category_management.serializers import CategorySerializer
+
 from goal_task_management.models import Goal
 from goal_task_management.serializers import GoalSerializer
 from habit_management.serializers import UserHabitSerializer

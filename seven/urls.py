@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('user_management.urls')),
     path('habit/', include('habit_management.urls')),
-    path('', include('category_management.urls')),
+    path('', include('life_sphere.urls')),
     path('goal_task/', include('goal_task_management.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
     path('auth/', include("djoser.urls")),

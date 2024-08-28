@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.filters import SearchFilter
 
-from category_management.models import Category
+from life_sphere.models import LifeSphere
 from goal_task_management.models import Goal
 from .filters import RoleFilter
 

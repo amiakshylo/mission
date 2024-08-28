@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'djoser',
-    'category_management',
+    'life_sphere',
     'core',
     'goal_task_management',
     'habit_management',

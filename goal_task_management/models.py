@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from torch import nn
+
 
 from core.models import TimeStampedModel, CompletedModel, PriorityModel
 from user_management.models import UserProfile, Role
@@ -20,7 +20,7 @@ class Goal(models.Model):
     is_custom = models.BooleanField(default=False, null=True)  # Distinguishes predefined from user-created goals
     impact_score = models.IntegerField(null=True, blank=True)
     goal_type = models.CharField(choices=GOAL_TYPE_CHOICES, null=True, blank=True)
-    category = models.ManyToManyField('category_management.Category', related_name='goals')
+    area = models.ManyToManyField('life_sphere.Area', related_name='goals')
     role = models.ManyToManyField('user_management.Role', related_name='goals')
     hash = models.CharField(max_length=64, unique=True, null=True, blank=True)
 

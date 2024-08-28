@@ -4,7 +4,7 @@ from rest_framework_nested import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register('category', views.CategoryViewSet, basename='category')
+router.register('life-sphere', views.LifeSphereViewSet, basename='life-sphere')
 
 urlpatterns = [
     path('', include(router.urls)),

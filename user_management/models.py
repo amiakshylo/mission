@@ -83,7 +83,24 @@ class UserProfile(models.Model):
         return self.user == user or user.is_staff
 
 
+class UserArea(TimeStampedModel):
+    """
+    A model representing the area of interest of the user
+    """
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_area')
+    area = models.ForeignKey('life_sphere.Area', on_delete=models.CASCADE)
+    custom_area = models.CharField(max_length=255, blank=True, null=True)
+    is_custom = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.custom_area if self.custom_area else self.area.title
+
+
 class UserMission(TimeStampedModel):
+    """
+    A model representing the mission statement of the user.
+    """
     user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name='user_mission')
     mission_statement = models.TextField(blank=True, null=True)
     tailored_by_ai = models.BooleanField(default=False)  # Indicates if the mission was tailored by AI
@@ -170,6 +187,9 @@ class UserGoal(TimeStampedModel, CompletedModel, ProgressModel, DueDateModel):
 
 
 class UserTask(TimeStampedModel, CompletedModel, PriorityModel):
+    """
+    A model representing tasks that users have chosen or created.
+    """
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_tasks')
     task = models.ForeignKey('goal_task_management.Task', on_delete=models.CASCADE)
     custom_name = models.CharField(max_length=255, blank=True, null=True)
@@ -198,6 +218,9 @@ class UserHabit(TimeStampedModel, ProgressModel):
 
 
 class UserPrinciple(TimeStampedModel):
+    """
+    A model representing the principles that users have chosen or created.
+    """
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_principles')
     principle = models.ForeignKey(Principle, on_delete=models.CASCADE, null=True, blank=True)
     custom_principle = models.CharField(max_length=255, blank=True, null=True)
