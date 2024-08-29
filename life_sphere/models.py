@@ -25,13 +25,12 @@ class Area(models.Model):
     """
     title = models.CharField()
     description = models.TextField(blank=True, null=True)
-    life_sphere = models.ForeignKey(LifeSphere, on_delete=models.CASCADE, related_name='subcategory')
+    life_sphere = models.ForeignKey(LifeSphere, on_delete=models.CASCADE, related_name='areas')
 
     def __str__(self):
         return self.title
 
-    class Meta:
-        verbose_name_plural = "SubCategories"
+
 
 
 class LifeSphereProgress(ProgressModel):

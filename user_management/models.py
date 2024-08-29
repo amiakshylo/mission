@@ -65,11 +65,12 @@ class UserProfile(models.Model):
         if self.birth_date:
             from datetime import date
             today = date.today()
-            return today.year - self.birth_date.year - ((today.month, today.day) < (self.birth_date.month, self.birth_date.day))
+            return today.year - self.birth_date.year - (
+                        (today.month, today.day) < (self.birth_date.month, self.birth_date.day))
         return
 
     def __str__(self):
-        return f'{self.user.email} Profile'
+        return self.user.email
 
     def is_profile_complete(self):
         required_fields = ['birth_date', 'location', 'profile_picture', 'notification_preferences',
@@ -87,21 +88,19 @@ class UserArea(TimeStampedModel):
     """
     A model representing the area of interest of the user
     """
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_area')
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_areas')
     area = models.ForeignKey('life_sphere.Area', on_delete=models.CASCADE)
-    custom_area = models.CharField(max_length=255, blank=True, null=True)
-    is_custom = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.custom_area if self.custom_area else self.area.title
+        return self.area.title
 
 
 class UserMission(TimeStampedModel):
     """
     A model representing the mission statement of the user.
     """
-    user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name='user_mission')
+    user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name='user_missions')
     mission_statement = models.TextField(blank=True, null=True)
     tailored_by_ai = models.BooleanField(default=False)  # Indicates if the mission was tailored by AI
     is_active = models.BooleanField(default=True)
@@ -111,7 +110,6 @@ class UserMission(TimeStampedModel):
 
 
 class Role(TimeStampedModel):
-
     """
     A model representing user roles, either predefined or custom.
     """
@@ -138,6 +136,7 @@ class Role(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
     def is_owner(self, user):
         return self.user_profile.filter(user=user).exists() or user.is_staff
 
@@ -244,3 +243,12 @@ class UserPrinciple(TimeStampedModel):
             raise ValidationError("Either principle or custom_principle must be set.")
         if self.principle and self.custom_principle:
             raise ValidationError("Both principle and custom_principle cannot be set at the same time.")
+
+
+class UserBalance(models.Model):
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="balances", null=True)
+    life_sphere = models.ForeignKey('life_sphere.LifeSphere', on_delete=models.CASCADE, related_name="user_balances")
+    score = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.user_profile} - {self.life_sphere.title}: {self.score}"

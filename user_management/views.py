@@ -16,13 +16,14 @@ from life_sphere.models import LifeSphere
 from goal_task_management.models import Goal
 from .filters import RoleFilter
 
-from .models import UserProfile, UserGoal, Role
+from .models import UserProfile, UserGoal, Role, UserArea, UserBalance
 from .pagination import DefaultPagination
 from .serializers import (UserProfileSerializer, EditUserProfileSerializer,
 
                           CreateUserRoleSerializer,
                           UserRoleSerializer, UserGoalSerializer, CreateUserGoalSerializer,
-                          EditUserGoalSerializer, RoleSerializer)
+                          EditUserGoalSerializer, RoleSerializer, UserAreaSerializer, CreateUserAreaSerializer,
+                          UserBalanceSerializer)
 
 
 class UserProfileSet(ListModelMixin, GenericViewSet):
@@ -61,16 +62,12 @@ class RoleViewSet(ListModelMixin, GenericViewSet):
 
 
 class UserRoleViewSet(ListModelMixin, CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, GenericViewSet):
-
     permission_classes = [IsAuthenticated]
-
 
     def get_queryset(self):
         user_profile = self.request.user.user_profile
 
         return Role.objects.filter(user_profile=user_profile)
-
-
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -91,9 +88,6 @@ class UserRoleViewSet(ListModelMixin, CreateModelMixin, RetrieveModelMixin, Dest
 
         # Return a response indicating success
         return Response({"detail": "Role removed from profile."}, status=status.HTTP_204_NO_CONTENT)
-
-
-
 
 
 class UserGoalViewSet(ModelViewSet):
@@ -146,3 +140,32 @@ class UserGoalViewSet(ModelViewSet):
                                                 due_date=due_date, **kwargs)
 
         return Response(UserGoalSerializer(user_goal).data, status=status.HTTP_201_CREATED)
+
+
+class UserAreaViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return UserArea.objects.filter(user_profile=self.request.user.user_profile)
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return CreateUserAreaSerializer
+        return UserAreaSerializer
+
+    def get_serializer_context(self):
+        user_profile = self.request.user.user_profile
+        print(user_profile)
+
+        return {'user_profile': user_profile}
+
+
+class UserBalanceViewSet(ListModelMixin, GenericViewSet):
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserBalanceSerializer
+
+    def get_queryset(self):
+        return UserBalance.objects.filter(user_profile=self.request.user.user_profile)
+
+
