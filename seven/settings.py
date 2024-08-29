@@ -22,7 +22,6 @@ ALLOWED_HOSTS = ['*']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 INSTALLED_APPS = [
-    'adminlte3_theme',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -32,12 +31,12 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_filters',
     'drf_yasg',
-    'adminlte3',
     'debug_toolbar',
     'rest_framework',
     'rest_framework_simplejwt',
     'djoser',
     'life_sphere',
+    'onboarding',
     'core',
     'goal_task_management',
     'habit_management',
@@ -54,6 +53,9 @@ REST_FRAMEWORK = {
     "COERCE_DECIMAL_TO_STRING": False,
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_FILTER_BACKENDS": (
+        "django_filters.rest_framework.DjangoFilterBackend",
     ),
 }
 

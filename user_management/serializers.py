@@ -6,11 +6,12 @@ from djoser.serializers import UserSerializer as BaseUserSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-
 from goal_task_management.models import Goal
 from goal_task_management.serializers import GoalSerializer
 from habit_management.serializers import UserHabitSerializer
-from .models import User, UserProfile, Role, UserGoal
+from life_sphere.models import Area
+from life_sphere.serializers import AreaSerializer
+from .models import User, UserProfile, Role, UserGoal, UserArea
 
 
 class UserCreateSerializer(BaseUserCreateSerializer):
@@ -30,14 +31,12 @@ class UserSerializer(BaseUserSerializer):
 class RoleSerializer(serializers.ModelSerializer):
     type = serializers.CharField()
 
-
     class Meta:
         model = Role
         fields = ['id', 'title', 'type']
 
 
 class UserRoleSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Role
         fields = ['id', 'title', 'type']
@@ -68,9 +67,11 @@ class CreateUserRoleSerializer(serializers.ModelSerializer):
         if not role_id and not custom_title:
             raise serializers.ValidationError("Either 'role' or 'custom_title' must be provided.")
         if role_id and custom_title:
-            raise serializers.ValidationError("'Predefined role' and 'custom_title' cannot both be provided simultaneously.")
+            raise serializers.ValidationError(
+                "'Predefined role' and 'custom_title' cannot both be provided simultaneously.")
         if custom_title and self._custom_title_exists(custom_title):
-            raise serializers.ValidationError({'duplicated': "A role with that title already exists, select from the list."})
+            raise serializers.ValidationError(
+                {'duplicated': "A role with that title already exists, select from the list."})
 
         return data
 
@@ -112,11 +113,39 @@ class CreateUserRoleSerializer(serializers.ModelSerializer):
             return serialized_data
 
 
+class UserAreaSerializer(serializers.ModelSerializer):
+    area = AreaSerializer()
+
+    class Meta:
+        model = UserArea
+        fields = ['id', 'area', 'is_active']
 
 
+class CreateUserAreaSerializer(serializers.ModelSerializer):
+    area = serializers.PrimaryKeyRelatedField(queryset=Area.objects.all(), required=False, allow_null=True)
 
+    class Meta:
+        model = UserArea
+        fields = ['id', 'area']
 
+    def validate(self, data):
+        if UserArea.objects.filter(user_profile=self.context.get('user_profile'), area=data.get('area')).exists():
+            raise serializers.ValidationError("This area of improvement is already set up by you,"
+                                              " please choose another area")
+        return data
 
+    def create(self, validated_data):
+        user_profile = self.context.get('user_profile')
+        if not user_profile:
+            raise ValidationError("User profile is required.")
+
+        # Your business logic here, using the user_profile or other data
+        user_area = UserArea.objects.create(
+            user_profile_id=user_profile.id,
+            area=validated_data.get('area')
+        )
+
+        return user_area
 
 
 class UserGoalSerializer(serializers.ModelSerializer):
@@ -172,3 +201,19 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
         if value is not None and value > datetime.date.today():
             raise serializers.ValidationError("Birth date cannot be in the future.")
         return value
+
+
+class UserBalanceSerializer(serializers.ModelSerializer):
+    balance = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserProfile
+        fields = ['balance']
+
+
+
+
+
+
+
+
