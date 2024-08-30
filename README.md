@@ -1,21 +1,9 @@
+
 <p align="center">
-  <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/ec559a9f6bfd399b82bb44393651661b08aaf7ba/icons/folder-markdown-open.svg" width="20%" alt="7HABITS-logo">
+    <h1 align="center">7habit</h1>
 </p>
-<p align="center">
-    <h1 align="center">7HABITS</h1>
-</p>
-<p align="center">
-    <em>Code Your Way to a Mindful Future! Embrace the power of metrics and modeling for self-improvement. Make every line of code count!</em>
-</p>
-<p align="center">
-	<img src="https://img.shields.io/github/license/amiakshylo/7habits?style=default&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
-	<img src="https://img.shields.io/github/last-commit/amiakshylo/7habits?style=default&logo=git&logoColor=white&color=0080ff" alt="last-commit">
-	<img src="https://img.shields.io/github/languages/top/amiakshylo/7habits?style=default&color=0080ff" alt="repo-top-language">
-	<img src="https://img.shields.io/github/languages/count/amiakshylo/7habits?style=default&color=0080ff" alt="repo-language-count">
-</p>
-<p align="center">
-	<!-- default option, no dependency badges. -->
-</p>
+
+
 
 <br>
 
@@ -39,7 +27,7 @@
 
 ##  Overview
 
-Habits is a comprehensive software project aimed at empowering users to cultivate positive habits and enhance their overall well-being. The project leverages cutting-edge technologies such as Django, Celery, and TensorFlow to deliver a seamless experience. By logging user interactions, retraining models with user data, and applying collaborative filtering techniques, 7habits offers personalized recommendations tailored to each individuals needs. The system constantly monitors model performance, allowing for continual improvement and adaptation. Additionally, features such as transfer learning and data augmentation enable users to experiment with various approaches to habit formation. With a robust metric tracking system that simplifies progress monitoring across habits, goals, and life spheres, 7habits stands out as a valuable tool for individuals striving for personal growth and positive lifestyle changes.
+7 Habits is a comprehensive software project aimed at empowering users to cultivate positive habits and enhance their overall well-being. The project leverages cutting-edge technologies such as Django, Celery, and TensorFlow to deliver a seamless experience. By logging user interactions, retraining models with user data, and applying collaborative filtering techniques, 7habits offers personalized recommendations tailored to each individuals needs. The system constantly monitors model performance, allowing for continual improvement and adaptation. Additionally, features such as transfer learning and data augmentation enable users to experiment with various approaches to habit formation. With a robust metric tracking system that simplifies progress monitoring across habits, goals, and life spheres, 7habits stands out as a valuable tool for individuals striving for personal growth and positive lifestyle changes.
 
 ---
 
@@ -262,35 +250,10 @@ Habits is a comprehensive software project aimed at empowering users to cultivat
 
 </details>
 
-<details closed><summary>habit_management.migrations</summary>
 
-| File | Summary |
-| --- | --- |
-| [0002_initial.py](https://github.com/amiakshylo/7habits/blob/main/habit_management/migrations/0002_initial.py) | Implements a migration adding a created_by field to the habit model, related to the AUTH_USER_MODEL. |
-| [0001_initial.py](https://github.com/amiakshylo/7habits/blob/main/habit_management/migrations/0001_initial.py) | Creates initial migration for Habit model with title, description, frequency, and predefined flag fields. |
 
-</details>
 
-<details closed><summary>playground</summary>
 
-| File | Summary |
-| --- | --- |
-| [models.py](https://github.com/amiakshylo/7habits/blob/main/playground/models.py) | Defines Django models for playground feature, forming the data structure for interactive activities. Central to user engagement and interaction within the application. |
-| [apps.py](https://github.com/amiakshylo/7habits/blob/main/playground/apps.py) | Defines the configuration for the playground app in the Django project. Sets the default database field and app name. |
-| [admin.py](https://github.com/amiakshylo/7habits/blob/main/playground/admin.py) | Registers models for admin interface in the playground module within the 7habits repository. Centralizes model registration to enable easy admin management of data related to playground activities. |
-| [tests.py](https://github.com/amiakshylo/7habits/blob/main/playground/tests.py) | Tests user interaction and data flow within the playground module, ensuring seamless integration with other components for a cohesive user experience. |
-| [urls.py](https://github.com/amiakshylo/7habits/blob/main/playground/urls.py) | Defines URL routes, including views for user interactions with the playground app, enriching user experience and enabling seamless navigation. |
-| [views.py](https://github.com/amiakshylo/7habits/blob/main/playground/views.py) | Enables user interaction with play-related functionalities. Facilitates seamless navigation and interaction within the playground module, ensuring an engaging user experience. |
-
-</details>
-
-<details closed><summary>playground.templates</summary>
-
-| File | Summary |
-| --- | --- |
-| [onboarding.html](https://github.com/amiakshylo/7habits/blob/main/playground/templates/onboarding.html) | Defines interactive onboarding steps using HTML forms and JavaScript. Users input personal info, birth date, select roles, and set goals. Steps progress with Next button. A modern, user-friendly process integrated into the parent repositorys frontend structure. |
-
-</details>
 
 <details closed><summary>utils</summary>
 
@@ -300,99 +263,11 @@ Habits is a comprehensive software project aimed at empowering users to cultivat
 
 </details>
 
-<details closed><summary>staticfiles.css</summary>
 
-| File | Summary |
-| --- | --- |
-| [style.css](https://github.com/amiakshylo/7habits/blob/main/staticfiles/css/style.css) | Defines CSS styling for an onboarding step in the parent repositorys user interface. Implementing a margin-bottom of 20px, it enhances the visual presentation and user experience of the onboarding process. |
 
-</details>
 
-<details closed><summary>staticfiles.js</summary>
 
-| File | Summary |
-| --- | --- |
-| [app.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/js/app.js) | Implements step transitions for onboarding form submissions. Displays subsequent steps upon completion of the current step, leading users through the onboarding process. |
 
-</details>
-
-<details closed><summary>staticfiles.rest_framework.css</summary>
-
-| File | Summary |
-| --- | --- |
-| [bootstrap.min.css](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/css/bootstrap.min.css) | This code file in the `7habits` repository, located in the `goal_task_management` module, focuses on managing and displaying tasks related to goals. It plays a crucial role in the parent repositorys architecture by providing functionalities related to goal task management, including data modeling, views, and URL routing. The code facilitates efficient organization and interaction with goal-related tasks within the larger system. |
-| [bootstrap.min.css.map](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/css/bootstrap.min.css.map) | This code file in the `goal_task_management` module of the repository contributes to managing goals and tasks within the 7habits application. It plays a crucial role in handling the backend logic for goal and task management, including data serialization, URL routing, and defining views for interacting with these entities. The file encapsulates functionalities related to goal and task management, enriching the overall architecture of the project. |
-| [bootstrap-theme.min.css.map](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/css/bootstrap-theme.min.css.map) | This code file in the goal_task_management module of the parent repository 7habits is responsible for managing goal tasks. It includes critical features such as defining models for goal tasks, setting up API endpoints for task management, and integrating machine learning and AI capabilities for automated task handling. This code contributes to the overall architecture of the repository by providing a structured approach to managing and tracking tasks related to users' goals within the 7habits application. |
-| [prettify.css](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/css/prettify.css) | Defines styling for the Django REST framework API documentation, enhancing code readability with syntax highlighting and line numbering. |
-| [default.css](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/css/default.css) | Styles navbar, headers, descriptions, and forms for the REST framework. Enhances readability and visual consistency of API documentation pages. |
-| [font-awesome-4.0.3.css](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/css/font-awesome-4.0.3.css) | This code file in the `goal_task_management` module of the `7habits` repository focuses on managing goals and tasks within the application. It contains essential features for handling goal setting, tracking progress, and managing associated tasks effectively. This component plays a crucial role in the users journey through the application by enabling them to set and achieve their personal goals efficiently. |
-| [bootstrap-tweaks.css](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/css/bootstrap-tweaks.css) | Enhances Bootstrap theme styling for the navbar, forms, and navigation elements. Adopts a dark color scheme, customizes dropdown menus, and styles pagination for improved user experience and a cohesive visual identity throughout the application. |
-| [bootstrap-theme.min.css](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/css/bootstrap-theme.min.css) | This code file in the `goal_task_management` module of the `7habits` repository manages the backend logic for handling goals and tasks within the application. It is responsible for defining models, serializers, and views related to goal and task management. By organizing this functionality into a separate module, the codebase maintains a clean and modular structure, enabling efficient development and maintenance of features related to goals and tasks. |
-
-</details>
-
-<details closed><summary>staticfiles.rest_framework.js</summary>
-
-| File | Summary |
-| --- | --- |
-| [load-ajax-form.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/js/load-ajax-form.js) | Enables form submission via AJAX using jQuery in the staticfiles folder. |
-| [ajax-form.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/js/ajax-form.js) | Enables AJAX form submission, supporting various content types and handling responses dynamically for seamless user experience. Handles multipart data, boundary parsing, and redirects based on response content type. |
-| [prettify-min.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/js/prettify-min.js) | Goal_task_management/models.py`This code file in the `goal_task_management` module of the repository defines the data models essential for managing goals and tasks within the application. It encapsulates the structure and relationships between different entities, enabling the efficient organization and tracking of user goals and associated tasks. The models specified here lay the foundation for seamless data management and manipulation within the broader goal and task management system of the application. |
-| [csrf.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/js/csrf.js) | Enables CSRF protection in AJAX requests by retrieving and setting the CSRF token based on the HTTP method and URL origin. Centralizes CSRF token handling for same-origin requests in Django Rest Framework, enhancing security. |
-| [bootstrap.min.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/js/bootstrap.min.js) | This code file in the `7habits/habit_management` directory of the repository is responsible for managing habits within the larger system. It defines the models and views necessary for creating, updating, and deleting habits. By separating this functionality into its own module, the codebase maintains a clear and organized structure, enhancing maintainability and scalability. |
-| [default.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/js/default.js) | Enhances user experience with JSON highlighting, tooltips, tab styling, and cookie preferences for tab selection. Automatically displays error message modal on page load. |
-| [coreapi-0.1.1.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/js/coreapi-0.1.1.js) | This code file in the `goal_task_management` module plays a crucial role in managing tasks associated with goals within the larger `7habits` repository. It focuses on handling the creation, tracking, and updating of tasks related to predefined goals. By organizing the task management logic separately, it contributes to the overall modularity and maintainability of the repositorys architecture. |
-| [jquery-3.7.1.min.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/js/jquery-3.7.1.min.js) | This code file in the parent repositorys architecture handles goal and task management within the 7habits project. It provides functionality for setting, tracking, and managing goals and tasks, leveraging machine learning and openAI capabilities for enhanced efficiency. The code encapsulates the core logic for creating, updating, and deleting goals and tasks, contributing to the overall goal achievement and habit formation features of the project. |
-
-</details>
-
-<details closed><summary>staticfiles.rest_framework.fonts</summary>
-
-| File | Summary |
-| --- | --- |
-| [glyphicons-halflings-regular.ttf](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/fonts/glyphicons-halflings-regular.ttf) | Improve font rendering by implementing glyphs in the REST API with the glyphicons-halflings-regular.ttf file located in staticfiles/rest_framework/fonts/. |
-| [fontawesome-webfont.ttf](https://github.com/amiakshylo/7habits/blob/main/staticfiles/rest_framework/fonts/fontawesome-webfont.ttf) | Manages font assets for REST API documentation, enhancing visual styling and readability. Essential for providing a seamless user experience in the systems web interface. |
-
-</details>
-
-<details closed><summary>staticfiles.django_extensions.css</summary>
-
-| File | Summary |
-| --- | --- |
-| [jquery.autocomplete.css](https://github.com/amiakshylo/7habits/blob/main/staticfiles/django_extensions/css/jquery.autocomplete.css) | Defines CSS styles for jQuery Autocomplete, enhancing user interface with clean, responsive design for search suggestions. Implements visual cues like borders, backgrounds, and font properties for user-friendly autocomplete functionality. Enhances user experience within the parent repositorys frontend components. |
-
-</details>
-
-<details closed><summary>staticfiles.django_extensions.js</summary>
-
-| File | Summary |
-| --- | --- |
-| [jquery.ajaxQueue.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/django_extensions/js/jquery.ajaxQueue.js) | Enhances jQuery Ajax functionality with a queue and sync feature for orderly request handling. Manages pending requests and ensures synced callbacks execution. Integrated into the repositorys web interface for improved user experience. |
-| [jquery.bgiframe.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/django_extensions/js/jquery.bgiframe.js) | Implements a cross-browser iframe fix for Internet Explorer 6, enhancing element styling by adding opacity and dynamic dimensions based on parent container size. |
-| [jquery.autocomplete.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/django_extensions/js/jquery.autocomplete.js) | This code file within the `7habits` repository under the `goal_task_management` module focuses on managing goals and tasks. It provides essential functionalities for creating, updating, and viewing goals and tasks within the application. This module plays a critical role in the overall goal and task management system, contributing to the core functionality of the application related to tracking and organizing tasks and goals effectively. |
-
-</details>
-
-<details closed><summary>staticfiles.debug_toolbar.css</summary>
-
-| File | Summary |
-| --- | --- |
-| [toolbar.css](https://github.com/amiakshylo/7habits/blob/main/staticfiles/debug_toolbar/css/toolbar.css) | This code file within the 7habits repository, specifically in the habit_management module, focuses on managing habits within the application. It provides functionality related to creating, updating, and deleting habits, along with associated views for user interaction. This module plays a crucial role in the overall architecture by enabling users to track and maintain their habits effectively. |
-| [print.css](https://github.com/amiakshylo/7habits/blob/main/staticfiles/debug_toolbar/css/print.css) | Hides Django Debug Toolbar in print view by hiding debug information display. |
-
-</details>
-
-<details closed><summary>staticfiles.debug_toolbar.js</summary>
-
-| File | Summary |
-| --- | --- |
-| [timer.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/debug_toolbar/js/timer.js) | Generates interactive browser timing visualization for debugging purposes by rendering timing bars and points in time based on performance metrics. Integrated into the debug toolbar for monitoring page load events efficiently. |
-| [redirect.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/debug_toolbar/js/redirect.js) | Enables focusing on an element with id redirect_to for user interaction. |
-| [history.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/debug_toolbar/js/history.js) | Enables dynamic refreshing and switching of history entries on the debug toolbar interface using AJAX requests. Automatically updates displayed requests and highlights new ones. Improves user experience by providing real-time feedback without reloading the entire toolbar. |
-| [utils.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/debug_toolbar/js/utils.js) | Enhances debugging experience by providing utility functions for event handling, element visibility, script loading, and AJAX requests. Facilitates dynamic updates to the debugging toolbar state and includes a debouncing mechanism for efficient function execution. |
-| [toolbar.js](https://github.com/amiakshylo/7habits/blob/main/staticfiles/debug_toolbar/js/toolbar.js) | Enables debugging features by managing toolbar visibility, content rendering, and theme toggling. Handles AJAX requests, cookies, and DOM interactions for a seamless debugging experience within the repositorys architecture. |
-
-</details>
 
 <details closed><summary>journey</summary>
 
@@ -408,14 +283,7 @@ Habits is a comprehensive software project aimed at empowering users to cultivat
 
 </details>
 
-<details closed><summary>journey.migrations</summary>
 
-| File | Summary |
-| --- | --- |
-| [0002_initial.py](https://github.com/amiakshylo/7habits/blob/main/journey/migrations/0002_initial.py) | Defines a database schema migration establishing a foreign key relationship between the UserJourneyStatus model in the journey app and the UserProfile model in the user_management app, enabling tracking of user journey status within the application. |
-| [0001_initial.py](https://github.com/amiakshylo/7habits/blob/main/journey/migrations/0001_initial.py) | Creates initial database schema for journeys, steps, and user journey statuses. Defines fields for title, description, dates, and completion status. Establishes relationships between journeys and steps, and tracks user progress. |
-
-</details>
 
 <details closed><summary>trained_models</summary>
 
@@ -438,14 +306,7 @@ Habits is a comprehensive software project aimed at empowering users to cultivat
 
 </details>
 
-<details closed><summary>principle_management.migrations</summary>
 
-| File | Summary |
-| --- | --- |
-| [0002_initial.py](https://github.com/amiakshylo/7habits/blob/main/principle_management/migrations/0002_initial.py) | Implements a database migration adding a created_by field to the Principle model, linked to the User model. |
-| [0001_initial.py](https://github.com/amiakshylo/7habits/blob/main/principle_management/migrations/0001_initial.py) | Defines initial data model for Principle with title, description, and predefined status fields; essential for the Principle Management feature in the repository's architecture. |
-
-</details>
 
 <details closed><summary>seven</summary>
 
@@ -471,17 +332,7 @@ Habits is a comprehensive software project aimed at empowering users to cultivat
 
 </details>
 
-<details closed><summary>goal_task_management.migrations</summary>
 
-| File | Summary |
-| --- | --- |
-| [0002_initial.py](https://github.com/amiakshylo/7habits/blob/main/goal_task_management/migrations/0002_initial.py) | Defines a migration adding a category field to the Goal model to establish a many-to-many relationship with Life Sphere model in the goal_task_management app. |
-| [0005_goal_area.py](https://github.com/amiakshylo/7habits/blob/main/goal_task_management/migrations/0005_goal_area.py) | Defines a migration adding a many-to-many field linking goals to areas in the goal_task_management and life_sphere apps. Extends the data model relationships within the repository architecture. |
-| [0003_initial.py](https://github.com/amiakshylo/7habits/blob/main/goal_task_management/migrations/0003_initial.py) | Defines database schema relationships for goals, tasks, subtasks, user roles, and profiles. Establishes connections between goal task management, habits, and user management modules in the projects architecture. |
-| [0001_initial.py](https://github.com/amiakshylo/7habits/blob/main/goal_task_management/migrations/0001_initial.py) | Defines models for goals, subtasks, and tasks in the goal_task_management module. Establishes fields for title, description, completion status, priority, and timestamps. Supports features related to goal setting, tracking, and task management within the repositorys architecture. |
-| [0004_remove_goal_category.py](https://github.com/amiakshylo/7habits/blob/main/goal_task_management/migrations/0004_remove_goal_category.py) | Implements removal of the category field from the Goal model in the goal_task_management app for Django migrations. |
-
-</details>
 
 <details closed><summary>goal_task_management.ml</summary>
 
@@ -516,17 +367,7 @@ Habits is a comprehensive software project aimed at empowering users to cultivat
 
 </details>
 
-<details closed><summary>life_sphere.migrations</summary>
 
-| File | Summary |
-| --- | --- |
-| [0002_initial.py](https://github.com/amiakshylo/7habits/blob/main/life_sphere/migrations/0002_initial.py) | Defines database relationships between user profiles and life sphere progress/completion in the application, facilitating user engagement tracking. |
-| [0005_alter_area_options.py](https://github.com/amiakshylo/7habits/blob/main/life_sphere/migrations/0005_alter_area_options.py) | Updates area model options within the life sphere module, ensuring proper dependency management within the repositorys Django architecture. |
-| [0001_initial.py](https://github.com/amiakshylo/7habits/blob/main/life_sphere/migrations/0001_initial.py) | Defines data models for life spheres with titles, descriptions, progress, completion status, and relationships for categorization. Enhances the repositorys architecture with structured data representation for life aspects and progress tracking within the core application framework. |
-| [0004_alter_area_life_sphere.py](https://github.com/amiakshylo/7habits/blob/main/life_sphere/migrations/0004_alter_area_life_sphere.py) | Improve relational mapping in the life sphere area model for seamless data organization within the repository. |
-| [0003_alter_area_life_sphere.py](https://github.com/amiakshylo/7habits/blob/main/life_sphere/migrations/0003_alter_area_life_sphere.py) | Defines migration for altering area life spheres, establishing foreign key relationship in the life_sphere app. |
-
-</details>
 
 <details closed><summary>user_feedback</summary>
 
@@ -559,18 +400,7 @@ Habits is a comprehensive software project aimed at empowering users to cultivat
 
 </details>
 
-<details closed><summary>user_management.migrations</summary>
 
-| File | Summary |
-| --- | --- |
-| [0004_remove_userarea_custom_area_and_more.py](https://github.com/amiakshylo/7habits/blob/main/user_management/migrations/0004_remove_userarea_custom_area_and_more.py) | Removes custom area and custom flag fields from the UserArea model in the user_management app to streamline data structure. Maintains data integrity by handling dependencies through Django migrations. |
-| [0002_alter_userarea_user_profile_and_more.py](https://github.com/amiakshylo/7habits/blob/main/user_management/migrations/0002_alter_userarea_user_profile_and_more.py) | Defines database relationships in user management module, connecting user profiles with areas and missions. Ensures data integrity by specifying foreign key constraints. This migration script updates fields and models according to the specified dependencies. |
-| [0005_alter_userprofile_user.py](https://github.com/amiakshylo/7habits/blob/main/user_management/migrations/0005_alter_userprofile_user.py) | Enhances user profile relation to the auth model, optimizing user management functionality in the repositorys architecture. |
-| [0001_initial.py](https://github.com/amiakshylo/7habits/blob/main/user_management/migrations/0001_initial.py) | Defines user-related models for roles, habits, goals, tasks, principles, and areas. Establishes user profiles linked to authentication, with AI customization and notifications. Manages user-specific data structures and relationships within the app. |
-| [0006_remove_userbalance_user_userbalance_user_profile.py](https://github.com/amiakshylo/7habits/blob/main/user_management/migrations/0006_remove_userbalance_user_userbalance_user_profile.py) | Enhances user balance management by removing the user field and adding a user_profile field for improved data integrity in the user management module. |
-| [0003_userbalance.py](https://github.com/amiakshylo/7habits/blob/main/user_management/migrations/0003_userbalance.py) | Defines UserBalance model linking life spheres and user profiles for tracking scores. Grows parent repositorys user management capabilities and establishes data relationships between distinct sections. |
-
-</details>
 
 <details closed><summary>user_management.signals</summary>
 
@@ -602,15 +432,7 @@ Habits is a comprehensive software project aimed at empowering users to cultivat
 
 </details>
 
-<details closed><summary>onboarding.migrations</summary>
 
-| File | Summary |
-| --- | --- |
-| [0003_alter_onboardingresponse_response_userprogress.py](https://github.com/amiakshylo/7habits/blob/main/onboarding/migrations/0003_alter_onboardingresponse_response_userprogress.py) | Updates response choices for onboarding, creates UserProgress model linking to life spheres and user profiles. Relates to life sphere, onboarding, and user management modules. Aims to enhance user onboarding experience and track user progress. |
-| [0002_alter_onboardingresponse_response.py](https://github.com/amiakshylo/7habits/blob/main/onboarding/migrations/0002_alter_onboardingresponse_response.py) | Updates the response field choices in the OnboardingResponse model to reflect agreement levels with integer values. |
-| [0001_initial.py](https://github.com/amiakshylo/7habits/blob/main/onboarding/migrations/0001_initial.py) | Defines essential models for user onboarding via questions and responses, linked to user profiles and life spheres. Key dependencies on life sphere and user management modules, ensuring streamlined integration within the wider application architecture. |
-
-</details>
 
 ---
 
