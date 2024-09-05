@@ -1,60 +1,59 @@
 from rest_framework import serializers
 
-from journey.models import Journey
-from user_management.models import UserProfile
+from journey.models import Journey, JourneyStep, UserJourneyStatus, UserJourneyStepStatus
 
 
 class JourneySerializer(serializers.ModelSerializer):
     class Meta:
         model = Journey
-        fields = ['title', 'description', 'start_date', 'end_date']
-#
-#
-# class OnboardingStepSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = OnboardingStep
-#         fields = ['step_number', 'title', 'description']
-#
-#
-# class UserOnboardingStatusSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = UserOnboardingStatus
-#         fields = ['user_profile', 'current_step', 'is_completed']
-#
-#
-# class OnboardingStep1Serializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = UserProfile
-#         fields = ['gender', 'location']
-#
-#
-# class OnboardingStep2Serializer(serializers.ModelSerializer):
-#     birth_date = serializers.DateField(format="%Y-%m-%d", input_formats=["%Y-%m-%d"])
-#
-#     class Meta:
-#         model = UserProfile
-#         fields = ['birth_date']
-#
-#
-# class OnboardingStep3Serializer(serializers.Serializer):
-#     roles = serializers.ListField(
-#         child=serializers.IntegerField(), allow_empty=True
-#     )
-#     custom_roles = serializers.ListField(
-#         child=serializers.DictField(
-#             child=serializers.CharField()
-#         ),
-#         allow_empty=True
-#     )
-#
-#
-# class OnboardingStep4Serializer(serializers.Serializer):
-#     goals = serializers.ListField(
-#         child=serializers.IntegerField(), allow_empty=True
-#     )
-#     custom_goals = serializers.ListField(
-#         child=serializers.DictField(
-#             child=serializers.CharField()
-#         ),
-#         allow_empty=True
-#     )
+        fields = ['id', 'title', 'description']
+
+
+class JourneyStepSerializer(serializers.ModelSerializer):
+    journey = serializers.StringRelatedField()
+
+    class Meta:
+        model = JourneyStep
+        fields = ['id', 'title', 'description', 'journey']
+
+
+class StartJourneyStepSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JourneyStep
+        fields = ['id']
+
+
+class UserJourneyStepStatusSerializer(serializers.ModelSerializer):
+
+
+    class Meta:
+        model = UserJourneyStepStatus
+        fields = ['started_at', 'ended_at', 'paused']
+
+
+class UserJourneyStatusSerializer(serializers.ModelSerializer):
+    journey = serializers.StringRelatedField()
+    current_step = serializers.StringRelatedField()
+    step_status = serializers.SerializerMethodField()
+
+
+    class Meta:
+        model = UserJourneyStatus
+        fields = ['user_profile', 'journey', 'current_step', 'step_status', 'started_at', 'progress', 'ended_at',
+                  'paused']
+
+    def get_step_status(self, obj):
+        user_profile = obj.user_profile
+        current_step = obj.current_step
+
+        # Fetch the UserJourneyStepStatus for the current step and user
+        step_status = UserJourneyStepStatus.objects.filter(
+            user_profile=user_profile,
+            step=current_step
+        ).first()
+
+        # If a step status exists, return serialized data, else return None
+        if step_status:
+            return UserJourneyStepStatusSerializer(step_status).data
+        return {}
+

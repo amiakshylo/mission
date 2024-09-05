@@ -27,4 +27,6 @@ class AreaViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     search_fields = ['title', 'description']
 
     def get_queryset(self):
+        if self.kwargs.get('life_sphere_pk'):
+            return Area.objects.filter(life_sphere_id=self.kwargs.get('life_sphere_pk')).select_related('life_sphere')
         return Area.objects.select_related('life_sphere').distinct()

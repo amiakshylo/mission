@@ -15,7 +15,7 @@ class Journey(models.Model):
         return self.title
 
 
-class JourneyStep(StartEndModel):
+class JourneyStep(models.Model):
     """
     A model representing a step in a journey.
     """
@@ -27,20 +27,18 @@ class JourneyStep(StartEndModel):
         return self.title
 
 
-class UserJourneyStepStatus(models.Model):
+class UserJourneyStepStatus(CompletedModel, StartEndModel):
     """
     A model representing the status of a user completing a journey step.
     """
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='step_statuses')
-    step = models.ForeignKey(JourneyStep, on_delete=models.CASCADE)
-    is_completed = models.BooleanField(default=False)
-    completed_at = models.DateTimeField(null=True, blank=True)
+    step = models.ForeignKey(JourneyStep, on_delete=models.CASCADE, related_name='step_statuses')
+    paused = None
+    ended_at = None
 
-    def mark_completed(self):
-        """Marks a step as completed."""
-        self.is_completed = True
-        self.completed_at = timezone.now()
-        self.save()
+
+
+
 
 
 class UserJourneyStatus(ProgressModel, StartEndModel, CompletedModel):
@@ -55,24 +53,4 @@ class UserJourneyStatus(ProgressModel, StartEndModel, CompletedModel):
     def __str__(self):
         return f"{self.user_profile.user.username} - {self.journey.title} - {self.current_step.title}"
 
-    def update_progress(self):
-        """
-        Update progress based on the completed steps and total steps in the journey.
-        Ensure the journey is only completed when all steps are done.
-        """
-        total_steps = self.journey.steps.count()
-        completed_steps = UserJourneyStepStatus.objects.filter(
-            user_profile=self.user_profile,
-            step__journey=self.journey,
-            is_completed=True
-        ).count()
 
-        # Update progress percentage
-        self.progress = (completed_steps / total_steps) * 100
-
-        # Mark journey as completed if all steps are done
-        if completed_steps == total_steps:
-            self.is_completed = True
-            self.completed_at = timezone.now()
-
-        self.save()

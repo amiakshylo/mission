@@ -18,8 +18,8 @@ def validate_start_due_date(value):
 
 
 class StartEndModel(models.Model):
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField(auto_now_add=True)
+    started_at = models.DateTimeField(auto_now_add=True)
+    ended_at = models.DateTimeField(null=True)
 
     class Meta:
         abstract = True
