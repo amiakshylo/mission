@@ -18,9 +18,14 @@ class JourneyViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
 
 
 class JourneyStepViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
-    queryset = JourneyStep.objects.select_related('journey').all()
+
 
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        journey_pk = self.kwargs.get('journey_pk')
+        return JourneyStep.objects.filter(journey_id=journey_pk).select_related('journey')
+
 
     def get_serializer_class(self):
         if self.request.method == 'PUT':
@@ -50,8 +55,7 @@ class JourneyStepViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, G
             user_journey_step_status, step_created = UserJourneyStepStatus.objects.get_or_create(
                 user_profile=user_profile,
                 step=step,
-                defaults={'started_at': timezone.now()}
-            )
+             )
 
             if step_created:
                 user_journey_step_status.save()
