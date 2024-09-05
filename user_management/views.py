@@ -31,7 +31,7 @@ class UserProfileSet(ListModelMixin, GenericViewSet):
     permission_classes = [IsAdminUser]
 
     def get_queryset(self):
-        return UserProfile.objects.all().select_related('user')
+        return UserProfile.objects.all().select_related('user').prefetch_related('roles')
 
     @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
     def me(self, request, *args, **kwargs):
@@ -48,8 +48,6 @@ class UserProfileSet(ListModelMixin, GenericViewSet):
         serializer = UserProfileSerializer(user_profile)
         return Response(serializer.data)
 
-
-# ATTENTION REDUNDANT QUERIES >
 
 class RoleViewSet(ListModelMixin, GenericViewSet):
     queryset = Role.objects.all()

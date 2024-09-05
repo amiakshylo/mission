@@ -12,9 +12,11 @@ from onboarding.serializers import OnboardingQuestionSerializer, OnboardingRespo
 
 
 class OnboardingViewSet(ListModelMixin, CreateModelMixin, GenericViewSet):
-    queryset = OnboardingQuestion.objects.all()
+    queryset = OnboardingQuestion.objects.select_related('life_sphere').all()
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['id']
+
+
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
