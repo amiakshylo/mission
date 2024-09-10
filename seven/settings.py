@@ -107,16 +107,30 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'seven.wsgi.application'
 
+#local
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'seven_db',
+#         'USER': 'admin',
+#         'PASSWORD': 'PortuGal2022@',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
+#heroku
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'seven_db',
-        'USER': 'admin',
-        'PASSWORD': 'PortuGal2022@',
-        'HOST': 'localhost',
+        'NAME': 'detjq7ch2kjtgn',
+        'USER': 'u54s56clafoj5v',
+        'PASSWORD': 'p3eca0a69ad5f9aeed15359129a6b402f362b69f663a44987d93d42dcec871ae3',
+        'HOST': 'c97r84s7psuajm.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
+
 
 AUTH_USER_MODEL = 'user_management.User'
 

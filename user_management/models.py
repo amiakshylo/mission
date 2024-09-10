@@ -56,7 +56,7 @@ class UserProfile(models.Model):
     birth_date = models.DateField(null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profile_picture/', blank=True, null=False,
-                                        validators=[validate_profile_image])
+                                        validators=[validate_profile_image]) # add user id
     notification_preferences = models.CharField(max_length=255, default='Push notifications')
     ai_assistant_model = models.CharField(choices=ASSISTANT_MODEL_CHOICES, max_length=255)
     dashboard_customization = models.TextField(blank=True, null=True)
@@ -246,7 +246,7 @@ class UserPrinciple(TimeStampedModel):
 
 
 class UserBalance(models.Model):
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="balances", null=True)
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="balances", null=True) # cannot be null
     life_sphere = models.ForeignKey('life_sphere.LifeSphere', on_delete=models.CASCADE, related_name="user_balances")
     score = models.IntegerField()
 

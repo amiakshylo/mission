@@ -14,3 +14,10 @@ class AreaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Area
         fields = ['id', 'title', 'description', 'life_sphere']
+
+
+class AddUserAreaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Area
+        fields = ['id']
+

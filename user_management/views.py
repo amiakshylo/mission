@@ -140,11 +140,20 @@ class UserGoalViewSet(ModelViewSet):
         return Response(UserGoalSerializer(user_goal).data, status=status.HTTP_201_CREATED)
 
 
-class UserAreaViewSet(ModelViewSet):
+class UserAreaViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['area__life_sphere']
+
+
 
     def get_queryset(self):
-        return UserArea.objects.filter(user_profile=self.request.user.user_profile)
+        user_profile = self.request.user.user_profile
+        return (UserArea.objects.filter(user_profile=user_profile)
+                .select_related('area__life_sphere').all()
+                )
+
+
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -165,5 +174,7 @@ class UserBalanceViewSet(ListModelMixin, GenericViewSet):
 
     def get_queryset(self):
         return UserBalance.objects.filter(user_profile=self.request.user.user_profile)
+
+
 
 
