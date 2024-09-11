@@ -97,7 +97,7 @@ whitenoise[brotli]==6.7.0; python_version >= '3.8'
 zope.event==5.0; python_version >= '3.7'
 zope.interface==6.4.post2; python_version >= '3.7'
 
-django~=5.0.6
+django~=5.0.8
 django-debug-toolbar~=4.4.2
 djoser~=2.2.3
 djangorestframework~=3.15.2
