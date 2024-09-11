@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
 from life_sphere.models import LifeSphere
-from onboarding.models import OnboardingResponse, OnboardingQuestion, UserProgress
+from onboarding.models import OnboardingResponse, OnboardingQuestion, OnboardingProgress
 from onboarding.serializers import OnboardingQuestionSerializer, OnboardingResponseSerializer
 
 
@@ -26,9 +26,9 @@ class OnboardingViewSet(ListModelMixin, CreateModelMixin, GenericViewSet):
 
     def get_serializer_context(self):
         user_profile = self.request.user.user_profile.id
-        progress, created = UserProgress.objects.get_or_create(user_profile=user_profile,
-                                                               defaults={'current_life_sphere': LifeSphere.objects.first()}
-                                                               )
+        progress, created = OnboardingProgress.objects.get_or_create(user_profile=user_profile,
+                                                                     defaults={'current_life_sphere': LifeSphere.objects.first()}
+                                                                     )
         life_sphere = progress.current_life_sphere
 
         # Get all questions for the current life sphere
@@ -59,7 +59,7 @@ class OnboardingViewSet(ListModelMixin, CreateModelMixin, GenericViewSet):
     def perform_create(self, serializer):
         user_profile = self.request.user.user_profile
         question_id = self.request.query_params.get('id')
-        progress = UserProgress.objects.get(user_profile=user_profile)
+        progress = OnboardingProgress.objects.get(user_profile=user_profile)
 
 
         serializer.save(user_profile=user_profile)

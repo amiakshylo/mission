@@ -8,7 +8,7 @@ from rest_framework.exceptions import ValidationError
 
 from goal_task_management.models import Goal
 from goal_task_management.serializers import GoalSerializer
-from habit_management.serializers import UserHabitSerializer
+
 from life_sphere.models import Area
 from life_sphere.serializers import AreaSerializer
 from .models import User, UserProfile, Role, UserGoal, UserArea, UserBalance

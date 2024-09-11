@@ -12,7 +12,6 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.filters import SearchFilter
 
-from life_sphere.models import LifeSphere
 from goal_task_management.models import Goal
 from .filters import RoleFilter
 
@@ -173,7 +172,7 @@ class UserBalanceViewSet(ListModelMixin, GenericViewSet):
     serializer_class = UserBalanceSerializer
 
     def get_queryset(self):
-        return UserBalance.objects.filter(user_profile=self.request.user.user_profile).select_related('user_profile', 'life_sphere')
+        return UserBalance.objects.filter(user_profile=self.request.user.user_profile).select_related('user_profile')
 
 
 

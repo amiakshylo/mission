@@ -52,8 +52,9 @@ class UserProfile(models.Model):
         ('therapist', 'Therapist')
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_profile')
+    name = models.CharField(max_length=50, null=True, blank=True)
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES, null=True, blank=False)
-    birth_date = models.DateField(null=True, blank=True)
+    birth_date = models.DateField(null=True, blank=False)
     location = models.CharField(max_length=255, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profile_picture/', blank=True, null=False,
                                         validators=[validate_profile_image]) # add user id
