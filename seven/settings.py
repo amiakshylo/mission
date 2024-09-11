@@ -118,7 +118,7 @@ WSGI_APPLICATION = 'seven.wsgi.application'
 #     }
 # }
 
-#heroku
+#cloud
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
