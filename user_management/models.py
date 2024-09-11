@@ -246,7 +246,7 @@ class UserPrinciple(TimeStampedModel):
 
 
 class UserBalance(models.Model):
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="balances", null=True) # cannot be null
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="balances")
     life_sphere = models.ForeignKey('life_sphere.LifeSphere', on_delete=models.CASCADE, related_name="user_balances")
     score = models.IntegerField()
 

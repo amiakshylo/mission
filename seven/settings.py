@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'principle_management',
     'metrics',
     'journey',
-    'playground',
     'user_feedback',
     'user_management.apps.UserManagementConfig',
 
@@ -123,10 +122,10 @@ WSGI_APPLICATION = 'seven.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'detjq7ch2kjtgn',
+        'NAME': 'd6isjt4kk01s7e',
         'USER': 'u54s56clafoj5v',
-        'PASSWORD': 'p3eca0a69ad5f9aeed15359129a6b402f362b69f663a44987d93d42dcec871ae3',
-        'HOST': 'c97r84s7psuajm.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com',
+        'PASSWORD': 'p10e9cbe68f2d6074ffdb2e540db79a87e5d4119b6fe0a083fc1748d5d4640a3e',
+        'HOST': 'c11ai4tgvdcf54.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }

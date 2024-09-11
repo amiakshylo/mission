@@ -173,7 +173,7 @@ class UserBalanceViewSet(ListModelMixin, GenericViewSet):
     serializer_class = UserBalanceSerializer
 
     def get_queryset(self):
-        return UserBalance.objects.filter(user_profile=self.request.user.user_profile)
+        return UserBalance.objects.filter(user_profile=self.request.user.user_profile).select_related('user_profile', 'life_sphere')
 
 
 

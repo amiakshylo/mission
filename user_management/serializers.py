@@ -11,7 +11,7 @@ from goal_task_management.serializers import GoalSerializer
 from habit_management.serializers import UserHabitSerializer
 from life_sphere.models import Area
 from life_sphere.serializers import AreaSerializer
-from .models import User, UserProfile, Role, UserGoal, UserArea
+from .models import User, UserProfile, Role, UserGoal, UserArea, UserBalance
 
 
 class UserCreateSerializer(BaseUserCreateSerializer):
@@ -204,11 +204,12 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
 
 
 class UserBalanceSerializer(serializers.ModelSerializer):
-    balance = serializers.SerializerMethodField()
+    life_sphere = serializers.CharField()
+
 
     class Meta:
-        model = UserProfile
-        fields = ['balance']
+        model = UserBalance
+        fields = ['score', 'life_sphere']
 
 
 

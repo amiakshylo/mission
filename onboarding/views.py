@@ -1,9 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, ListModelMixin
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
 from life_sphere.models import LifeSphere
@@ -14,6 +11,7 @@ from onboarding.serializers import OnboardingQuestionSerializer, OnboardingRespo
 class OnboardingViewSet(ListModelMixin, CreateModelMixin, GenericViewSet):
     queryset = OnboardingQuestion.objects.select_related('life_sphere').all()
     filter_backends = [DjangoFilterBackend]
+    permission_classes = [IsAuthenticated]
     filterset_fields = ['id']
 
 
@@ -63,7 +61,7 @@ class OnboardingViewSet(ListModelMixin, CreateModelMixin, GenericViewSet):
         question_id = self.request.query_params.get('id')
         progress = UserProgress.objects.get(user_profile=user_profile)
 
-        # Save the response
+
         serializer.save(user_profile=user_profile)
 
         # Update progress
