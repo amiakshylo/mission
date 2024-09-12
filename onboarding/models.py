@@ -8,28 +8,28 @@ class OnboardingQuestion(models.Model):
     text = models.TextField()
     life_sphere = models.ForeignKey('life_sphere.LifeSphere', on_delete=models.CASCADE, related_name="questions")
     is_followup = models.BooleanField(default=False)
-    followup_condition = models.ForeignKey('QuestionOption', on_delete=models.SET_NULL, null=True, blank=True)
+    followup_condition = models.ForeignKey('AnswerOption', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.text
 
 
-class QuestionOption(models.Model):
+class AnswerOption(models.Model):
     question = models.ForeignKey(OnboardingQuestion, on_delete=models.CASCADE, related_name="options")
-    text = models.CharField(max_length=255)
-    points = models.IntegerField(default=0)  # Points towards balance calculation
+    option = models.CharField(max_length=255)
+    points = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.text
+        return self.option
 
 
-class OnboardingResponse(models.Model):
+class OnboardingAnswer(models.Model):
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="responses")
     question = models.ForeignKey(OnboardingQuestion, on_delete=models.CASCADE)
-    selected_option = models.ForeignKey(QuestionOption, on_delete=models.CASCADE, null=True)
+    user_answer = models.ForeignKey(AnswerOption, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f"{self.user_profile} - {self.question} - {self.selected_option}"
+        return f"{self.user_profile} - {self.question} - {self.user_answer}"
 
 
 class OnboardingProgress(models.Model):
