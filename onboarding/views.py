@@ -1,47 +1,73 @@
-from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework import status
-from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
+from rest_framework.decorators import action
+from rest_framework.mixins import RetrieveModelMixin, UpdateModelMixin, CreateModelMixin, ListModelMixin
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.viewsets import GenericViewSet
 
-from life_sphere.models import LifeSphere
-from onboarding.models import OnboardingQuestion, OnboardingAnswer, AnswerOption
-from onboarding.serializers import OnboardingQuestionSerializer, OnboardingAnswerSerializer
+from onboarding.models import OnboardingQuestion, UserResponse, AnswerOption
+from onboarding.serializers import AnswerSerializer, AnswerOptionSerializer, QuestionSerializer
 
 
-class OnboardingViewSet(RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
+class OnboardingViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericViewSet):
     queryset = OnboardingQuestion.objects.prefetch_related('options')
-
     permission_classes = [IsAuthenticated]
+
+    @action(detail=False, methods=['get'], url_path='next-question')
+    def next_question(self, request):
+        user_profile = request.user.user_profile
+        answered_question_ids = user_profile.responses.values_list('question_id', flat=True)
+
+        # Get the last response
+        last_response = user_profile.responses.order_by('-timestamp').first()
+
+        if last_response:
+            # Attempt to find a follow-up question triggered by the last answer
+            follow_up_questions = OnboardingQuestion.objects.filter(
+                is_followup=True,
+                followup_condition=last_response.user_answer
+            ).exclude(id__in=answered_question_ids)
+
+            if follow_up_questions.exists():
+                # Found a follow-up question
+                next_question = follow_up_questions.first()
+            else:
+                # No follow-up; get the next unanswered non-follow-up question in the same life sphere
+                next_question = OnboardingQuestion.objects.filter(
+                    life_sphere=last_response.question.life_sphere,
+                    is_followup=False
+                ).exclude(id__in=answered_question_ids).order_by('order').first()
+        else:
+            # No previous responses; get the first non-follow-up question
+            next_question = OnboardingQuestion.objects.filter(
+                is_followup=False
+            ).exclude(id__in=answered_question_ids).order_by('order').first()
+
+        if not next_question:
+            return Response({'detail': 'Questionnaire completed.'}, status=status.HTTP_200_OK)
+
+        serializer = QuestionSerializer(next_question)
+        return Response(serializer.data)
 
 
     def get_serializer_class(self):
-
         if self.request.method == 'PUT':
-            return OnboardingAnswerSerializer
-        return OnboardingQuestionSerializer
+            return AnswerSerializer
+        return QuestionSerializer
+
+    def get_serializer_context(self):
+        user_profile = self.request.user.user_profile
+        question = self.kwargs.get('pk')
+        return {'user_profile': user_profile, 'question': question}
+
 
     def update(self, request, *args, **kwargs):
-        user_profile = request.user.user_profile
-        question = self.get_object()
-
-        answer = request.data.get('user_answer')
-        try:
-            answer_option = question.options.get(id=answer)
-        except AnswerOption.DoesNotExist:
-            return Response({'error': 'Invalid answer option'}, status=status.HTTP_400_BAD_REQUEST)
-
-        # If an answer already exists, update it
-        if OnboardingAnswer.objects.filter(user_profile=user_profile, question=question).exists():
-            OnboardingAnswer.objects.filter(user_profile=user_profile, question=question).update(
-                user_answer=answer_option)
-            return Response({'message': 'Answer updated successfully'}, status=status.HTTP_200_OK)
-
-        # Create a new answer if it doesn't exist
-        OnboardingAnswer.objects.update_or_create(user_profile=user_profile, question=question,
-                                                  user_answer=answer_option)
-        return Response({'message': 'Answer created successfully'}, status=status.HTTP_201_CREATED)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 

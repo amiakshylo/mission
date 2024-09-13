@@ -9,6 +9,8 @@ class OnboardingQuestion(models.Model):
     life_sphere = models.ForeignKey('life_sphere.LifeSphere', on_delete=models.CASCADE, related_name="questions")
     is_followup = models.BooleanField(default=False)
     followup_condition = models.ForeignKey('AnswerOption', on_delete=models.SET_NULL, null=True, blank=True)
+    triggering_options = models.ManyToManyField('AnswerOption', blank=True, related_name='triggered_questions')
+    order = models.IntegerField(default=0)
 
     def __str__(self):
         return self.text
@@ -23,13 +25,17 @@ class AnswerOption(models.Model):
         return self.option
 
 
-class OnboardingAnswer(models.Model):
+class UserResponse(models.Model):
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="responses")
     question = models.ForeignKey(OnboardingQuestion, on_delete=models.CASCADE)
     user_answer = models.ForeignKey(AnswerOption, on_delete=models.CASCADE, null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user_profile} - {self.question} - {self.user_answer}"
+
+    class Meta:
+        unique_together = ('user_profile', 'question')
 
 
 class OnboardingProgress(models.Model):

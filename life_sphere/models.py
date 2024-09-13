@@ -19,6 +19,8 @@ class LifeSphere(models.Model):
         verbose_name_plural = "Categories"
 
 
+
+
 class Area(models.Model):
     """
     A model representing an areas of interest.

@@ -6,14 +6,12 @@ from pathlib import Path
 import openai
 from dotenv import load_dotenv
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 openai.api_key = os.getenv('OPENAI_API_KEY')
-
 
 DEBUG = True
 
@@ -55,6 +53,9 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_FILTER_BACKENDS": (
         "django_filters.rest_framework.DjangoFilterBackend",
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAdminUser',
     ),
 }
 
@@ -130,7 +131,6 @@ DATABASES = {
     }
 }
 
-
 AUTH_USER_MODEL = 'user_management.User'
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -147,9 +147,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-
-
 
 # LOGGING = {
 #     'version': 1,
