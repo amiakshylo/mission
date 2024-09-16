@@ -18,11 +18,11 @@ class OnboardingQuestion(models.Model):
 
 class AnswerOption(models.Model):
     question = models.ForeignKey(OnboardingQuestion, on_delete=models.CASCADE, related_name="options")
-    option = models.CharField(max_length=255)
+    answer = models.CharField(max_length=255)
     points = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.option
+        return self.answer
 
 
 class UserResponse(models.Model):

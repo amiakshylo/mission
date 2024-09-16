@@ -4,7 +4,7 @@ from rest_framework_nested import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register('onboarding_question', views.OnboardingViewSet, basename='onboarding_question')
+router.register('user_answer', views.OnboardingViewSet, basename='user_answer')
 
 
 

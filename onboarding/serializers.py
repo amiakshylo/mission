@@ -8,8 +8,8 @@ class AnswerOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnswerOption
         fields = ['id',
-                  'option'
-        ]
+                  'answer'
+                  ]
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -24,22 +24,24 @@ class QuestionSerializer(serializers.ModelSerializer):
                   ]
 
 
-class AnswerSerializer(serializers.ModelSerializer):
-
+class UserResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserResponse
-        fields = ['user_answer']
-
+        fields = ['question', 'user_answer']
 
     def validate(self, attrs):
         selected_answer = attrs.get('user_answer')
-        question = int(self.context.get('question'))
+        question = attrs.get('question')
+
 
         if not question:
             raise serializers.ValidationError("Question instance is required.")
+        if not selected_answer:
+            raise serializers.ValidationError("Selected answer is required.")
 
-        if selected_answer.question_id != question:
-            print(type(selected_answer.question_id), type(question))
+
+        if selected_answer.question_id != question.id:
+
             raise serializers.ValidationError("Selected answer does not belong to this question.")
 
         user_profile = self.context['user_profile']
@@ -49,7 +51,5 @@ class AnswerSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        user_profile = self.context['user_profile']
-        question = self.context.get('question')
-        user_response = UserResponse.objects.create(**validated_data, user_profile=user_profile, question_id=question)
-        return user_response
+        validated_data['user_profile'] = self.context['user_profile']
+        return UserResponse.objects.create(**validated_data)

@@ -8,11 +8,12 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from onboarding.models import OnboardingQuestion, UserResponse, AnswerOption
-from onboarding.serializers import AnswerSerializer, AnswerOptionSerializer, QuestionSerializer
+from onboarding.serializers import UserResponseSerializer, AnswerOptionSerializer, QuestionSerializer
 
 
-class OnboardingViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericViewSet):
-    queryset = OnboardingQuestion.objects.prefetch_related('options')
+class OnboardingViewSet(CreateModelMixin, GenericViewSet):
+    queryset = UserResponse.objects.select_related('question')
+    serializer_class = UserResponseSerializer
     permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['get'], url_path='next-question')
@@ -52,22 +53,9 @@ class OnboardingViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, Ge
         return Response(serializer.data)
 
 
-    def get_serializer_class(self):
-        if self.request.method == 'PUT':
-            return AnswerSerializer
-        return QuestionSerializer
-
     def get_serializer_context(self):
         user_profile = self.request.user.user_profile
-        question = self.kwargs.get('pk')
-        return {'user_profile': user_profile, 'question': question}
-
-
-    def update(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return {'user_profile': user_profile}
 
 
 
