@@ -2,12 +2,14 @@
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.mixins import RetrieveModelMixin, UpdateModelMixin, CreateModelMixin, ListModelMixin
+from . import utils
+from user_management.utils import save_initial_user_balance
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from onboarding.models import OnboardingQuestion, UserResponse, AnswerOption
+from onboarding.models import OnboardingQuestion, UserResponse
 from onboarding.serializers import UserResponseSerializer, AnswerOptionSerializer, QuestionSerializer
 
 
@@ -47,7 +49,9 @@ class OnboardingViewSet(CreateModelMixin, GenericViewSet):
             ).exclude(id__in=answered_question_ids).order_by('order').first()
 
         if not next_question:
-            return Response({'detail': 'Questionnaire completed.'}, status=status.HTTP_200_OK)
+            initial_user_balance = utils.calculate_total_points_per_life_sphere(user_profile)
+            save_initial_user_balance(user_profile)
+            return Response(f'Current life sphere balance: {initial_user_balance}', status=status.HTTP_200_OK)
 
         serializer = QuestionSerializer(next_question)
         return Response(serializer.data)

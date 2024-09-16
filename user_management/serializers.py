@@ -209,7 +209,7 @@ class UserBalanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserBalance
-        fields = ['score', 'life_sphere']
+        fields = ['life_sphere', 'score']
 
 
 

@@ -167,12 +167,11 @@ class UserAreaViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
 
 
 class UserBalanceViewSet(ListModelMixin, GenericViewSet):
-
+    queryset = UserBalance.objects.select_related('user_profile').prefetch_related('life_sphere')
     permission_classes = [IsAuthenticated]
     serializer_class = UserBalanceSerializer
 
-    def get_queryset(self):
-        return UserBalance.objects.filter(user_profile=self.request.user.user_profile).select_related('user_profile')
+
 
 
 

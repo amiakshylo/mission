@@ -30,6 +30,16 @@ class UserResponse(models.Model):
     user_answer = models.ForeignKey(AnswerOption, on_delete=models.CASCADE, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    def calculate_points(self):
+        if not self.user_answer:
+            return 0
+        return self.user_answer.points
+
+
+
+
+
+
     def __str__(self):
         return f"{self.user_profile} - {self.question} - {self.user_answer}"
 

@@ -253,3 +253,8 @@ class UserBalance(models.Model):
 
     def __str__(self):
         return f"{self.user_profile} - {self.life_sphere.title}: {self.score}"
+
+
+
+
+
