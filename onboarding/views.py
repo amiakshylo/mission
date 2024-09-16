@@ -26,18 +26,18 @@ class OnboardingViewSet(CreateModelMixin, GenericViewSet):
 
         if last_response:
             # Attempt to find a follow-up question triggered by the last answer
-            follow_up_questions = OnboardingQuestion.objects.filter(
+            follow_up_question = OnboardingQuestion.objects.filter(
                 is_followup=True,
-                followup_condition=last_response.user_answer
+                triggering_options=last_response.user_answer
             ).exclude(id__in=answered_question_ids)
 
-            if follow_up_questions.exists():
+            if follow_up_question.exists():
                 # Found a follow-up question
-                next_question = follow_up_questions.first()
+                next_question = follow_up_question.first()
             else:
                 # No follow-up; get the next unanswered non-follow-up question in the same life sphere
                 next_question = OnboardingQuestion.objects.filter(
-                    life_sphere=last_response.question.life_sphere,
+                    
                     is_followup=False
                 ).exclude(id__in=answered_question_ids).order_by('order').first()
         else:

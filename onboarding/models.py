@@ -8,7 +8,6 @@ class OnboardingQuestion(models.Model):
     text = models.TextField()
     life_sphere = models.ForeignKey('life_sphere.LifeSphere', on_delete=models.CASCADE, related_name="questions")
     is_followup = models.BooleanField(default=False)
-    followup_condition = models.ForeignKey('AnswerOption', on_delete=models.SET_NULL, null=True, blank=True)
     triggering_options = models.ManyToManyField('AnswerOption', blank=True, related_name='triggered_questions')
     order = models.IntegerField(default=0)
 
