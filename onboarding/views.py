@@ -4,7 +4,7 @@ from rest_framework.mixins import CreateModelMixin
 from . import utils
 from user_management.utils import save_initial_user_balance
 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 

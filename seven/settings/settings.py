@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     "onboarding",
     "core",
     "goal_task_management",
-    "habit_management",
     "principle_management",
     "metrics",
     "journey",
@@ -102,17 +101,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "seven.wsgi.application"
 
-# local
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'seven_db',
-#         'USER': 'admin',
-#         'PASSWORD': 'PortuGal2022@',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
 
 # cloud
 DATABASES = {
