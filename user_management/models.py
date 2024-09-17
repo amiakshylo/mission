@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from datetime import date
 from django.db import models
 from django.db.models import UniqueConstraint
 from rest_framework.exceptions import ValidationError
@@ -61,12 +62,12 @@ class UserProfile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="user_profile"
     )
-    name = models.CharField(max_length=50, null=True, blank=True)
+    name = models.CharField(max_length=50, blank=True)
     gender = models.CharField(
-        max_length=20, choices=GENDER_CHOICES, null=True, blank=False
+        max_length=20, choices=GENDER_CHOICES, blank=False
     )
     birth_date = models.DateField(null=True, blank=False)
-    location = models.CharField(max_length=255, null=True, blank=True)
+    location = models.CharField(max_length=255, blank=True)
     profile_picture = models.ImageField(
         upload_to="profile_picture/",
         blank=True,
@@ -79,12 +80,10 @@ class UserProfile(models.Model):
     ai_assistant_model = models.CharField(
         choices=ASSISTANT_MODEL_CHOICES, max_length=255
     )
-    dashboard_customization = models.TextField(blank=True, null=True)
+    dashboard_customization = models.TextField(blank=True)
 
     def get_age(self):
         if self.birth_date:
-            from datetime import date
-
             today = date.today()
             return (
                 today.year
@@ -140,7 +139,7 @@ class UserMission(TimeStampedModel):
     user_profile = models.OneToOneField(
         UserProfile, on_delete=models.CASCADE, related_name="user_missions"
     )
-    mission_statement = models.TextField(blank=True, null=True)
+    mission_statement = models.TextField(blank=True)
     tailored_by_ai = models.BooleanField(
         default=False
     )  # Indicates if the mission was tailored by AI
@@ -169,11 +168,11 @@ class Role(TimeStampedModel):
         (WELLNESS_SPIRITUAL, "Wellness and Spiritual Roles"),
     ]
 
-    title = models.CharField(max_length=50, unique=True, null=True, blank=True)
+    title = models.CharField(max_length=50, unique=True, blank=True)
     type = models.CharField(max_length=50, choices=ROLE_TYPE_CHOICES)
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True)
     user_profile = models.ManyToManyField(UserProfile, related_name="roles")
-    custom_title = models.CharField(max_length=50, unique=True, null=True, blank=True)
+    custom_title = models.CharField(max_length=50, unique=True, blank=True)
     is_custom = models.BooleanField(default=False)
 
     def __str__(self):
@@ -201,7 +200,7 @@ class UserGoal(TimeStampedModel, CompletedModel, ProgressModel, DueDateModel):
     goal = models.ForeignKey(
         "goal_task_management.Goal", on_delete=models.CASCADE, null=True, blank=True
     )
-    custom_goal = models.CharField(max_length=255, blank=True, null=True)
+    custom_goal = models.CharField(max_length=255, blank=True)
     goal_type = models.CharField(choices=GOAL_TYPE_CHOICES)
     is_custom = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -245,7 +244,7 @@ class UserTask(TimeStampedModel, CompletedModel, PriorityModel):
         UserProfile, on_delete=models.CASCADE, related_name="user_tasks"
     )
     task = models.ForeignKey("goal_task_management.Task", on_delete=models.CASCADE)
-    custom_name = models.CharField(max_length=255, blank=True, null=True)
+    custom_name = models.CharField(max_length=255, blank=True)
     progress = models.FloatField(default=0)
     is_active = models.BooleanField(default=True)
     is_repetitive = models.BooleanField(default=False)
@@ -267,7 +266,7 @@ class UserPrinciple(TimeStampedModel):
     principle = models.ForeignKey(
         Principle, on_delete=models.CASCADE, null=True, blank=True
     )
-    custom_principle = models.CharField(max_length=255, blank=True, null=True)
+    custom_principle = models.CharField(max_length=255, blank=True)
     is_custom = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 

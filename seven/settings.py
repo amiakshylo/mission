@@ -3,6 +3,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+import dj_database_url
 import openai
 from dotenv import load_dotenv
 
@@ -104,13 +105,13 @@ WSGI_APPLICATION = "seven.wsgi.application"
 
 # cloud
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "d6isjt4kk01s7e",
-        "USER": "u54s56clafoj5v",
-        "PASSWORD": "p10e9cbe68f2d6074ffdb2e540db79a87e5d4119b6fe0a083fc1748d5d4640a3e",
-        "HOST": "c11ai4tgvdcf54.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com",
-        "PORT": "5432",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DATABASE_NAME'),
+        'USER': os.getenv('DATABASE_USER'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': os.getenv('DATABASE_HOST'),
+        'PORT': os.getenv('DATABASE_PORT'),
     }
 }
 

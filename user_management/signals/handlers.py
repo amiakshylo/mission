@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from seven.settings import settings
+from seven import settings
 
 from user_management.models import UserProfile
 

@@ -7,7 +7,7 @@ services:
       POSTGRES_DB: d6isjt4kk01s7e
       POSTGRES_USER: u54s56clafoj5v
       POSTGRES_PASSWORD: p10e9cbe68f2d6074ffdb2e540db79a87e5d4119b6fe0a083fc1748d5d4640a3e
-      POSTGRES_HOST_AUTH_METHOD: trust  # Optionally, you can set this to `md5` if you prefer password authentication.
+      POSTGRES_HOST_AUTH_METHOD: trust
 
   web:
     build: .
