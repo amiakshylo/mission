@@ -8,14 +8,16 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('goal_task_management', '0001_initial'),
-        ('life_sphere', '0001_initial'),
+        ("goal_task_management", "0001_initial"),
+        ("life_sphere", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='goal',
-            name='category',
-            field=models.ManyToManyField(related_name='goals', to='life_sphere.lifesphere'),
+            model_name="goal",
+            name="category",
+            field=models.ManyToManyField(
+                related_name="goals", to="life_sphere.lifesphere"
+            ),
         ),
     ]

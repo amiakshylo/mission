@@ -9,14 +9,18 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('journey', '0001_initial'),
-        ('user_management', '0001_initial'),
+        ("journey", "0001_initial"),
+        ("user_management", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='userjourneystatus',
-            name='user_profile',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='journey_statuses', to='user_management.userprofile'),
+            model_name="userjourneystatus",
+            name="user_profile",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="journey_statuses",
+                to="user_management.userprofile",
+            ),
         ),
     ]

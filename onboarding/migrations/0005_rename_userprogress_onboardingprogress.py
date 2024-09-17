@@ -6,14 +6,14 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('life_sphere', '0005_alter_area_options'),
-        ('onboarding', '0004_remove_onboardingresponse_response_and_more'),
-        ('user_management', '0010_alter_userprofile_birth_date'),
+        ("life_sphere", "0005_alter_area_options"),
+        ("onboarding", "0004_remove_onboardingresponse_response_and_more"),
+        ("user_management", "0010_alter_userprofile_birth_date"),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='UserProgress',
-            new_name='OnboardingProgress',
+            old_name="UserProgress",
+            new_name="OnboardingProgress",
         ),
     ]

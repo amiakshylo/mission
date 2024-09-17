@@ -10,48 +10,65 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('journey', '0003_remove_journey_end_date_remove_journey_start_date'),
+        ("journey", "0003_remove_journey_end_date_remove_journey_start_date"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='userjourneystatus',
-            name='completed_at',
+            model_name="userjourneystatus",
+            name="completed_at",
             field=models.DateTimeField(null=True),
         ),
         migrations.AddField(
-            model_name='userjourneystatus',
-            name='end_date',
+            model_name="userjourneystatus",
+            name="end_date",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='userjourneystatus',
-            name='journey',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='journey.journey'),
+            model_name="userjourneystatus",
+            name="journey",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="journey.journey",
+            ),
         ),
         migrations.AddField(
-            model_name='userjourneystatus',
-            name='paused',
+            model_name="userjourneystatus",
+            name="paused",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='userjourneystatus',
-            name='progress',
-            field=models.FloatField(default=0.0, help_text='Progress in percentage', validators=[django.core.validators.MinValueValidator(0.0), django.core.validators.MaxValueValidator(100.0)]),
+            model_name="userjourneystatus",
+            name="progress",
+            field=models.FloatField(
+                default=0.0,
+                help_text="Progress in percentage",
+                validators=[
+                    django.core.validators.MinValueValidator(0.0),
+                    django.core.validators.MaxValueValidator(100.0),
+                ],
+            ),
         ),
         migrations.AddField(
-            model_name='userjourneystatus',
-            name='start_date',
-            field=models.DateTimeField(default=django.utils.timezone.now, validators=[core.models.validate_start_due_date]),
+            model_name="userjourneystatus",
+            name="start_date",
+            field=models.DateTimeField(
+                default=django.utils.timezone.now,
+                validators=[core.models.validate_start_due_date],
+            ),
         ),
         migrations.AlterField(
-            model_name='journeystep',
-            name='end_date',
+            model_name="journeystep",
+            name="end_date",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='journeystep',
-            name='start_date',
-            field=models.DateTimeField(default=django.utils.timezone.now, validators=[core.models.validate_start_due_date]),
+            model_name="journeystep",
+            name="start_date",
+            field=models.DateTimeField(
+                default=django.utils.timezone.now,
+                validators=[core.models.validate_start_due_date],
+            ),
         ),
     ]

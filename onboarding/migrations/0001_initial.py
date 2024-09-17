@@ -9,26 +9,73 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('life_sphere', '0005_alter_area_options'),
-        ('user_management', '0005_alter_userprofile_user'),
+        ("life_sphere", "0005_alter_area_options"),
+        ("user_management", "0005_alter_userprofile_user"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='OnboardingQuestion',
+            name="OnboardingQuestion",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('text', models.TextField()),
-                ('life_sphere', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='questions', to='life_sphere.lifesphere')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("text", models.TextField()),
+                (
+                    "life_sphere",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="questions",
+                        to="life_sphere.lifesphere",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='OnboardingResponse',
+            name="OnboardingResponse",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('response', models.IntegerField(choices=[(2, 'Strongly Agree'), (1, 'Agree'), (-1, 'Disagree'), (-2, 'Strongly Disagree')])),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='responses', to='onboarding.onboardingquestion')),
-                ('user_profile', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='responses', to='user_management.userprofile')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "response",
+                    models.IntegerField(
+                        choices=[
+                            (2, "Strongly Agree"),
+                            (1, "Agree"),
+                            (-1, "Disagree"),
+                            (-2, "Strongly Disagree"),
+                        ]
+                    ),
+                ),
+                (
+                    "question",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="responses",
+                        to="onboarding.onboardingquestion",
+                    ),
+                ),
+                (
+                    "user_profile",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="responses",
+                        to="user_management.userprofile",
+                    ),
+                ),
             ],
         ),
     ]

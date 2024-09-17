@@ -6,28 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('goal_task_management', '0005_goal_area'),
+        ("goal_task_management", "0005_goal_area"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='subtask',
-            name='created_at',
+            model_name="subtask",
+            name="created_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='subtask',
-            name='updated_at',
+            model_name="subtask",
+            name="updated_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='task',
-            name='created_at',
+            model_name="task",
+            name="created_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='task',
-            name='updated_at',
+            model_name="task",
+            name="updated_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
     ]

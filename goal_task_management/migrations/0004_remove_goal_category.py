@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('goal_task_management', '0003_initial'),
+        ("goal_task_management", "0003_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='goal',
-            name='category',
+            model_name="goal",
+            name="category",
         ),
     ]

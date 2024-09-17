@@ -9,7 +9,7 @@ class GoalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Goal
-        fields = ['id', 'title', 'description', 'sub_category']
+        fields = ["id", "title", "description", "sub_category"]
 
 
 class GoalSuggestionInputSerializer(serializers.ModelSerializer):
@@ -18,8 +18,10 @@ class GoalSuggestionInputSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super(GoalSuggestionInputSerializer, self).__init__(*args, **kwargs)
-        self.fields['role'].queryset = kwargs['context']['request'].user.user_profile.roles.all()
+        self.fields["role"].queryset = kwargs["context"][
+            "request"
+        ].user.user_profile.roles.all()
 
     class Meta:
         model = Role
-        fields = ['role', 'search']
+        fields = ["role", "search"]

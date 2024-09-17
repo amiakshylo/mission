@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('onboarding', '0018_rename_option_answeroption_answer'),
+        ("onboarding", "0018_rename_option_answeroption_answer"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='answeroption',
-            name='answer_code',
+            model_name="answeroption",
+            name="answer_code",
             field=models.IntegerField(default=0),
         ),
     ]

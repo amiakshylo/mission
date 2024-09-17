@@ -2,52 +2,208 @@ import csv
 
 data_health_mindfulness = [
     # Health
-    {"title": "Physical Fitness", "description": "Improving physical fitness through regular exercise, strength training, and cardiovascular activities to enhance overall health and well-being. Includes workout routines, endurance building, and muscle strengthening.", "category": "Health"},
-    {"title": "Nutrition", "description": "Enhancing nutrition by adopting a balanced and healthy diet, understanding nutritional needs, and making informed food choices for optimal health. Focuses on diet planning, healthy eating habits, and nutritional awareness.", "category": "Health"},
-    {"title": "Sleep Quality", "description": "Improving sleep quality by establishing a consistent sleep routine, creating a restful environment, and addressing sleep-related issues to ensure adequate rest. Includes sleep hygiene, relaxation techniques, and sleep cycle optimization.", "category": "Health"},
-    {"title": "Stress Management", "description": "Developing effective stress management techniques to reduce anxiety, cope with challenges, and maintain mental and emotional well-being. Focuses on relaxation methods, mindfulness, and resilience building.", "category": "Health"},
-    {"title": "Weight Management", "description": "Achieving and maintaining a healthy weight through a combination of diet, exercise, and lifestyle changes, tailored to individual needs and goals. Includes weight loss strategies, healthy habits, and body composition management.", "category": "Health"},
-    {"title": "Mental Health", "description": "Prioritizing mental health by seeking support, practicing self-care, and addressing mental health challenges to achieve emotional and psychological well-being. Focuses on therapy, counseling, and mental wellness practices.", "category": "Health"},
-    {"title": "Disease Prevention", "description": "Focusing on disease prevention through regular health screenings, vaccinations, and adopting healthy lifestyle habits to reduce the risk of illness. Includes preventive care, healthy habits, and early detection strategies.", "category": "Health"},
-    {"title": "Hydration", "description": "Maintaining proper hydration levels by drinking adequate water throughout the day to support bodily functions, energy levels, and overall health. Includes hydration tips, water intake tracking, and benefits of staying hydrated.", "category": "Health"},
-    {"title": "Exercise Routine", "description": "Establishing a consistent and effective exercise routine that includes a mix of cardiovascular activities, strength training, and flexibility exercises. Focuses on fitness planning, exercise diversity, and routine adherence.", "category": "Health"},
-    {"title": "Posture", "description": "Improving posture to prevent injury, enhance physical appearance, and support overall health. Includes posture correction exercises, ergonomic practices, and back health awareness.", "category": "Health"},
-    {"title": "Immunity Boosting", "description": "Strengthening the immune system through nutrition, exercise, and lifestyle choices to enhance the body's defense against illness. Includes immunity-boosting foods, supplements, and healthy habits.", "category": "Health"},
-    {"title": "Work-Life Balance", "description": "Achieving a healthy balance between work responsibilities and personal life to reduce stress and improve overall well-being. Focuses on time management, prioritization, and boundary setting.", "category": "Health"},
-    {"title": "Substance Use", "description": "Managing and reducing the use of harmful substances for better health and well-being. Includes strategies for quitting, support systems, and understanding the risks associated with substance use.", "category": "Health"},
-    {"title": "Cardiovascular Health", "description": "Improving heart health through diet, exercise, and lifestyle choices to prevent cardiovascular disease. Focuses on heart-healthy habits, risk reduction, and cardiovascular fitness.", "category": "Health"},
-    {"title": "Flexibility", "description": "Enhancing physical flexibility to improve mobility, reduce the risk of injury, and support overall physical health. Includes stretching routines, flexibility exercises, and mobility practices.", "category": "Health"},
-    {"title": "Bone Health", "description": "Strengthening bones through nutrition, exercise, and lifestyle choices to prevent osteoporosis and support overall skeletal health. Includes calcium-rich diets, weight-bearing exercises, and bone density awareness.", "category": "Health"},
-    {"title": "Digestive Health", "description": "Improving digestive function and gut health through diet, lifestyle choices, and understanding digestive processes. Includes gut health practices, dietary fiber, and digestive wellness.", "category": "Health"},
-    {"title": "Lung Capacity", "description": "Enhancing respiratory health and lung function through exercise, proper breathing techniques, and lifestyle choices. Includes lung exercises, respiratory health tips, and breathing techniques.", "category": "Health"},
-    {"title": "Chronic Pain Management", "description": "Developing strategies to manage and alleviate chronic pain for improved quality of life. Focuses on pain relief techniques, lifestyle adjustments, and understanding chronic pain.", "category": "Health"},
-    {"title": "Vision Care", "description": "Maintaining and improving eye health through regular check-ups, proper care, and understanding vision needs. Includes eye health tips, vision correction, and protective practices.", "category": "Health"},
-
+    {
+        "title": "Physical Fitness",
+        "description": "Improving physical fitness through regular exercise, strength training, and cardiovascular activities to enhance overall health and well-being. Includes workout routines, endurance building, and muscle strengthening.",
+        "category": "Health",
+    },
+    {
+        "title": "Nutrition",
+        "description": "Enhancing nutrition by adopting a balanced and healthy diet, understanding nutritional needs, and making informed food choices for optimal health. Focuses on diet planning, healthy eating habits, and nutritional awareness.",
+        "category": "Health",
+    },
+    {
+        "title": "Sleep Quality",
+        "description": "Improving sleep quality by establishing a consistent sleep routine, creating a restful environment, and addressing sleep-related issues to ensure adequate rest. Includes sleep hygiene, relaxation techniques, and sleep cycle optimization.",
+        "category": "Health",
+    },
+    {
+        "title": "Stress Management",
+        "description": "Developing effective stress management techniques to reduce anxiety, cope with challenges, and maintain mental and emotional well-being. Focuses on relaxation methods, mindfulness, and resilience building.",
+        "category": "Health",
+    },
+    {
+        "title": "Weight Management",
+        "description": "Achieving and maintaining a healthy weight through a combination of diet, exercise, and lifestyle changes, tailored to individual needs and goals. Includes weight loss strategies, healthy habits, and body composition management.",
+        "category": "Health",
+    },
+    {
+        "title": "Mental Health",
+        "description": "Prioritizing mental health by seeking support, practicing self-care, and addressing mental health challenges to achieve emotional and psychological well-being. Focuses on therapy, counseling, and mental wellness practices.",
+        "category": "Health",
+    },
+    {
+        "title": "Disease Prevention",
+        "description": "Focusing on disease prevention through regular health screenings, vaccinations, and adopting healthy lifestyle habits to reduce the risk of illness. Includes preventive care, healthy habits, and early detection strategies.",
+        "category": "Health",
+    },
+    {
+        "title": "Hydration",
+        "description": "Maintaining proper hydration levels by drinking adequate water throughout the day to support bodily functions, energy levels, and overall health. Includes hydration tips, water intake tracking, and benefits of staying hydrated.",
+        "category": "Health",
+    },
+    {
+        "title": "Exercise Routine",
+        "description": "Establishing a consistent and effective exercise routine that includes a mix of cardiovascular activities, strength training, and flexibility exercises. Focuses on fitness planning, exercise diversity, and routine adherence.",
+        "category": "Health",
+    },
+    {
+        "title": "Posture",
+        "description": "Improving posture to prevent injury, enhance physical appearance, and support overall health. Includes posture correction exercises, ergonomic practices, and back health awareness.",
+        "category": "Health",
+    },
+    {
+        "title": "Immunity Boosting",
+        "description": "Strengthening the immune system through nutrition, exercise, and lifestyle choices to enhance the body's defense against illness. Includes immunity-boosting foods, supplements, and healthy habits.",
+        "category": "Health",
+    },
+    {
+        "title": "Work-Life Balance",
+        "description": "Achieving a healthy balance between work responsibilities and personal life to reduce stress and improve overall well-being. Focuses on time management, prioritization, and boundary setting.",
+        "category": "Health",
+    },
+    {
+        "title": "Substance Use",
+        "description": "Managing and reducing the use of harmful substances for better health and well-being. Includes strategies for quitting, support systems, and understanding the risks associated with substance use.",
+        "category": "Health",
+    },
+    {
+        "title": "Cardiovascular Health",
+        "description": "Improving heart health through diet, exercise, and lifestyle choices to prevent cardiovascular disease. Focuses on heart-healthy habits, risk reduction, and cardiovascular fitness.",
+        "category": "Health",
+    },
+    {
+        "title": "Flexibility",
+        "description": "Enhancing physical flexibility to improve mobility, reduce the risk of injury, and support overall physical health. Includes stretching routines, flexibility exercises, and mobility practices.",
+        "category": "Health",
+    },
+    {
+        "title": "Bone Health",
+        "description": "Strengthening bones through nutrition, exercise, and lifestyle choices to prevent osteoporosis and support overall skeletal health. Includes calcium-rich diets, weight-bearing exercises, and bone density awareness.",
+        "category": "Health",
+    },
+    {
+        "title": "Digestive Health",
+        "description": "Improving digestive function and gut health through diet, lifestyle choices, and understanding digestive processes. Includes gut health practices, dietary fiber, and digestive wellness.",
+        "category": "Health",
+    },
+    {
+        "title": "Lung Capacity",
+        "description": "Enhancing respiratory health and lung function through exercise, proper breathing techniques, and lifestyle choices. Includes lung exercises, respiratory health tips, and breathing techniques.",
+        "category": "Health",
+    },
+    {
+        "title": "Chronic Pain Management",
+        "description": "Developing strategies to manage and alleviate chronic pain for improved quality of life. Focuses on pain relief techniques, lifestyle adjustments, and understanding chronic pain.",
+        "category": "Health",
+    },
+    {
+        "title": "Vision Care",
+        "description": "Maintaining and improving eye health through regular check-ups, proper care, and understanding vision needs. Includes eye health tips, vision correction, and protective practices.",
+        "category": "Health",
+    },
     # Mindfulness
-    {"title": "Meditation Practice", "description": "Establishing a regular meditation practice to enhance mindfulness, reduce stress, and improve mental clarity. Includes guided meditations, mindfulness techniques, and meditation routines.", "category": "Mindfulness"},
-    {"title": "Mindful Breathing", "description": "Practicing mindful breathing techniques to enhance relaxation, focus, and awareness of the present moment. Includes breath control exercises, relaxation techniques, and stress relief practices.", "category": "Mindfulness"},
-    {"title": "Gratitude Journaling", "description": "Maintaining a gratitude journal to cultivate a positive outlook, increase happiness, and enhance mindfulness. Includes journaling practices, positive reflection, and gratitude exercises.", "category": "Mindfulness"},
-    {"title": "Stress Reduction Techniques", "description": "Implementing stress reduction techniques such as mindfulness, meditation, and relaxation practices to improve overall well-being. Includes stress management strategies, mindfulness practices, and relaxation techniques.", "category": "Mindfulness"},
-    {"title": "Emotional Awareness", "description": "Enhancing emotional awareness by understanding and recognizing one's own emotions, developing emotional intelligence, and fostering emotional well-being. Includes mindfulness practices, emotional regulation, and self-reflection.", "category": "Mindfulness"},
-    {"title": "Self-Compassion", "description": "Practicing self-compassion to foster kindness and understanding towards oneself, reduce self-criticism, and enhance emotional well-being. Includes mindfulness, self-kindness, and emotional healing.", "category": "Mindfulness"},
-    {"title": "Mindful Eating", "description": "Developing mindful eating habits to foster a healthy relationship with food, enhance digestion, and improve overall well-being. Includes mindful eating practices, awareness of hunger cues, and savoring food.", "category": "Mindfulness"},
-    {"title": "Body Awareness", "description": "Enhancing body awareness through mindfulness practices, physical activity, and self-reflection to improve overall well-being. Includes body scan meditation, movement practices, and awareness exercises.", "category": "Mindfulness"},
-    {"title": "Present Moment Focus", "description": "Cultivating present moment focus to reduce stress, increase mindfulness, and improve overall well-being. Includes mindfulness practices, meditation, and techniques for staying in the present.", "category": "Mindfulness"},
-    {"title": "Reflective Practices", "description": "Engaging in reflective practices to enhance self-awareness, mindfulness, and personal growth. Includes journaling, meditation, and self-reflection exercises.", "category": "Mindfulness"},
-    {"title": "Mindful Walking", "description": "Practicing mindful walking to connect with the present moment, reduce stress, and enhance physical and mental well-being. Includes walking meditation, mindfulness practices, and outdoor mindfulness.", "category": "Mindfulness"},
-    {"title": "Journaling", "description": "Engaging in journaling practices to enhance mindfulness, self-reflection, and emotional well-being. Includes journaling techniques, mindfulness practices, and emotional expression.", "category": "Mindfulness"},
-    {"title": "Visualization Techniques", "description": "Utilizing visualization techniques to enhance mindfulness, reduce stress, and achieve personal goals. Includes guided visualization, mindfulness practices, and mental imagery exercises.", "category": "Mindfulness"},
-    {"title": "Mindful Listening", "description": "Practicing mindful listening to improve communication, enhance relationships, and increase mindfulness. Includes active listening techniques, mindfulness practices, and empathy exercises.", "category": "Mindfulness"},
-    {"title": "Progressive Muscle Relaxation", "description": "Practicing progressive muscle relaxation to reduce stress, enhance mindfulness, and improve physical and mental well-being. Includes relaxation techniques, mindfulness practices, and stress relief exercises.", "category": "Mindfulness"},
-    {"title": "Loving-Kindness Meditation", "description": "Engaging in loving-kindness meditation to cultivate compassion, enhance mindfulness, and improve emotional well-being. Includes guided meditation, mindfulness practices, and compassion exercises.", "category": "Mindfulness"},
-    {"title": "Mindful Communication", "description": "Developing mindful communication skills to enhance relationships, reduce stress, and increase mindfulness in interactions. Includes communication techniques, mindfulness practices, and empathy exercises.", "category": "Mindfulness"},
-    {"title": "Savoring Daily Activities", "description": "Practicing mindfulness by savoring daily activities, enhancing awareness, and increasing enjoyment of life's simple pleasures. Includes mindfulness techniques, present moment focus, and gratitude practices.", "category": "Mindfulness"},
-    {"title": "Non-Judgmental Awareness", "description": "Cultivating non-judgmental awareness through mindfulness and introspection allows individuals to observe their thoughts, emotions, and behaviors without immediately labeling them as good or bad. This practice encourages a deeper understanding of oneself and the world, promoting emotional balance, reducing stress, and enhancing overall well-being. By consistently practicing non-judgmental awareness, individuals can develop a more compassionate and accepting attitude towards themselves and others, leading to more mindful interactions and decisions in daily life.", "category": "Mindfulness"}]
+    {
+        "title": "Meditation Practice",
+        "description": "Establishing a regular meditation practice to enhance mindfulness, reduce stress, and improve mental clarity. Includes guided meditations, mindfulness techniques, and meditation routines.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Mindful Breathing",
+        "description": "Practicing mindful breathing techniques to enhance relaxation, focus, and awareness of the present moment. Includes breath control exercises, relaxation techniques, and stress relief practices.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Gratitude Journaling",
+        "description": "Maintaining a gratitude journal to cultivate a positive outlook, increase happiness, and enhance mindfulness. Includes journaling practices, positive reflection, and gratitude exercises.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Stress Reduction Techniques",
+        "description": "Implementing stress reduction techniques such as mindfulness, meditation, and relaxation practices to improve overall well-being. Includes stress management strategies, mindfulness practices, and relaxation techniques.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Emotional Awareness",
+        "description": "Enhancing emotional awareness by understanding and recognizing one's own emotions, developing emotional intelligence, and fostering emotional well-being. Includes mindfulness practices, emotional regulation, and self-reflection.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Self-Compassion",
+        "description": "Practicing self-compassion to foster kindness and understanding towards oneself, reduce self-criticism, and enhance emotional well-being. Includes mindfulness, self-kindness, and emotional healing.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Mindful Eating",
+        "description": "Developing mindful eating habits to foster a healthy relationship with food, enhance digestion, and improve overall well-being. Includes mindful eating practices, awareness of hunger cues, and savoring food.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Body Awareness",
+        "description": "Enhancing body awareness through mindfulness practices, physical activity, and self-reflection to improve overall well-being. Includes body scan meditation, movement practices, and awareness exercises.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Present Moment Focus",
+        "description": "Cultivating present moment focus to reduce stress, increase mindfulness, and improve overall well-being. Includes mindfulness practices, meditation, and techniques for staying in the present.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Reflective Practices",
+        "description": "Engaging in reflective practices to enhance self-awareness, mindfulness, and personal growth. Includes journaling, meditation, and self-reflection exercises.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Mindful Walking",
+        "description": "Practicing mindful walking to connect with the present moment, reduce stress, and enhance physical and mental well-being. Includes walking meditation, mindfulness practices, and outdoor mindfulness.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Journaling",
+        "description": "Engaging in journaling practices to enhance mindfulness, self-reflection, and emotional well-being. Includes journaling techniques, mindfulness practices, and emotional expression.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Visualization Techniques",
+        "description": "Utilizing visualization techniques to enhance mindfulness, reduce stress, and achieve personal goals. Includes guided visualization, mindfulness practices, and mental imagery exercises.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Mindful Listening",
+        "description": "Practicing mindful listening to improve communication, enhance relationships, and increase mindfulness. Includes active listening techniques, mindfulness practices, and empathy exercises.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Progressive Muscle Relaxation",
+        "description": "Practicing progressive muscle relaxation to reduce stress, enhance mindfulness, and improve physical and mental well-being. Includes relaxation techniques, mindfulness practices, and stress relief exercises.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Loving-Kindness Meditation",
+        "description": "Engaging in loving-kindness meditation to cultivate compassion, enhance mindfulness, and improve emotional well-being. Includes guided meditation, mindfulness practices, and compassion exercises.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Mindful Communication",
+        "description": "Developing mindful communication skills to enhance relationships, reduce stress, and increase mindfulness in interactions. Includes communication techniques, mindfulness practices, and empathy exercises.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Savoring Daily Activities",
+        "description": "Practicing mindfulness by savoring daily activities, enhancing awareness, and increasing enjoyment of life's simple pleasures. Includes mindfulness techniques, present moment focus, and gratitude practices.",
+        "category": "Mindfulness",
+    },
+    {
+        "title": "Non-Judgmental Awareness",
+        "description": "Cultivating non-judgmental awareness through mindfulness and introspection allows individuals to observe their thoughts, emotions, and behaviors without immediately labeling them as good or bad. This practice encourages a deeper understanding of oneself and the world, promoting emotional balance, reducing stress, and enhancing overall well-being. By consistently practicing non-judgmental awareness, individuals can develop a more compassionate and accepting attitude towards themselves and others, leading to more mindful interactions and decisions in daily life.",
+        "category": "Mindfulness",
+    },
+]
 
 csv_file = "health_mindfulness.csv"
 fields = ["title", "description", "category"]
 
-with open(csv_file, mode='w', newline='') as file:
+with open(csv_file, mode="w", newline="") as file:
     writer = csv.DictWriter(file, fieldnames=fields)
     writer.writeheader()
     for data in data_health_mindfulness:

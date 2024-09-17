@@ -1,12 +1,14 @@
-
 from .models import UserResponse
 
 
 def calculate_total_points_per_life_sphere(user_profile):
     life_sphere_points = {}
 
-    user_responses = (UserResponse.objects.filter(user_profile=user_profile).select_related('question__life_sphere').
-                      select_related('user_answer'))
+    user_responses = (
+        UserResponse.objects.filter(user_profile=user_profile)
+        .select_related("question__life_sphere")
+        .select_related("user_answer")
+    )
 
     for response in user_responses:
         life_sphere = response.question.life_sphere

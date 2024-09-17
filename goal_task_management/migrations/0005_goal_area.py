@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('goal_task_management', '0004_remove_goal_category'),
-        ('life_sphere', '0002_initial'),
+        ("goal_task_management", "0004_remove_goal_category"),
+        ("life_sphere", "0002_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='goal',
-            name='area',
-            field=models.ManyToManyField(related_name='goals', to='life_sphere.area'),
+            model_name="goal",
+            name="area",
+            field=models.ManyToManyField(related_name="goals", to="life_sphere.area"),
         ),
     ]

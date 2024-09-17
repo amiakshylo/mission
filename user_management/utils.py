@@ -16,5 +16,5 @@ def save_initial_user_balance(user_profile):
         UserBalance.objects.get_or_create(
             user_profile=user_profile,
             life_sphere=life_sphere,
-            defaults={'score': points}
+            defaults={"score": points},
         )

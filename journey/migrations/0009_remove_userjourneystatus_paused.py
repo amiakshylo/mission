@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('journey', '0008_userjourneystepstatus'),
+        ("journey", "0008_userjourneystepstatus"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='userjourneystatus',
-            name='paused',
+            model_name="userjourneystatus",
+            name="paused",
         ),
     ]

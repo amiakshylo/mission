@@ -7,13 +7,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('journey', '0012_remove_userjourneystepstatus_ended_at'),
+        ("journey", "0012_remove_userjourneystepstatus_ended_at"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='userjourneystepstatus',
-            name='step',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='step_statuses', to='journey.journeystep'),
+            model_name="userjourneystepstatus",
+            name="step",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="step_statuses",
+                to="journey.journeystep",
+            ),
         ),
     ]

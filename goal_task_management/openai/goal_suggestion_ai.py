@@ -1,7 +1,5 @@
-
 import os
 from openai import OpenAI
-
 
 
 def generate_goal_with_openai(user_profile, selected_role):
@@ -11,11 +9,9 @@ def generate_goal_with_openai(user_profile, selected_role):
 
     age = user_profile.get_age()
 
-    gender = {
-        'M': "male",
-        'F': "female",
-        'O': "other"
-    }.get(user_profile.gender, "prefer not to say")
+    gender = {"M": "male", "F": "female", "O": "other"}.get(
+        user_profile.gender, "prefer not to say"
+    )
 
     instructions = """
     1. Goal Title and Description:
@@ -33,16 +29,14 @@ def generate_goal_with_openai(user_profile, selected_role):
 
     prompt = f"{instructions}\n\nUser Profile: {gender.capitalize()}, {age} years old, Role: {selected_role}\n"
 
-
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     chat_completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": instructions},
-            {"role": "user", "content": prompt}
+            {"role": "user", "content": prompt},
         ],
-
     )
     response = chat_completion.choices[0].message.content
 
@@ -55,11 +49,7 @@ def generate_goal_with_openai(user_profile, selected_role):
             title_line, description_line = parts
             title = title_line.split(": ", 1)[-1].strip()  # Safely handle splitting
             description = description_line.split(": ", 1)[-1].strip()
-            generated_goals.append({
-                'title': title,
-                'description': description
-            })
+            generated_goals.append({"title": title, "description": description})
         else:
             print(f"Unexpected goal format: {goal}")
     return generated_goals
-

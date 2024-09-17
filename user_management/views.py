@@ -5,7 +5,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, DestroyModelMixin, CreateModelMixin
+from rest_framework.mixins import (
+    RetrieveModelMixin,
+    ListModelMixin,
+    DestroyModelMixin,
+    CreateModelMixin,
+)
 
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
@@ -17,12 +22,19 @@ from .filters import RoleFilter
 
 from .models import UserProfile, UserGoal, Role, UserArea, UserBalance
 from .pagination import DefaultPagination
-from .serializers import (UserProfileSerializer, EditUserProfileSerializer,
-
-                          CreateUserRoleSerializer,
-                          UserRoleSerializer, UserGoalSerializer, CreateUserGoalSerializer,
-                          EditUserGoalSerializer, RoleSerializer, UserAreaSerializer, CreateUserAreaSerializer,
-                          UserBalanceSerializer)
+from .serializers import (
+    UserProfileSerializer,
+    EditUserProfileSerializer,
+    CreateUserRoleSerializer,
+    UserRoleSerializer,
+    UserGoalSerializer,
+    CreateUserGoalSerializer,
+    EditUserGoalSerializer,
+    RoleSerializer,
+    UserAreaSerializer,
+    CreateUserAreaSerializer,
+    UserBalanceSerializer,
+)
 
 
 class UserProfileSet(ListModelMixin, GenericViewSet):
@@ -30,15 +42,21 @@ class UserProfileSet(ListModelMixin, GenericViewSet):
     permission_classes = [IsAdminUser]
 
     def get_queryset(self):
-        return UserProfile.objects.all().select_related('user').prefetch_related('roles')
+        return (
+            UserProfile.objects.all().select_related("user").prefetch_related("roles")
+        )
 
-    @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
+    @action(detail=False, methods=["GET", "PUT"], permission_classes=[IsAuthenticated])
     def me(self, request, *args, **kwargs):
-        queryset = UserProfile.objects.all().select_related('user').prefetch_related('roles')
+        queryset = (
+            UserProfile.objects.all().select_related("user").prefetch_related("roles")
+        )
         user_profile = get_object_or_404(queryset, user=request.user)
 
-        if request.method == 'PUT':
-            serializer = EditUserProfileSerializer(user_profile, data=request.data, partial=True)
+        if request.method == "PUT":
+            serializer = EditUserProfileSerializer(
+                user_profile, data=request.data, partial=True
+            )
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
@@ -55,10 +73,16 @@ class RoleViewSet(ListModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = RoleFilter
-    search_fields = ['title']
+    search_fields = ["title"]
 
 
-class UserRoleViewSet(ListModelMixin, CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, GenericViewSet):
+class UserRoleViewSet(
+    ListModelMixin,
+    CreateModelMixin,
+    RetrieveModelMixin,
+    DestroyModelMixin,
+    GenericViewSet,
+):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
@@ -67,13 +91,13 @@ class UserRoleViewSet(ListModelMixin, CreateModelMixin, RetrieveModelMixin, Dest
         return Role.objects.filter(user_profile=user_profile)
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
+        if self.request.method == "POST":
             return CreateUserRoleSerializer
         return UserRoleSerializer
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context['user_profile'] = self.request.user.user_profile
+        context["user_profile"] = self.request.user.user_profile
         return context
 
     def destroy(self, request, *args, **kwargs):
@@ -84,40 +108,42 @@ class UserRoleViewSet(ListModelMixin, CreateModelMixin, RetrieveModelMixin, Dest
         user_profile.roles.remove(role)
 
         # Return a response indicating success
-        return Response({"detail": "Role removed from profile."}, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {"detail": "Role removed from profile."}, status=status.HTTP_204_NO_CONTENT
+        )
 
 
 class UserGoalViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['goal_type', 'is_active', 'is_completed']
+    filterset_fields = ["goal_type", "is_active", "is_completed"]
 
     def get_serializer_class(self):
-        if self.request.method in ['POST']:
+        if self.request.method in ["POST"]:
             return CreateUserGoalSerializer
-        if self.request.method in ['PUT', 'PATCH']:
+        if self.request.method in ["PUT", "PATCH"]:
             return EditUserGoalSerializer
         return UserGoalSerializer
 
     def get_queryset(self):
         user_profile = self.request.user.user_profile
-        return user_profile.goals.prefetch_related('goal')
+        return user_profile.goals.prefetch_related("goal")
 
     def get_serializer_context(self, *args, **kwargs):
         user_profile = self.request.user.user_profile.id
-        return {'user_profile': user_profile}
+        return {"user_profile": user_profile}
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         user_profile = request.user.user_profile
-        goal = serializer.validated_data.get('goal')
-        custom_goal_title = serializer.validated_data.get('custom_goal')
-        category = serializer.validated_data.get('category')
-        goal_type = serializer.validated_data.get('goal_type')
-        due_date = serializer.validated_data.get('due_date')
+        goal = serializer.validated_data.get("goal")
+        custom_goal_title = serializer.validated_data.get("custom_goal")
+        category = serializer.validated_data.get("category")
+        goal_type = serializer.validated_data.get("goal_type")
+        due_date = serializer.validated_data.get("due_date")
 
         with transaction.atomic():
             if custom_goal_title:
@@ -129,33 +155,37 @@ class UserGoalViewSet(ModelViewSet):
                     due_date=due_date,
                     is_custom=True,
                     created_by=request.user,
-
                 )
 
             # Create the UserGoal record
-            user_goal = UserGoal.objects.create(user_profile=user_profile, goal=goal, goal_type=goal_type,
-                                                due_date=due_date, **kwargs)
+            user_goal = UserGoal.objects.create(
+                user_profile=user_profile,
+                goal=goal,
+                goal_type=goal_type,
+                due_date=due_date,
+                **kwargs
+            )
 
-        return Response(UserGoalSerializer(user_goal).data, status=status.HTTP_201_CREATED)
+        return Response(
+            UserGoalSerializer(user_goal).data, status=status.HTTP_201_CREATED
+        )
 
 
 class UserAreaViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['area__life_sphere']
-
-
+    filterset_fields = ["area__life_sphere"]
 
     def get_queryset(self):
         user_profile = self.request.user.user_profile
-        return (UserArea.objects.filter(user_profile=user_profile)
-                .select_related('area__life_sphere').all()
-                )
-
-
+        return (
+            UserArea.objects.filter(user_profile=user_profile)
+            .select_related("area__life_sphere")
+            .all()
+        )
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
+        if self.request.method == "POST":
             return CreateUserAreaSerializer
         return UserAreaSerializer
 
@@ -163,16 +193,12 @@ class UserAreaViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
         user_profile = self.request.user.user_profile
         print(user_profile)
 
-        return {'user_profile': user_profile}
+        return {"user_profile": user_profile}
 
 
 class UserBalanceViewSet(ListModelMixin, GenericViewSet):
-    queryset = UserBalance.objects.select_related('user_profile').prefetch_related('life_sphere')
+    queryset = UserBalance.objects.select_related("user_profile").prefetch_related(
+        "life_sphere"
+    )
     permission_classes = [IsAuthenticated]
     serializer_class = UserBalanceSerializer
-
-
-
-
-
-

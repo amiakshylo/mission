@@ -6,78 +6,78 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_management', '0006_remove_userbalance_user_userbalance_user_profile'),
+        ("user_management", "0006_remove_userbalance_user_userbalance_user_profile"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='role',
-            name='created_at',
+            model_name="role",
+            name="created_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='role',
-            name='updated_at',
+            model_name="role",
+            name="updated_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='userarea',
-            name='created_at',
+            model_name="userarea",
+            name="created_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='userarea',
-            name='updated_at',
+            model_name="userarea",
+            name="updated_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='usergoal',
-            name='created_at',
+            model_name="usergoal",
+            name="created_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='usergoal',
-            name='updated_at',
+            model_name="usergoal",
+            name="updated_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='userhabit',
-            name='created_at',
+            model_name="userhabit",
+            name="created_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='userhabit',
-            name='updated_at',
+            model_name="userhabit",
+            name="updated_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='usermission',
-            name='created_at',
+            model_name="usermission",
+            name="created_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='usermission',
-            name='updated_at',
+            model_name="usermission",
+            name="updated_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='userprinciple',
-            name='created_at',
+            model_name="userprinciple",
+            name="created_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='userprinciple',
-            name='updated_at',
+            model_name="userprinciple",
+            name="updated_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='usertask',
-            name='created_at',
+            model_name="usertask",
+            name="created_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='usertask',
-            name='updated_at',
+            model_name="usertask",
+            name="updated_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
     ]

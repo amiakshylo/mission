@@ -5,7 +5,7 @@ from .models import LifeSphere, Area
 class LifeSphereSerializer(serializers.ModelSerializer):
     class Meta:
         model = LifeSphere
-        fields = ['id', 'title', 'description']
+        fields = ["id", "title", "description"]
 
 
 class AreaSerializer(serializers.ModelSerializer):
@@ -13,11 +13,10 @@ class AreaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Area
-        fields = ['id', 'title', 'description', 'life_sphere']
+        fields = ["id", "title", "description", "life_sphere"]
 
 
 class AddUserAreaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Area
-        fields = ['id']
-
+        fields = ["id"]

@@ -7,17 +7,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_management', '0005_alter_userprofile_user'),
+        ("user_management", "0005_alter_userprofile_user"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='userbalance',
-            name='user',
+            model_name="userbalance",
+            name="user",
         ),
         migrations.AddField(
-            model_name='userbalance',
-            name='user_profile',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='balances', to='user_management.userprofile'),
+            model_name="userbalance",
+            name="user_profile",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="balances",
+                to="user_management.userprofile",
+            ),
         ),
     ]

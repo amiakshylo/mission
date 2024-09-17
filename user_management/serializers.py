@@ -25,7 +25,7 @@ class UserSerializer(BaseUserSerializer):
 
     class Meta(BaseUserSerializer.Meta):
         model = User
-        fields = ['id', 'email', 'username']
+        fields = ["id", "email", "username"]
 
 
 class RoleSerializer(serializers.ModelSerializer):
@@ -33,13 +33,13 @@ class RoleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Role
-        fields = ['id', 'title', 'type']
+        fields = ["id", "title", "type"]
 
 
 class UserRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
-        fields = ['id', 'title', 'type']
+        fields = ["id", "title", "type"]
 
 
 class CreateUserRoleSerializer(serializers.ModelSerializer):
@@ -49,7 +49,7 @@ class CreateUserRoleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Role
-        fields = ['id', 'title', 'custom_title', 'type']
+        fields = ["id", "title", "custom_title", "type"]
 
     def validate_custom_title(self, value):
         """Capitalize the custom title."""
@@ -57,27 +57,35 @@ class CreateUserRoleSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         """Validate the input data."""
-        role_id = data.get('id')
-        custom_title = data.get('custom_title')
+        role_id = data.get("id")
+        custom_title = data.get("custom_title")
 
         if not Role.objects.filter(pk=role_id).exists() and not custom_title:
             raise serializers.ValidationError("Role does not exist.")
         if self._role_already_exists(role_id):
             raise serializers.ValidationError("You already have that role.")
         if not role_id and not custom_title:
-            raise serializers.ValidationError("Either 'role' or 'custom_title' must be provided.")
+            raise serializers.ValidationError(
+                "Either 'role' or 'custom_title' must be provided."
+            )
         if role_id and custom_title:
             raise serializers.ValidationError(
-                "'Predefined role' and 'custom_title' cannot both be provided simultaneously.")
+                "'Predefined role' and 'custom_title' cannot both be provided simultaneously."
+            )
         if custom_title and self._custom_title_exists(custom_title):
             raise serializers.ValidationError(
-                {'duplicated': "A role with that title already exists, select from the list."})
+                {
+                    "duplicated": "A role with that title already exists, select from the list."
+                }
+            )
 
         return data
 
     def _role_already_exists(self, role_id):
         """Check if the role already exists for the user."""
-        return role_id in [role.id for role in self.context.get('user_profile').roles.all()]
+        return role_id in [
+            role.id for role in self.context.get("user_profile").roles.all()
+        ]
 
     def _custom_title_exists(self, custom_title):
         """Check if a role with the custom title already exists."""
@@ -86,13 +94,13 @@ class CreateUserRoleSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Create a new role or assign an existing one to the user profile."""
         with transaction.atomic():
-            user_profile = self.context.get('user_profile')
+            user_profile = self.context.get("user_profile")
             if not user_profile:
                 raise ValidationError("User profile is required.")
 
-            role_id = validated_data.get('id')
-            custom_title = validated_data.get('custom_title')
-            role_type = validated_data.get('type')
+            role_id = validated_data.get("id")
+            custom_title = validated_data.get("custom_title")
+            role_type = validated_data.get("type")
 
             if role_id:
                 try:
@@ -103,7 +111,9 @@ class CreateUserRoleSerializer(serializers.ModelSerializer):
                 user_profile.roles.add(user_role)
                 user_profile.save()
             else:
-                user_role = Role.objects.create(title=custom_title, is_custom=True, type=role_type)
+                user_role = Role.objects.create(
+                    title=custom_title, is_custom=True, type=role_type
+                )
                 user_profile.roles.add(user_role)
                 user_profile.save()
 
@@ -118,31 +128,36 @@ class UserAreaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserArea
-        fields = ['id', 'area', 'is_active']
+        fields = ["id", "area", "is_active"]
 
 
 class CreateUserAreaSerializer(serializers.ModelSerializer):
-    area = serializers.PrimaryKeyRelatedField(queryset=Area.objects.all(), required=False, allow_null=True)
+    area = serializers.PrimaryKeyRelatedField(
+        queryset=Area.objects.all(), required=False, allow_null=True
+    )
 
     class Meta:
         model = UserArea
-        fields = ['id', 'area']
+        fields = ["id", "area"]
 
     def validate(self, data):
-        if UserArea.objects.filter(user_profile=self.context.get('user_profile'), area=data.get('area')).exists():
-            raise serializers.ValidationError("This area of improvement is already set up by you,"
-                                              " please choose another area")
+        if UserArea.objects.filter(
+            user_profile=self.context.get("user_profile"), area=data.get("area")
+        ).exists():
+            raise serializers.ValidationError(
+                "This area of improvement is already set up by you,"
+                " please choose another area"
+            )
         return data
 
     def create(self, validated_data):
-        user_profile = self.context.get('user_profile')
+        user_profile = self.context.get("user_profile")
         if not user_profile:
             raise ValidationError("User profile is required.")
 
         # Your business logic here, using the user_profile or other data
         user_area = UserArea.objects.create(
-            user_profile_id=user_profile.id,
-            area=validated_data.get('area')
+            user_profile_id=user_profile.id, area=validated_data.get("area")
         )
 
         return user_area
@@ -153,30 +168,47 @@ class UserGoalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserGoal
-        fields = ['id', 'goal', 'paused', 'is_active', 'progress', 'goal_type', 'is_completed', 'due_date']
+        fields = [
+            "id",
+            "goal",
+            "paused",
+            "is_active",
+            "progress",
+            "goal_type",
+            "is_completed",
+            "due_date",
+        ]
 
 
 class EditUserGoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserGoal
-        fields = ['paused', 'progress', 'is_completed']
+        fields = ["paused", "progress", "is_completed"]
 
 
 class CreateUserGoalSerializer(serializers.ModelSerializer):
-    goal = serializers.PrimaryKeyRelatedField(queryset=Goal.objects.all(), required=False, allow_null=True)
+    goal = serializers.PrimaryKeyRelatedField(
+        queryset=Goal.objects.all(), required=False, allow_null=True
+    )
 
     class Meta:
         model = UserGoal
-        fields = ['id', 'goal', 'custom_goal', 'goal_type', 'due_date']
+        fields = ["id", "goal", "custom_goal", "goal_type", "due_date"]
 
     def validate(self, data):
-        if not data.get('goal') and not data.get('custom_goal'):
-            raise serializers.ValidationError("Either 'goal' or 'custom_goal' must be provided.")
-        if data.get('custom_goal') and not data.get('category'):
+        if not data.get("goal") and not data.get("custom_goal"):
+            raise serializers.ValidationError(
+                "Either 'goal' or 'custom_goal' must be provided."
+            )
+        if data.get("custom_goal") and not data.get("category"):
             raise serializers.ValidationError("Select a category for your custom goal")
-        if UserGoal.objects.filter(user_profile=self.context.get('user_profile'), goal=data.get('goal')).exists():
-            raise serializers.ValidationError("This goal is already set up by you, please choose another goal or create"
-                                              " a new one.")
+        if UserGoal.objects.filter(
+            user_profile=self.context.get("user_profile"), goal=data.get("goal")
+        ).exists():
+            raise serializers.ValidationError(
+                "This goal is already set up by you, please choose another goal or create"
+                " a new one."
+            )
         return data
 
 
@@ -186,16 +218,26 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ['id', 'user', 'gender', 'location', 'profile_picture', 'birth_date',
-                  'roles'
-                  ]
+        fields = [
+            "id",
+            "user",
+            "gender",
+            "location",
+            "profile_picture",
+            "birth_date",
+            "roles",
+        ]
 
 
 class EditUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['gender', 'location', 'profile_picture', 'birth_date',
-                  ]
+        fields = [
+            "gender",
+            "location",
+            "profile_picture",
+            "birth_date",
+        ]
 
     def validate_birth_date(self, value):
         if value is not None and value > datetime.date.today():
@@ -206,15 +248,6 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
 class UserBalanceSerializer(serializers.ModelSerializer):
     life_sphere = serializers.CharField()
 
-
     class Meta:
         model = UserBalance
-        fields = ['life_sphere', 'score']
-
-
-
-
-
-
-
-
+        fields = ["life_sphere", "score"]

@@ -7,13 +7,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('life_sphere', '0002_initial'),
+        ("life_sphere", "0002_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='area',
-            name='life_sphere',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='subcategories', to='life_sphere.lifesphere'),
+            model_name="area",
+            name="life_sphere",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="subcategories",
+                to="life_sphere.lifesphere",
+            ),
         ),
     ]

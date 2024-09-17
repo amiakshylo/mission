@@ -6,13 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('onboarding', '0016_userresponse_timestamp'),
+        ("onboarding", "0016_userresponse_timestamp"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='onboardingquestion',
-            name='triggering_options',
-            field=models.ManyToManyField(blank=True, related_name='triggered_questions', to='onboarding.answeroption'),
+            model_name="onboardingquestion",
+            name="triggering_options",
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="triggered_questions",
+                to="onboarding.answeroption",
+            ),
         ),
     ]

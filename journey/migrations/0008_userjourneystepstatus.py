@@ -7,19 +7,43 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('journey', '0007_alter_journeystep_start_date_and_more'),
-        ('user_management', '0007_alter_role_created_at_alter_role_updated_at_and_more'),
+        ("journey", "0007_alter_journeystep_start_date_and_more"),
+        (
+            "user_management",
+            "0007_alter_role_created_at_alter_role_updated_at_and_more",
+        ),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='UserJourneyStepStatus',
+            name="UserJourneyStepStatus",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_completed', models.BooleanField(default=False)),
-                ('completed_at', models.DateTimeField(blank=True, null=True)),
-                ('step', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='journey.journeystep')),
-                ('user_profile', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='step_statuses', to='user_management.userprofile')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("is_completed", models.BooleanField(default=False)),
+                ("completed_at", models.DateTimeField(blank=True, null=True)),
+                (
+                    "step",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="journey.journeystep",
+                    ),
+                ),
+                (
+                    "user_profile",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="step_statuses",
+                        to="user_management.userprofile",
+                    ),
+                ),
             ],
         ),
     ]

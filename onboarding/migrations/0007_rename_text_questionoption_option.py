@@ -6,13 +6,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('onboarding', '0006_onboardingprogress_last_updated'),
+        ("onboarding", "0006_onboardingprogress_last_updated"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='questionoption',
-            old_name='text',
-            new_name='option',
+            model_name="questionoption",
+            old_name="text",
+            new_name="option",
         ),
     ]

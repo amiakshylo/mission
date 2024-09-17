@@ -7,41 +7,68 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('onboarding', '0003_alter_onboardingresponse_response_userprogress'),
+        ("onboarding", "0003_alter_onboardingresponse_response_userprogress"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='onboardingresponse',
-            name='response',
+            model_name="onboardingresponse",
+            name="response",
         ),
         migrations.AddField(
-            model_name='onboardingquestion',
-            name='is_followup',
+            model_name="onboardingquestion",
+            name="is_followup",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='onboardingresponse',
-            name='question',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='onboarding.onboardingquestion'),
+            model_name="onboardingresponse",
+            name="question",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="onboarding.onboardingquestion",
+            ),
         ),
         migrations.CreateModel(
-            name='QuestionOption',
+            name="QuestionOption",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('text', models.CharField(max_length=255)),
-                ('points', models.IntegerField(default=0)),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='options', to='onboarding.onboardingquestion')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("text", models.CharField(max_length=255)),
+                ("points", models.IntegerField(default=0)),
+                (
+                    "question",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="options",
+                        to="onboarding.onboardingquestion",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='onboardingquestion',
-            name='followup_condition',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='onboarding.questionoption'),
+            model_name="onboardingquestion",
+            name="followup_condition",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="onboarding.questionoption",
+            ),
         ),
         migrations.AddField(
-            model_name='onboardingresponse',
-            name='selected_option',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='onboarding.questionoption'),
+            model_name="onboardingresponse",
+            name="selected_option",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="onboarding.questionoption",
+            ),
         ),
     ]

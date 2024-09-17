@@ -7,13 +7,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_management', '0007_alter_role_created_at_alter_role_updated_at_and_more'),
+        (
+            "user_management",
+            "0007_alter_role_created_at_alter_role_updated_at_and_more",
+        ),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='userbalance',
-            name='user_profile',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='balances', to='user_management.userprofile'),
+            model_name="userbalance",
+            name="user_profile",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="balances",
+                to="user_management.userprofile",
+            ),
         ),
     ]

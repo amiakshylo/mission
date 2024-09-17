@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('onboarding', '0020_remove_answeroption_answer_code'),
+        ("onboarding", "0020_remove_answeroption_answer_code"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='onboardingquestion',
-            name='followup_condition',
+            model_name="onboardingquestion",
+            name="followup_condition",
         ),
     ]

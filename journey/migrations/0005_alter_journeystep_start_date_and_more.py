@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('journey', '0004_userjourneystatus_completed_at_and_more'),
+        ("journey", "0004_userjourneystatus_completed_at_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='journeystep',
-            name='start_date',
+            model_name="journeystep",
+            name="start_date",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='userjourneystatus',
-            name='start_date',
+            model_name="userjourneystatus",
+            name="start_date",
             field=models.DateTimeField(auto_now_add=True),
         ),
     ]

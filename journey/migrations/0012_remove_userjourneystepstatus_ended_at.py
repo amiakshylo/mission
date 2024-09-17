@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('journey', '0011_remove_journeystep_ended_at_and_more'),
+        ("journey", "0011_remove_journeystep_ended_at_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='userjourneystepstatus',
-            name='ended_at',
+            model_name="userjourneystepstatus",
+            name="ended_at",
         ),
     ]

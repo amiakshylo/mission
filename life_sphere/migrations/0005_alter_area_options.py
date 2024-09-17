@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('life_sphere', '0004_alter_area_life_sphere'),
+        ("life_sphere", "0004_alter_area_life_sphere"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='area',
+            name="area",
             options={},
         ),
     ]

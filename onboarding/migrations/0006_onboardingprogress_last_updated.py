@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('onboarding', '0005_rename_userprogress_onboardingprogress'),
+        ("onboarding", "0005_rename_userprogress_onboardingprogress"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='onboardingprogress',
-            name='last_updated',
+            model_name="onboardingprogress",
+            name="last_updated",
             field=models.DateTimeField(auto_now=True),
         ),
     ]

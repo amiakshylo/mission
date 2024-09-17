@@ -20,29 +20,36 @@ class LifeSphereViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
 
 
-
 class AreaViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
     pagination_class = DefaultPagination
     filter_backends = [SearchFilter]
-    search_fields = ['title', 'description']
+    search_fields = ["title", "description"]
 
     def get_queryset(self):
-        life_sphere_pk = self.kwargs.get('life_sphere_pk')
-        return Area.objects.filter(life_sphere_id=life_sphere_pk).select_related('life_sphere')
+        life_sphere_pk = self.kwargs.get("life_sphere_pk")
+        return Area.objects.filter(life_sphere_id=life_sphere_pk).select_related(
+            "life_sphere"
+        )
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT':
+        if self.request.method == "PUT":
             return AddUserAreaSerializer
         return AreaSerializer
 
     def update(self, request, *args, **kwargs):
         user_profile = request.user.user_profile
         area = self.get_object()
-        user_area, created = UserArea.objects.get_or_create(user_profile=user_profile, area=area)
+        user_area, created = UserArea.objects.get_or_create(
+            user_profile=user_profile, area=area
+        )
         if created:
             user_area.save()
-            return Response({'message': 'Area added to user profile.'}, status=status.HTTP_201_CREATED)
-        return Response({'message': 'Area already exists in your profile.'}, status=status.HTTP_400_BAD_REQUEST)
-
-
+            return Response(
+                {"message": "Area added to user profile."},
+                status=status.HTTP_201_CREATED,
+            )
+        return Response(
+            {"message": "Area already exists in your profile."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )

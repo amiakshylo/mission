@@ -18,7 +18,7 @@ class IsOwnerOrAdmin(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        user_profile_pk = view.kwargs.get('user_profile_pk')
+        user_profile_pk = view.kwargs.get("user_profile_pk")
 
         # Ensure that user_profile_pk is an integer
         if not isinstance(user_profile_pk, int):

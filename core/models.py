@@ -14,7 +14,7 @@ class TimeStampedModel(models.Model):
 
 def validate_start_due_date(value):
     if value < timezone.now().date():
-        raise ValidationError('Start/due date cannot be in the past.')
+        raise ValidationError("Start/due date cannot be in the past.")
 
 
 class StartEndModel(models.Model):
@@ -38,14 +38,18 @@ class CompletedModel(models.Model):
         if not self.is_completed:
             self.is_completed = True
             self.completed_at = timezone.now()
-            self.save(update_fields=['completes', 'completed_at'])
+            self.save(update_fields=["completes", "completed_at"])
 
 
 class ProgressModel(models.Model):
-    progress = models.FloatField(default=0.0, validators=[
-        MinValueValidator(0.0),
-        MaxValueValidator(100.0),
-    ], help_text='Progress in percentage')
+    progress = models.FloatField(
+        default=0.0,
+        validators=[
+            MinValueValidator(0.0),
+            MaxValueValidator(100.0),
+        ],
+        help_text="Progress in percentage",
+    )
 
     class Meta:
         abstract = True
@@ -56,20 +60,17 @@ class ProgressModel(models.Model):
 
 
 class DueDateModel(models.Model):
-    due_date = models.DateField(validators=[validate_start_due_date], null=True, blank=True)
+    due_date = models.DateField(
+        validators=[validate_start_due_date], null=True, blank=True
+    )
 
     class Meta:
         abstract = True
 
 
 class PriorityModel(models.Model):
-    PRIORITY_CHOICES = [
-        ('L', 'Low'),
-        ('M', 'Medium'),
-        ('H', 'High'),
-        ('C', 'Critical')
-    ]
-    priority = models.CharField(max_length=1, choices=PRIORITY_CHOICES, default='M')
+    PRIORITY_CHOICES = [("L", "Low"), ("M", "Medium"), ("H", "High"), ("C", "Critical")]
+    priority = models.CharField(max_length=1, choices=PRIORITY_CHOICES, default="M")
 
     class Meta:
         abstract = True

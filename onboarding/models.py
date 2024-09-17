@@ -6,9 +6,13 @@ from user_management.models import UserProfile
 
 class OnboardingQuestion(models.Model):
     text = models.TextField()
-    life_sphere = models.ForeignKey('life_sphere.LifeSphere', on_delete=models.CASCADE, related_name="questions")
+    life_sphere = models.ForeignKey(
+        "life_sphere.LifeSphere", on_delete=models.CASCADE, related_name="questions"
+    )
     is_followup = models.BooleanField(default=False)
-    triggering_options = models.ManyToManyField('AnswerOption', blank=True, related_name='triggered_questions')
+    triggering_options = models.ManyToManyField(
+        "AnswerOption", blank=True, related_name="triggered_questions"
+    )
     order = models.IntegerField(default=0)
 
     def __str__(self):
@@ -16,7 +20,9 @@ class OnboardingQuestion(models.Model):
 
 
 class AnswerOption(models.Model):
-    question = models.ForeignKey(OnboardingQuestion, on_delete=models.CASCADE, related_name="options")
+    question = models.ForeignKey(
+        OnboardingQuestion, on_delete=models.CASCADE, related_name="options"
+    )
     answer = models.CharField(max_length=255)
     points = models.IntegerField(default=0)
 
@@ -25,7 +31,9 @@ class AnswerOption(models.Model):
 
 
 class UserResponse(models.Model):
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="responses")
+    user_profile = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, related_name="responses"
+    )
     question = models.ForeignKey(OnboardingQuestion, on_delete=models.CASCADE)
     user_answer = models.ForeignKey(AnswerOption, on_delete=models.CASCADE, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -35,23 +43,24 @@ class UserResponse(models.Model):
             return 0
         return self.user_answer.points
 
-
-
-
-
-
     def __str__(self):
         return f"{self.user_profile} - {self.question} - {self.user_answer}"
 
     class Meta:
-        unique_together = ('user_profile', 'question')
+        unique_together = ("user_profile", "question")
 
 
 class OnboardingProgress(models.Model):
     user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
-    current_life_sphere = models.ForeignKey(LifeSphere, on_delete=models.SET_NULL, null=True)
-    completed_questions = models.ManyToManyField(OnboardingQuestion, related_name='completed_by_users')
-    skipped_questions = models.ManyToManyField(OnboardingQuestion, related_name='skipped_by_users')
+    current_life_sphere = models.ForeignKey(
+        LifeSphere, on_delete=models.SET_NULL, null=True
+    )
+    completed_questions = models.ManyToManyField(
+        OnboardingQuestion, related_name="completed_by_users"
+    )
+    skipped_questions = models.ManyToManyField(
+        OnboardingQuestion, related_name="skipped_by_users"
+    )
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):

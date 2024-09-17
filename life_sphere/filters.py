@@ -6,9 +6,6 @@ from life_sphere.models import Area
 
 class AreaFilter(FilterSet):
 
-
     class Meta:
         model = Area
-        fields = {'life_sphere__title': ['exact']}
-
-
+        fields = {"life_sphere__title": ["exact"]}

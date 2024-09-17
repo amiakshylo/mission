@@ -8,64 +8,135 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Goal',
+            name="Goal",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255)),
-                ('description', models.TextField()),
-                ('is_custom', models.BooleanField(default=False, null=True)),
-                ('impact_score', models.IntegerField(blank=True, null=True)),
-                ('goal_type', models.CharField(blank=True, choices=[('short_term', 'Short-term'), ('long_term', 'Long-term')], null=True)),
-                ('hash', models.CharField(blank=True, max_length=64, null=True, unique=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("description", models.TextField()),
+                ("is_custom", models.BooleanField(default=False, null=True)),
+                ("impact_score", models.IntegerField(blank=True, null=True)),
+                (
+                    "goal_type",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("short_term", "Short-term"),
+                            ("long_term", "Long-term"),
+                        ],
+                        null=True,
+                    ),
+                ),
+                (
+                    "hash",
+                    models.CharField(blank=True, max_length=64, null=True, unique=True),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='GoalSuggestionLog',
+            name="GoalSuggestionLog",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('suggestion_source', models.CharField(max_length=255)),
-                ('suggested_at', models.DateTimeField(auto_now_add=True)),
-                ('user_feedback', models.CharField(blank=True, max_length=255, null=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("suggestion_source", models.CharField(max_length=255)),
+                ("suggested_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "user_feedback",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='SubTask',
+            name="SubTask",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('updated_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('completed_at', models.DateTimeField(null=True)),
-                ('is_completed', models.BooleanField(default=False)),
-                ('paused', models.BooleanField(default=False)),
-                ('priority', models.CharField(choices=[('L', 'Low'), ('M', 'Medium'), ('H', 'High'), ('C', 'Critical')], default='M', max_length=1)),
-                ('name', models.CharField(max_length=255, unique=True)),
-                ('description', models.TextField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
+                ("updated_at", models.DateTimeField(default=django.utils.timezone.now)),
+                ("completed_at", models.DateTimeField(null=True)),
+                ("is_completed", models.BooleanField(default=False)),
+                ("paused", models.BooleanField(default=False)),
+                (
+                    "priority",
+                    models.CharField(
+                        choices=[
+                            ("L", "Low"),
+                            ("M", "Medium"),
+                            ("H", "High"),
+                            ("C", "Critical"),
+                        ],
+                        default="M",
+                        max_length=1,
+                    ),
+                ),
+                ("name", models.CharField(max_length=255, unique=True)),
+                ("description", models.TextField()),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Task',
+            name="Task",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('updated_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('completed_at', models.DateTimeField(null=True)),
-                ('is_completed', models.BooleanField(default=False)),
-                ('paused', models.BooleanField(default=False)),
-                ('priority', models.CharField(choices=[('L', 'Low'), ('M', 'Medium'), ('H', 'High'), ('C', 'Critical')], default='M', max_length=1)),
-                ('name', models.CharField(max_length=255)),
-                ('description', models.TextField()),
-                ('is_predefined', models.BooleanField(default=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
+                ("updated_at", models.DateTimeField(default=django.utils.timezone.now)),
+                ("completed_at", models.DateTimeField(null=True)),
+                ("is_completed", models.BooleanField(default=False)),
+                ("paused", models.BooleanField(default=False)),
+                (
+                    "priority",
+                    models.CharField(
+                        choices=[
+                            ("L", "Low"),
+                            ("M", "Medium"),
+                            ("H", "High"),
+                            ("C", "Critical"),
+                        ],
+                        default="M",
+                        max_length=1,
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("description", models.TextField()),
+                ("is_predefined", models.BooleanField(default=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

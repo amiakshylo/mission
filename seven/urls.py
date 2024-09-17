@@ -10,7 +10,7 @@ from rest_framework import permissions
 schema_view = get_schema_view(
     openapi.Info(
         title="My API",
-        default_version='v1',
+        default_version="v1",
         description="API documentation",
         contact=openapi.Contact(email="andrew.m@evolvion.tech"),
     ),
@@ -20,19 +20,26 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/v1/user/', include('user_management.urls')),
-    path('api/v1/habit/', include('habit_management.urls')),
-    path('api/v1/life_sphere/', include('life_sphere.urls')),
-    path('api/v1/goal_task/', include('goal_task_management.urls')),
-    path('__debug__/', include(debug_toolbar.urls)),
-    path('api/v1/auth/', include("djoser.urls")),
-    path('api/v1/auth/', include("djoser.urls.jwt")),
-    path('api/v1/journey/', include('journey.urls')),
-    path('api/v1/onboarding/', include('onboarding.urls')),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('swagger.yaml/', schema_view.without_ui(cache_timeout=0), name='schema-json'),  # OpenAPI schema in JSON format
-    path('swagger.json/', schema_view.without_ui(cache_timeout=0), name='schema-json'),  # OpenAPI schema in YAML format
+    path("admin/", admin.site.urls),
+    path("api/v1/user/", include("user_management.urls")),
+    path("api/v1/life_sphere/", include("life_sphere.urls")),
+    path("api/v1/goal_task/", include("goal_task_management.urls")),
+    path("__debug__/", include(debug_toolbar.urls)),
+    path("api/v1/auth/", include("djoser.urls")),
+    path("api/v1/auth/", include("djoser.urls.jwt")),
+    path("api/v1/journey/", include("journey.urls")),
+    path("api/v1/onboarding/", include("onboarding.urls")),
+    path(
+        "swagger/",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    path(
+        "swagger.yaml/", schema_view.without_ui(cache_timeout=0), name="schema-json"
+    ),  # OpenAPI schema in JSON format
+    path(
+        "swagger.json/", schema_view.without_ui(cache_timeout=0), name="schema-json"
+    ),  # OpenAPI schema in YAML format
 ]
 
 if settings.DEBUG:
