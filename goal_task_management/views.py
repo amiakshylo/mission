@@ -8,10 +8,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import CreateModelMixin
 
 from goal_task_management.ml.goal_suggestion_ml import (
-    load_trained_model,
     preprocess_user_data,
-    train_pytorch_model,
-    get_output_size,
     reverse_goal_mapping,
     validate_model_output_size,
 )
@@ -22,7 +19,7 @@ from goal_task_management.serializers import (
     GoalSuggestionInputSerializer,
     GoalSerializer,
 )
-from utils.text_utils import lemmatize_title, are_titles_similar, normalize_text
+from goal_task_management.services.text_utils import lemmatize_title, are_titles_similar, normalize_text
 
 
 class GoalSuggestionsViewset(CreateModelMixin, GenericViewSet):

@@ -137,7 +137,7 @@
                 }
             }
 
-            var utils = require('../utils');
+            var utils = require('../services');
 
             function trim(str) {
                 return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
@@ -271,7 +271,7 @@
             var codecs = require('./codecs');
             var errors = require('./errors');
             var transports = require('./transports');
-            var utils = require('./utils');
+            var utils = require('./services');
 
             function lookupLink(node, keys) {
                 var _iteratorNormalCompletion = true;
@@ -806,7 +806,7 @@
             var document = require('./document');
             var errors = require('./errors');
             var transports = require('./transports');
-            var utils = require('./utils');
+            var utils = require('./services');
 
             var coreapi = {
                 Client: client.Client,
@@ -859,7 +859,7 @@
 
             var fetch = require('isomorphic-fetch');
             var errors = require('../errors');
-            var utils = require('../utils');
+            var utils = require('../services');
             var URL = require('url-parse');
             var urlTemplate = require('url-template');
 

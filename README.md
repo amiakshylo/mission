@@ -193,7 +193,7 @@
     │   ├── urls.py
     │   ├── validators.py
     │   └── views.py
-    └── utils
+    └── services
         └── text_utils.py
 ```
 
