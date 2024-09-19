@@ -5,11 +5,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.mixins import (
     RetrieveModelMixin,
     ListModelMixin,
     DestroyModelMixin,
-    CreateModelMixin,
+    CreateModelMixin, UpdateModelMixin,
 )
 
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -37,33 +38,20 @@ from .serializers import (
 )
 
 
-class UserProfileSet(ListModelMixin, GenericViewSet):
+class UserProfileViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
     serializer_class = UserProfileSerializer
-    permission_classes = [IsAdminUser]
 
     def get_queryset(self):
-        return (
-            UserProfile.objects.all().select_related("user").prefetch_related("roles")
-        )
+        user_id = self.request.user
+        return ((UserProfile.objects.filter(user=user_id)
+                .select_related('user'))
+                .prefetch_related('roles')
+                )
 
-    @action(detail=False, methods=["GET", "PUT"], permission_classes=[IsAuthenticated])
-    def me(self, request, *args, **kwargs):
-        queryset = (
-            UserProfile.objects.all().select_related("user").prefetch_related("roles")
-        )
-        user_profile = get_object_or_404(queryset, user=request.user)
-
-        if request.method == "PUT":
-            serializer = EditUserProfileSerializer(
-                user_profile, data=request.data, partial=True
-            )
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = UserProfileSerializer(user_profile)
-        return Response(serializer.data)
+    def get_serializer_class(self):
+        if self.request.method == 'PUT':
+            return EditUserProfileSerializer
+        return UserProfileSerializer
 
 
 class RoleViewSet(ListModelMixin, GenericViewSet):

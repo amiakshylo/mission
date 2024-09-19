@@ -41,12 +41,12 @@ class UserProfile(models.Model):
     A model representing additional profile information for the user.
     """
 
-    GENDER_MALE = "M"
-    GENDER_FEMALE = "F"
-    GENDER_OTHER = "O"
-    GENDER_NON_BINARY = "NB"
-    GENDER_NOT_TO_SAY = "PNS"
-    GENDER_SELF_DESCRIBE = "SD"
+    GENDER_MALE = "Male"
+    GENDER_FEMALE = "Female"
+    GENDER_OTHER = "Other"
+    GENDER_NON_BINARY = "Non-binary"
+    GENDER_NOT_TO_SAY = "Prefer not to say"
+    GENDER_SELF_DESCRIBE = "Self describe"
 
     GENDER_CHOICES = [
         (GENDER_MALE, "Male"),
@@ -310,3 +310,6 @@ class UserBalance(models.Model):
 
     def __str__(self):
         return f"{self.user_profile} - {self.life_sphere.title}: {self.score}"
+
+
+

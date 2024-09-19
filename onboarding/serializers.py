@@ -1,7 +1,7 @@
 from rest_framework import serializers, status
 from rest_framework.response import Response
 
-from onboarding.models import OnboardingQuestion, AnswerOption, UserResponse
+from onboarding.models import OnboardingQuestion, AnswerOption, UserResponse, OnboardingProgress
 
 
 class AnswerOptionSerializer(serializers.ModelSerializer):
@@ -34,14 +34,13 @@ class UserResponseSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Selected answer is required.")
 
         if selected_answer.question_id != question.id:
-
             raise serializers.ValidationError(
                 "Selected answer does not belong to this question."
             )
 
         user_profile = self.context["user_profile"]
         if UserResponse.objects.filter(
-            user_profile=user_profile, question=question
+                user_profile=user_profile, question=question
         ).exists():
             raise serializers.ValidationError(
                 "You have already responded to this question."
@@ -52,3 +51,14 @@ class UserResponseSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data["user_profile"] = self.context["user_profile"]
         return UserResponse.objects.create(**validated_data)
+
+
+class OnboardingProgressSerializer(serializers.ModelSerializer):
+    questions_remain = serializers.SerializerMethodField()
+
+    class Meta:
+        model = OnboardingProgress
+        fields = ['completed_questions', 'questions_remain']
+
+    def get_questions_remain(self, obj: OnboardingProgress):
+        return obj.calculate_remaining_questions()

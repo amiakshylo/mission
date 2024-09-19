@@ -222,6 +222,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "id",
             "user",
             "gender",
+            "custom_gender",
             "location",
             "profile_picture",
             "birth_date",
@@ -234,7 +235,7 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = [
             "gender",
-            "location",
+            "custom_gender",
             "profile_picture",
             "birth_date",
         ]
