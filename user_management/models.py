@@ -44,13 +44,17 @@ class UserProfile(models.Model):
     GENDER_MALE = "M"
     GENDER_FEMALE = "F"
     GENDER_OTHER = "O"
+    GENDER_NON_BINARY = "NB"
     GENDER_NOT_TO_SAY = "PNS"
+    GENDER_SELF_DESCRIBE = "SD"
 
     GENDER_CHOICES = [
         (GENDER_MALE, "Male"),
         (GENDER_FEMALE, "Female"),
         (GENDER_OTHER, "Other"),
         (GENDER_NOT_TO_SAY, "Prefer not to say"),
+        (GENDER_NON_BINARY, "Non-binary"),
+        (GENDER_SELF_DESCRIBE, "Prefer to self-describe")
     ]
 
     ASSISTANT_MODEL_CHOICES = [
@@ -66,6 +70,7 @@ class UserProfile(models.Model):
     gender = models.CharField(
         max_length=20, choices=GENDER_CHOICES, blank=False
     )
+    custom_gender = models.CharField(max_length=20, blank=True)
     birth_date = models.DateField(null=True, blank=False)
     location = models.CharField(max_length=255, blank=True)
     profile_picture = models.ImageField(
@@ -172,14 +177,12 @@ class Role(TimeStampedModel):
     type = models.CharField(max_length=50, choices=ROLE_TYPE_CHOICES)
     description = models.TextField(blank=True)
     user_profile = models.ManyToManyField(UserProfile, related_name="roles")
-    custom_title = models.CharField(max_length=50, unique=True, blank=True)
+    custom_title = models.CharField(max_length=50, unique=True, null=True, blank=True, default="Default Title")
     is_custom = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
 
-    def is_owner(self, user):
-        return self.user_profile.filter(user=user).exists() or user.is_staff
 
 
 class UserGoal(TimeStampedModel, CompletedModel, ProgressModel, DueDateModel):
