@@ -1,5 +1,6 @@
 from django.db import transaction
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -22,20 +23,20 @@ from journey.serializers import (
 class JourneyViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Journey.objects.all()
     serializer_class = JourneySerializer
-    permission_classes = [IsAuthenticated]
+
+    @action(detail=True, url_path='start-journey')
+    def start_journey(self, request):
+        
+
+
 
 
 class JourneyStepViewSet(
     ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet
 ):
 
-    permission_classes = [IsAuthenticated]
+    queryset = JourneyStep.objects.select_related('journey').all()
 
-    def get_queryset(self):
-        journey_pk = self.kwargs.get("journey_pk")
-        return JourneyStep.objects.filter(journey_id=journey_pk).select_related(
-            "journey"
-        )
 
     def get_serializer_class(self):
         if self.request.method == "PUT":

@@ -10,6 +10,7 @@ class Journey(models.Model):
     """
 
     title = models.CharField(max_length=255)
+    journey_number = models.IntegerField()
     description = models.TextField()
 
     def __str__(self):
@@ -22,7 +23,9 @@ class JourneyStep(models.Model):
     """
 
     journey = models.ForeignKey(Journey, on_delete=models.CASCADE, related_name="steps")
+
     title = models.CharField(max_length=255)
+    step_number = models.IntegerField()
     description = models.TextField()
 
     def __str__(self):
