@@ -22,6 +22,12 @@ class JourneyStepSerializer(serializers.ModelSerializer):
         fields = ["id", "title", "description", "journey"]
 
 
+class MinimalJourneyStepSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JourneyStep
+        fields = ['step_number', 'title']
+
+
 class StartJourneyStepSerializer(serializers.ModelSerializer):
     class Meta:
         model = JourneyStep
@@ -29,7 +35,6 @@ class StartJourneyStepSerializer(serializers.ModelSerializer):
 
 
 class UserJourneyStepStatusSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserJourneyStepStatus
         fields = ["started_at", "ended_at", "paused"]
@@ -37,32 +42,24 @@ class UserJourneyStepStatusSerializer(serializers.ModelSerializer):
 
 class UserJourneyStatusSerializer(serializers.ModelSerializer):
     journey = serializers.StringRelatedField()
-    current_step = serializers.StringRelatedField()
-    step_status = serializers.SerializerMethodField()
+    current_step = MinimalJourneyStepSerializer(read_only=True)
 
     class Meta:
         model = UserJourneyStatus
         fields = [
-            "user_profile",
-            "journey",
-            "current_step",
-            "step_status",
-            "started_at",
-            "progress",
-            "ended_at",
-            "paused",
+            'journey',
+            'started_at',
+            'is_completed',
+            'progress',
+            'ended_at',
+            'current_step'
+
         ]
 
-    def get_step_status(self, obj):
-        user_profile = obj.user_profile
-        current_step = obj.current_step
 
-        # Fetch the UserJourneyStepStatus for the current step and user
-        step_status = UserJourneyStepStatus.objects.filter(
-            user_profile=user_profile, step=current_step
-        ).first()
+class UserJourneyStartSerializer(serializers.ModelSerializer):
+    journey = serializers.StringRelatedField
 
-        # If a step status exists, return serialized data, else return None
-        if step_status:
-            return UserJourneyStepStatusSerializer(step_status).data
-        return {}
+    class Meta:
+        model = UserJourneyStatus
+        fields = ['journey', 'started_at']

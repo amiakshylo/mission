@@ -16,16 +16,42 @@ from journey.serializers import (
     JourneySerializer,
     JourneyStepSerializer,
     StartJourneyStepSerializer,
-    UserJourneyStatusSerializer,
+    UserJourneyStatusSerializer, UserJourneyStartSerializer,
 )
+from journey.services.journey_service import JourneyService
 
 
 class JourneyViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     queryset = Journey.objects.all()
-    serializer_class = JourneySerializer
 
-    @action(detail=True, url_path='start-journey')
-    def start_journey(self, request):
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return UserJourneyStatusSerializer
+
+        return JourneySerializer
+
+
+    @action(detail=True, url_path='start', methods=['post'])
+    def start_journey(self, request, pk=None):
+        user_profile = request.user.user_profile
+        journey = self.get_object()
+
+        services = JourneyService(user_profile, journey)
+        journey_status = services.start_journey()
+
+        serializer = UserJourneyStatusSerializer(journey_status)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=False, methods=['get'], url_path='status')
+    def journey_status(self, request, pk=None):
+        user_profile = self.request.user.user_profile
+        services = JourneyService(user_profile, None)
+        journey_status = services.get_current_journey_status()
+        serializer = UserJourneyStatusSerializer(journey_status)
+        return Response(serializer.data, status.HTTP_200_OK)
+
+
+
         
 
 
