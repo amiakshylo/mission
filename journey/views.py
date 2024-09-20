@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.http import Http404
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
@@ -27,7 +28,6 @@ class JourneyViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return UserJourneyStatusSerializer
-
         return JourneySerializer
 
 
@@ -46,7 +46,13 @@ class JourneyViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     def journey_status(self, request, pk=None):
         user_profile = self.request.user.user_profile
         services = JourneyService(user_profile, None)
-        journey_status = services.get_current_journey_status()
+        try:
+            journey_status = services.get_current_journey_status()
+        except Http404:
+            return Response(
+                {'No found': 'You have not started any journey yet.'},
+                status=status.HTTP_200_OK
+            )
         serializer = UserJourneyStatusSerializer(journey_status)
         return Response(serializer.data, status.HTTP_200_OK)
 
