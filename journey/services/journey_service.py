@@ -16,10 +16,6 @@ class JourneyService(JourneyBaseService):
 
     @transaction.atomic
     def start_journey(self):
-        if self._has_incomplete_journey():
-            raise ValidationError(
-                'Cannot start new journey until previous is uncompleted.'
-            )
         if not self.journey:
             raise ValidationError("Journey not specified.")
 
@@ -36,6 +32,12 @@ class JourneyService(JourneyBaseService):
 
         if not created:
             raise ValidationError(f'Journey {self.journey.journey_number} is already started.')
+
+        if self._has_incomplete_journey():
+            raise ValidationError(
+                'Cannot start new journey until previous is uncompleted.'
+            )
+
         return journey_status
 
 
