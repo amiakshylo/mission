@@ -11,7 +11,15 @@ from goal_task_management.serializers import GoalSerializer
 
 from life_sphere.models import Area
 from life_sphere.serializers import AreaSerializer
-from .models import User, UserProfile, Role, UserGoal, UserArea, UserBalance
+from .models import (
+    User,
+    UserProfile,
+    Role,
+    UserGoal,
+    UserArea,
+    UserBalance,
+    UserProfileImage,
+)
 
 
 class UserCreateSerializer(BaseUserCreateSerializer):
@@ -212,9 +220,37 @@ class CreateUserGoalSerializer(serializers.ModelSerializer):
         return data
 
 
+class EditUserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = [
+            "gender",
+            "custom_gender",
+            "birth_date",
+        ]
+
+    def validate_birth_date(self, value):
+        if value is not None and value > datetime.date.today():
+            raise serializers.ValidationError("Birth date cannot be in the future.")
+        return value
+
+
+class UserImageProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfileImage
+        fields = ["id", "profile_image"]
+
+    def create(self, validated_data):
+        user_profile = self.context.get("user_profile_id")
+        user_image = UserProfileImage.objects.create(
+            user_profile_id=user_profile, **validated_data
+        )
+        return user_image
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
-    roles = UserRoleSerializer(many=True, read_only=True)
     user = UserSerializer(read_only=True)
+    profile_image = UserImageProfileSerializer()
 
     class Meta:
         model = UserProfile
@@ -223,27 +259,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "user",
             "gender",
             "custom_gender",
-            "location",
-            "profile_picture",
-            "birth_date",
-            "roles",
-        ]
-
-
-class EditUserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = [
-            "gender",
-            "custom_gender",
-            "profile_picture",
+            "profile_image"
             "birth_date",
         ]
-
-    def validate_birth_date(self, value):
-        if value is not None and value > datetime.date.today():
-            raise serializers.ValidationError("Birth date cannot be in the future.")
-        return value
 
 
 class UserBalanceSerializer(serializers.ModelSerializer):

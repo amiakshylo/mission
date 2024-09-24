@@ -1,3 +1,5 @@
+import os.path
+
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 
@@ -6,11 +8,13 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
+
 from rest_framework.mixins import (
     RetrieveModelMixin,
     ListModelMixin,
     DestroyModelMixin,
-    CreateModelMixin, UpdateModelMixin,
+    CreateModelMixin,
+    UpdateModelMixin,
 )
 
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -21,7 +25,7 @@ from rest_framework.filters import SearchFilter
 from goal_task_management.models import Goal
 from .filters import RoleFilter
 
-from .models import UserProfile, UserGoal, Role, UserArea, UserBalance
+from .models import UserProfile, UserGoal, Role, UserArea, UserBalance, UserProfileImage
 from .pagination import DefaultPagination
 from .serializers import (
     UserProfileSerializer,
@@ -35,21 +39,20 @@ from .serializers import (
     UserAreaSerializer,
     CreateUserAreaSerializer,
     UserBalanceSerializer,
+    UserImageProfileSerializer,
 )
 
 
-class UserProfileViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
-    serializer_class = UserProfileSerializer
+class UserProfileViewSet(
+    ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet
+):
 
     def get_queryset(self):
         user_id = self.request.user
-        return ((UserProfile.objects.filter(user=user_id)
-                .select_related('user'))
-                .prefetch_related('roles')
-                )
+        return UserProfile.objects.filter(user=user_id).select_related("user")
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT':
+        if self.request.method == "PUT":
             return EditUserProfileSerializer
         return UserProfileSerializer
 
@@ -58,7 +61,6 @@ class RoleViewSet(ListModelMixin, GenericViewSet):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
     pagination_class = DefaultPagination
-    permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = RoleFilter
     search_fields = ["title"]
@@ -71,7 +73,6 @@ class UserRoleViewSet(
     DestroyModelMixin,
     GenericViewSet,
 ):
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user_profile = self.request.user.user_profile
@@ -92,7 +93,6 @@ class UserRoleViewSet(
         user_profile = self.request.user.user_profile
         role = self.get_object()
 
-        # Remove the role from the user's profile without deleting the role
         user_profile.roles.remove(role)
 
         # Return a response indicating success
@@ -102,7 +102,6 @@ class UserRoleViewSet(
 
 
 class UserGoalViewSet(ModelViewSet):
-    permission_classes = [IsAuthenticated]
 
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["goal_type", "is_active", "is_completed"]
