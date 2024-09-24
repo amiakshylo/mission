@@ -47,16 +47,10 @@ class UserResponse(models.Model):
 
 class OnboardingProgress(models.Model):
     user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
-    current_life_sphere = models.ForeignKey(
-        LifeSphere, on_delete=models.SET_NULL, null=True
-    )
-    completed_questions = models.ManyToManyField(
-        OnboardingQuestion, related_name="completed_by_users"
-    )
-    skipped_questions = models.ManyToManyField(
-        OnboardingQuestion, related_name="skipped_by_users"
-    )
+    completed_questions = models.IntegerField(default=0)
     last_updated = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f"{self.user_profile} - Current Sphere: {self.current_life_sphere}"
+
+    def calculate_remaining_questions(self):
+        questions_remain = 13 - self.completed_questions
+        return questions_remain

@@ -14,3 +14,4 @@ venv.bak/
 .pyenv
 
 .DS_Store
+.pylintrc

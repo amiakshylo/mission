@@ -4,7 +4,7 @@ from django.utils.functional import cached_property
 
 from life_sphere.models import LifeSphere
 
-from onboarding.models import OnboardingQuestion, UserResponse
+from onboarding.models import OnboardingQuestion, UserResponse, OnboardingProgress
 from user_management.models import UserBalance
 
 
@@ -49,6 +49,17 @@ class OnboardingService:
                 return next_question
 
         return self._get_next_unanswered_question()
+
+    def update_onboarding_progress(self):
+        onboarding_progress, created = OnboardingProgress.objects.get_or_create(
+            user_profile=self.user_profile,
+            defaults={'completed_questions': 0}
+        )
+        onboarding_progress.completed_questions += 1
+        onboarding_progress.save()
+
+
+
 
     @cached_property
     def initial_user_balance(self):

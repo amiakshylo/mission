@@ -41,12 +41,12 @@ class UserProfile(models.Model):
     A model representing additional profile information for the user.
     """
 
-    GENDER_MALE = "M"
-    GENDER_FEMALE = "F"
-    GENDER_OTHER = "O"
-    GENDER_NON_BINARY = "NB"
-    GENDER_NOT_TO_SAY = "PNS"
-    GENDER_SELF_DESCRIBE = "SD"
+    GENDER_MALE = "Male"
+    GENDER_FEMALE = "Female"
+    GENDER_OTHER = "Other"
+    GENDER_NON_BINARY = "Non-binary"
+    GENDER_NOT_TO_SAY = "Prefer not to say"
+    GENDER_SELF_DESCRIBE = "Self describe"
 
     GENDER_CHOICES = [
         (GENDER_MALE, "Male"),
@@ -54,7 +54,7 @@ class UserProfile(models.Model):
         (GENDER_OTHER, "Other"),
         (GENDER_NOT_TO_SAY, "Prefer not to say"),
         (GENDER_NON_BINARY, "Non-binary"),
-        (GENDER_SELF_DESCRIBE, "Prefer to self-describe")
+        (GENDER_SELF_DESCRIBE, "Prefer to self-describe"),
     ]
 
     ASSISTANT_MODEL_CHOICES = [
@@ -67,18 +67,10 @@ class UserProfile(models.Model):
         User, on_delete=models.CASCADE, related_name="user_profile"
     )
     name = models.CharField(max_length=50, blank=True)
-    gender = models.CharField(
-        max_length=20, choices=GENDER_CHOICES, blank=False
-    )
+    gender = models.CharField(max_length=20, choices=GENDER_CHOICES, blank=False)
     custom_gender = models.CharField(max_length=20, blank=True)
     birth_date = models.DateField(null=True, blank=False)
     location = models.CharField(max_length=255, blank=True)
-    profile_picture = models.ImageField(
-        upload_to="profile_picture/",
-        blank=True,
-        null=False,
-        validators=[validate_profile_image],
-    )  # add user id
     notification_preferences = models.CharField(
         max_length=255, default="Push notifications"
     )
@@ -117,8 +109,20 @@ class UserProfile(models.Model):
                 return False
         return True
 
-    def is_owner(self, user):
-        return self.user == user or user.is_staff
+
+class UserProfileImage(models.Model):
+    user_profile = models.OneToOneField(
+        UserProfile, on_delete=models.CASCADE, related_name="profile_image"
+    )
+    profile_image = models.ImageField(
+        upload_to="profile_picture/",
+        blank=True,
+        null=False,
+        validators=[validate_profile_image],
+    )
+
+    class Meta:
+        unique_together = ["user_profile", "profile_image"]
 
 
 class UserArea(TimeStampedModel):
@@ -177,12 +181,13 @@ class Role(TimeStampedModel):
     type = models.CharField(max_length=50, choices=ROLE_TYPE_CHOICES)
     description = models.TextField(blank=True)
     user_profile = models.ManyToManyField(UserProfile, related_name="roles")
-    custom_title = models.CharField(max_length=50, unique=True, null=True, blank=True, default="Default Title")
+    custom_title = models.CharField(
+        max_length=50, unique=True, null=True, blank=True, default="Default Title"
+    )
     is_custom = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
-
 
 
 class UserGoal(TimeStampedModel, CompletedModel, ProgressModel, DueDateModel):

@@ -1,3 +1,5 @@
+import os.path
+
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 
@@ -5,11 +7,13 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.mixins import (
     RetrieveModelMixin,
     ListModelMixin,
     DestroyModelMixin,
     CreateModelMixin,
+    UpdateModelMixin,
 )
 
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -20,7 +24,7 @@ from rest_framework.filters import SearchFilter
 from goal_task_management.models import Goal
 from .filters import RoleFilter
 
-from .models import UserProfile, UserGoal, Role, UserArea, UserBalance
+from .models import UserProfile, UserGoal, Role, UserArea, UserBalance, UserProfileImage
 from .pagination import DefaultPagination
 from .serializers import (
     UserProfileSerializer,
@@ -34,43 +38,75 @@ from .serializers import (
     UserAreaSerializer,
     CreateUserAreaSerializer,
     UserBalanceSerializer,
+    UserImageProfileSerializer,
 )
 
 
-class UserProfileSet(ListModelMixin, GenericViewSet):
-    serializer_class = UserProfileSerializer
-    permission_classes = [IsAdminUser]
+class UserProfileViewSet(
+    ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet
+):
 
     def get_queryset(self):
-        return (
-            UserProfile.objects.all().select_related("user").prefetch_related("roles")
+        user_id = self.request.user
+        return UserProfile.objects.filter(user=user_id).select_related("user")
+
+    def get_serializer_class(self):
+        if self.request.method == "PUT":
+            return EditUserProfileSerializer
+        return UserProfileSerializer
+
+
+class UserProfileImageViewSet(ModelViewSet):
+
+    serializer_class = UserImageProfileSerializer
+
+    def get_queryset(self):
+        user_profile_pk = self.request.user.user_profile.id
+        return UserProfileImage.objects.filter(user_profile=user_profile_pk)
+
+    def create(self, request, *args, **kwargs):
+        user_profile = self.kwargs.get("user_profile_pk")
+
+        serializer = self.get_serializer(
+            data=request.data, context={"user_profile_id": user_profile}
         )
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
 
-    @action(detail=False, methods=["GET", "PUT"], permission_classes=[IsAuthenticated])
-    def me(self, request, *args, **kwargs):
-        queryset = (
-            UserProfile.objects.all().select_related("user").prefetch_related("roles")
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        profile_image = instance.profile_image
+
+        if profile_image:
+            image_path = profile_image.path
+
+            if os.path.isfile(image_path):
+                try:
+                    os.remove(image_path)
+                    instance.delete()
+                    return Response(
+                        "Image deleted successfully", status=status.HTTP_204_NO_CONTENT
+                    )
+                except Exception as e:
+                    return Response(
+                        {"error": str(e)}, status=status.HTTP_400_BAD_REQUEST
+                    )
+            else:
+                return Response(
+                    "Image file does not exist", status=status.HTTP_404_NOT_FOUND
+                )
+
+        return Response(
+            "No image associated with this profile", status=status.HTTP_404_NOT_FOUND
         )
-        user_profile = get_object_or_404(queryset, user=request.user)
-
-        if request.method == "PUT":
-            serializer = EditUserProfileSerializer(
-                user_profile, data=request.data, partial=True
-            )
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = UserProfileSerializer(user_profile)
-        return Response(serializer.data)
 
 
 class RoleViewSet(ListModelMixin, GenericViewSet):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
     pagination_class = DefaultPagination
-    permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = RoleFilter
     search_fields = ["title"]
@@ -83,7 +119,6 @@ class UserRoleViewSet(
     DestroyModelMixin,
     GenericViewSet,
 ):
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user_profile = self.request.user.user_profile
@@ -104,7 +139,6 @@ class UserRoleViewSet(
         user_profile = self.request.user.user_profile
         role = self.get_object()
 
-        # Remove the role from the user's profile without deleting the role
         user_profile.roles.remove(role)
 
         # Return a response indicating success
@@ -114,7 +148,6 @@ class UserRoleViewSet(
 
 
 class UserGoalViewSet(ModelViewSet):
-    permission_classes = [IsAuthenticated]
 
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["goal_type", "is_active", "is_completed"]
