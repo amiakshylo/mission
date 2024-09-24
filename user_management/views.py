@@ -1,10 +1,6 @@
 import os.path
-
 from django.db import transaction
-from django.shortcuts import get_object_or_404
-
 from django_filters.rest_framework import DjangoFilterBackend
-
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
@@ -15,15 +11,12 @@ from rest_framework.mixins import (
     CreateModelMixin,
     UpdateModelMixin,
 )
-
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.filters import SearchFilter
-
 from goal_task_management.models import Goal
 from .filters import RoleFilter
-
 from .models import UserProfile, UserGoal, Role, UserArea, UserBalance, UserProfileImage
 from .pagination import DefaultPagination
 from .serializers import (

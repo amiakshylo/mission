@@ -2,6 +2,7 @@
 /media
 *.pyc
 .idea/
+*.iml
 # Environments
 .env
 .venv
@@ -12,6 +13,5 @@ env.bak/
 venv.bak/
 .flaskenv
 .pyenv
-
+7habits.iml
 .DS_Store
-.pylintrc
