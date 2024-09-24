@@ -71,12 +71,6 @@ class UserProfile(models.Model):
     custom_gender = models.CharField(max_length=20, blank=True)
     birth_date = models.DateField(null=True, blank=False)
     location = models.CharField(max_length=255, blank=True)
-    profile_image = models.ImageField(
-        upload_to="profile_picture/",
-        blank=True,
-        null=False,
-        validators=[validate_profile_image],
-    )  # add user id
     notification_preferences = models.CharField(
         max_length=255, default="Push notifications"
     )
@@ -115,8 +109,20 @@ class UserProfile(models.Model):
                 return False
         return True
 
-    def is_owner(self, user):
-        return self.user == user or user.is_staff
+
+class UserProfileImage(models.Model):
+    user_profile = models.OneToOneField(
+        UserProfile, on_delete=models.CASCADE, related_name="profile_image"
+    )
+    profile_image = models.ImageField(
+        upload_to="profile_picture/",
+        blank=True,
+        null=False,
+        validators=[validate_profile_image],
+    )
+
+    class Meta:
+        unique_together = ["user_profile", "profile_image"]
 
 
 class UserArea(TimeStampedModel):

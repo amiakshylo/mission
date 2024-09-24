@@ -11,7 +11,15 @@ from goal_task_management.serializers import GoalSerializer
 
 from life_sphere.models import Area
 from life_sphere.serializers import AreaSerializer
-from .models import User, UserProfile, Role, UserGoal, UserArea, UserBalance
+from .models import (
+    User,
+    UserProfile,
+    Role,
+    UserGoal,
+    UserArea,
+    UserBalance,
+    UserProfileImage,
+)
 
 
 class UserCreateSerializer(BaseUserCreateSerializer):
@@ -212,24 +220,6 @@ class CreateUserGoalSerializer(serializers.ModelSerializer):
         return data
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    roles = UserRoleSerializer(many=True, read_only=True)
-    user = UserSerializer(read_only=True)
-
-    class Meta:
-        model = UserProfile
-        fields = [
-            "id",
-            "user",
-            "gender",
-            "custom_gender",
-            "location",
-            "profile_image",
-            "birth_date",
-            "roles",
-        ]
-
-
 class EditUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
@@ -245,10 +235,34 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
         return value
 
 
-class ImageProfileSerializer(serializers.ModelSerializer):
+class UserImageProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfileImage
+        fields = ["id", "profile_image"]
+
+    def create(self, validated_data):
+        user_profile = self.context.get("user_profile_id")
+        user_image = UserProfileImage.objects.create(
+            user_profile_id=user_profile, **validated_data
+        )
+        return user_image
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    profile_image = UserImageProfileSerializer()
+
     class Meta:
         model = UserProfile
-        fields = ["id", "profile_image"]
+        fields = [
+            "id",
+            "user",
+            "gender",
+            "custom_gender",
+            "profile_image",
+            "location",
+            "birth_date",
+        ]
 
 
 class UserBalanceSerializer(serializers.ModelSerializer):
