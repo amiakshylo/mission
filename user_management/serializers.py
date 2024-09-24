@@ -224,7 +224,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "gender",
             "custom_gender",
             "location",
-            "profile_picture",
+            "profile_image",
             "birth_date",
             "roles",
         ]
@@ -236,7 +236,6 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
         fields = [
             "gender",
             "custom_gender",
-            "profile_picture",
             "birth_date",
         ]
 
@@ -244,6 +243,12 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
         if value is not None and value > datetime.date.today():
             raise serializers.ValidationError("Birth date cannot be in the future.")
         return value
+
+
+class ImageProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ["id", "profile_image"]
 
 
 class UserBalanceSerializer(serializers.ModelSerializer):

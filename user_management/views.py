@@ -1,3 +1,5 @@
+import os.path
+
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 
@@ -10,7 +12,8 @@ from rest_framework.mixins import (
     RetrieveModelMixin,
     ListModelMixin,
     DestroyModelMixin,
-    CreateModelMixin, UpdateModelMixin,
+    CreateModelMixin,
+    UpdateModelMixin,
 )
 
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -35,23 +38,66 @@ from .serializers import (
     UserAreaSerializer,
     CreateUserAreaSerializer,
     UserBalanceSerializer,
+    ImageProfileSerializer,
 )
 
 
-class UserProfileViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
+class UserProfileViewSet(
+    ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet
+):
     serializer_class = UserProfileSerializer
 
     def get_queryset(self):
         user_id = self.request.user
-        return ((UserProfile.objects.filter(user=user_id)
-                .select_related('user'))
-                .prefetch_related('roles')
-                )
+        return (
+            UserProfile.objects.filter(user=user_id).select_related("user")
+        ).prefetch_related("roles")
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT':
+        if self.request.method == "PUT":
             return EditUserProfileSerializer
         return UserProfileSerializer
+
+
+class ImageProfileViewSet(
+    ListModelMixin,
+    RetrieveModelMixin,
+    UpdateModelMixin,
+    DestroyModelMixin,
+    GenericViewSet,
+):
+    serializer_class = ImageProfileSerializer
+
+    def get_queryset(self):
+        user_profile_pk = self.request.user.user_profile.id
+        return UserProfile.objects.filter(pk=user_profile_pk)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        profile_image = instance.profile_image
+
+        if profile_image:
+            image_path = profile_image.path
+
+            if os.path.isfile(image_path):
+                try:
+                    os.remove(image_path)
+                    profile_image.delete()
+                    return Response(
+                        "Image deleted successfully", status=status.HTTP_204_NO_CONTENT
+                    )
+                except Exception as e:
+                    return Response(
+                        {"error": str(e)}, status=status.HTTP_400_BAD_REQUEST
+                    )
+            else:
+                return Response(
+                    "Image file does not exist", status=status.HTTP_404_NOT_FOUND
+                )
+
+        return Response(
+            "No image associated with this profile", status=status.HTTP_404_NOT_FOUND
+        )
 
 
 class RoleViewSet(ListModelMixin, GenericViewSet):
