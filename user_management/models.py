@@ -70,7 +70,6 @@ class UserProfile(models.Model):
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES, blank=False)
     custom_gender = models.CharField(max_length=20, blank=True)
     birth_date = models.DateField(null=True, blank=False)
-    location = models.CharField(max_length=255, blank=True)
     notification_preferences = models.CharField(
         max_length=255, default="Push notifications"
     )
@@ -93,7 +92,9 @@ class UserProfile(models.Model):
         return
 
     def __str__(self):
-        return self.user.email
+        if self.custom_gender:
+            return self.custom_gender
+        return self.gender
 
     def is_profile_complete(self):
         required_fields = [
@@ -108,6 +109,13 @@ class UserProfile(models.Model):
             if not getattr(self, field):
                 return False
         return True
+
+    def save(self, *args, **kwargs):
+        custom_gender = self.custom_gender
+        if custom_gender:
+            self.gender = custom_gender
+
+        super(UserProfile, self).save(*args, **kwargs)
 
 
 class UserProfileImage(models.Model):

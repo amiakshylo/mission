@@ -234,6 +234,22 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Birth date cannot be in the future.")
         return value
 
+    def validate(self, attrs):
+        gender = attrs.get("gender")
+        custom_gender = attrs.get("custom_gender")
+
+        if gender == "Self describe" and not custom_gender:
+            raise serializers.ValidationError(
+                "Custom gender must be provided if you prefer to self-describe."
+            )
+
+        if gender != "Self describe" and custom_gender:
+            raise serializers.ValidationError(
+                "Custom gender should only be set when you prefer to self-describe."
+            )
+
+        return attrs
+
 
 class UserImageProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -258,9 +274,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "id",
             "user",
             "gender",
-            "custom_gender",
             "profile_image",
-            "location",
             "birth_date",
         ]
 
