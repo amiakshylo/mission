@@ -1,5 +1,6 @@
 import os.path
 from django.db import transaction
+from django.db.models import F
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.mixins import (
@@ -14,7 +15,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.filters import SearchFilter
 from goal_task_management.models import Goal
-from .filters import RoleFilter
+from .filters import RoleFilter, UserAreaFilter
 from .models import UserProfile, UserGoal, Role, UserArea, UserBalance, UserProfileImage
 from .pagination import DefaultPagination
 from .serializers import (
@@ -48,7 +49,6 @@ class UserProfileViewSet(
 
 
 class UserProfileImageViewSet(ModelViewSet):
-
     serializer_class = UserImageProfileSerializer
 
     def get_queryset(self):
@@ -139,7 +139,6 @@ class UserRoleViewSet(
 
 
 class UserGoalViewSet(ModelViewSet):
-
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["goal_type", "is_active", "is_completed"]
 
@@ -196,17 +195,13 @@ class UserGoalViewSet(ModelViewSet):
 
 
 class UserAreaViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
-    permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["area__life_sphere"]
+    filterset_class = UserAreaFilter
 
     def get_queryset(self):
         user_profile = self.request.user.user_profile
-        return (
-            UserArea.objects.filter(user_profile=user_profile)
-            .select_related("area__life_sphere")
-            .all()
-        )
+        return UserArea.objects.filter(user_profile=user_profile).select_related('area__life_sphere')
+
 
     def get_serializer_class(self):
         if self.request.method == "POST":

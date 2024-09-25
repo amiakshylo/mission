@@ -132,7 +132,8 @@ class CreateUserRoleSerializer(serializers.ModelSerializer):
 
 
 class UserAreaSerializer(serializers.ModelSerializer):
-    area = AreaSerializer()
+    area = serializers.StringRelatedField()
+
 
     class Meta:
         model = UserArea
