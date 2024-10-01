@@ -1,6 +1,5 @@
 import os.path
 from django.db import transaction
-from django.db.models import F
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.mixins import (
@@ -132,7 +131,6 @@ class UserRoleViewSet(
 
         user_profile.roles.remove(role)
 
-        # Return a response indicating success
         return Response(
             {"detail": "Role removed from profile."}, status=status.HTTP_204_NO_CONTENT
         )
@@ -150,7 +148,7 @@ class UserGoalViewSet(ModelViewSet):
         return UserGoalSerializer
 
     def get_queryset(self):
-        user_profile = self.request.user.user_profile
+        user_profile = self.request.user.user_profiley
         return user_profile.goals.prefetch_related("goal")
 
     def get_serializer_context(self, *args, **kwargs):
@@ -194,7 +192,7 @@ class UserGoalViewSet(ModelViewSet):
         )
 
 
-class UserAreaViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
+class UserAreaViewSet(ListModelMixin, RetrieveModelMixin, CreateModelMixin, GenericViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_class = UserAreaFilter
 
@@ -210,7 +208,6 @@ class UserAreaViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
 
     def get_serializer_context(self):
         user_profile = self.request.user.user_profile
-        print(user_profile)
 
         return {"user_profile": user_profile}
 
@@ -219,5 +216,4 @@ class UserBalanceViewSet(ListModelMixin, GenericViewSet):
     queryset = UserBalance.objects.select_related("user_profile").prefetch_related(
         "life_sphere"
     )
-    permission_classes = [IsAuthenticated]
     serializer_class = UserBalanceSerializer
