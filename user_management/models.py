@@ -1,5 +1,5 @@
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator, RegexValidator
 from datetime import date
 from django.db import models
 from django.db.models import UniqueConstraint
@@ -52,11 +52,29 @@ class UserProfile(models.Model):
         User, on_delete=models.CASCADE, related_name="user_profile"
     )
     name = models.CharField(
-        max_length=50, blank=True, validators=[MinLengthValidator(2)]
+        max_length=50,
+        blank=True,
+        validators=[
+            MinLengthValidator(2),
+            RegexValidator(
+                regex=r"^[A-Za-z ]+$",
+                message="Name must contain only letters and spaces.",
+                code="invalid_name",
+            ),
+        ],
     )
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES, blank=False)
     custom_gender = models.CharField(
-        max_length=20, blank=True, validators=[MinLengthValidator(2)]
+        max_length=20,
+        blank=True,
+        validators=[
+            MinLengthValidator(2),
+            RegexValidator(
+                regex=r"^[A-Za-z ]+$",
+                message="Custom gender must contain only letters and spaces.",
+                code="invalid_gender",
+            ),
+        ],
     )
     birth_date = models.DateField(null=True, blank=False)
     age_range = models.IntegerField(
