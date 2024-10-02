@@ -134,7 +134,6 @@ class CreateUserRoleSerializer(serializers.ModelSerializer):
 class UserAreaSerializer(serializers.ModelSerializer):
     area = serializers.StringRelatedField()
 
-
     class Meta:
         model = UserArea
         fields = ["id", "area", "is_active"]
@@ -225,6 +224,7 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = [
+            "name",
             "gender",
             "custom_gender",
             "birth_date",
@@ -274,6 +274,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "user",
+            "name",
             "gender",
             "profile_image",
             "birth_date",
