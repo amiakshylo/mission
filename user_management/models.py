@@ -53,7 +53,7 @@ class UserProfile(models.Model):
     )
     name = models.CharField(
         max_length=50,
-        blank=True,
+        blank=False,
         validators=[
             MinLengthValidator(2),
             RegexValidator(
@@ -65,7 +65,7 @@ class UserProfile(models.Model):
     )
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES, blank=False)
     custom_gender = models.CharField(
-        max_length=20,
+        max_length=50,
         blank=True,
         validators=[
             MinLengthValidator(2),
