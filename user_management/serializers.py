@@ -140,17 +140,15 @@ class UserAreaSerializer(serializers.ModelSerializer):
 
 
 class CreateUserAreaSerializer(serializers.ModelSerializer):
-    area = serializers.PrimaryKeyRelatedField(
-        queryset=Area.objects.all(), required=False, allow_null=True
-    )
 
     class Meta:
         model = UserArea
-        fields = ["id", "area"]
+        fields = ['area']
 
     def validate(self, data):
+        area = data.get("area")
         if UserArea.objects.filter(
-            user_profile=self.context.get("user_profile"), area=data.get("area")
+            user_profile=self.context.get("user_profile"), area=area
         ).exists():
             raise serializers.ValidationError(
                 "This area of improvement is already set up by you,"
@@ -163,7 +161,6 @@ class CreateUserAreaSerializer(serializers.ModelSerializer):
         if not user_profile:
             raise ValidationError("User profile is required.")
 
-        # Your business logic here, using the user_profile or other data
         user_area = UserArea.objects.create(
             user_profile_id=user_profile.id, area=validated_data.get("area")
         )

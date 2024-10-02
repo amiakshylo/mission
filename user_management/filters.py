@@ -10,16 +10,14 @@ class RoleFilter(FilterSet):
         fields = {"type": ["exact"]}
 
 
-"""Attention, redundant query"""
-
-
 class UserAreaFilter(FilterSet):
-    life_sphere = filters.NumberFilter(field_name='area__life_sphere__title',
-                                       lookup_expr='exact',
-                                       label='Life Sphere',
-                                       help_text='Filter by Area Life Sphere ID'
-                                       )
+    life_sphere = filters.NumberFilter(
+        field_name="area__life_sphere__title",
+        lookup_expr="exact",
+        label="Life Sphere",
+        help_text="Filter by Area Life Sphere ID",
+    )
 
     class Meta:
         model = UserArea
-        fields = ['life_sphere']
+        fields = ["life_sphere", "is_active"]

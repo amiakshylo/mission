@@ -17,6 +17,10 @@ class AreaSerializer(serializers.ModelSerializer):
 
 
 class AddUserAreaSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
     class Meta:
         model = Area
         fields = ["id"]
+
+

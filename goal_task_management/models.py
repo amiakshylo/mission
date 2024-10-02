@@ -19,9 +19,7 @@ class Goal(models.Model):
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True
     )
-    is_custom = models.BooleanField(
-        default=False, null=True
-    )  # Distinguishes predefined from user-created goals
+    is_custom = models.BooleanField(default=False, null=True)
     impact_score = models.IntegerField(null=True, blank=True)
     goal_type = models.CharField(choices=GOAL_TYPE_CHOICES, null=True, blank=True)
     area = models.ManyToManyField("life_sphere.Area", related_name="goals")
