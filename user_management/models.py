@@ -1,9 +1,16 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinLengthValidator, RegexValidator
 from datetime import date
 from django.db import models
 from django.db.models import UniqueConstraint
 from rest_framework.exceptions import ValidationError
 
+from core.choices import (
+    AGE_RANGE_CHOICES,
+    AGE_RANGE_PREFER_NOT_TO_SAY,
+    GENDER_CHOICES,
+    ASSISTANT_MODEL_CHOICES,
+)
 from core.models import (
     TimeStampedModel,
     CompletedModel,
@@ -41,35 +48,39 @@ class UserProfile(models.Model):
     A model representing additional profile information for the user.
     """
 
-    GENDER_MALE = "Male"
-    GENDER_FEMALE = "Female"
-    GENDER_OTHER = "Other"
-    GENDER_NON_BINARY = "Non-binary"
-    GENDER_NOT_TO_SAY = "Prefer not to say"
-    GENDER_SELF_DESCRIBE = "Self describe"
-
-    GENDER_CHOICES = [
-        (GENDER_MALE, "Male"),
-        (GENDER_FEMALE, "Female"),
-        (GENDER_OTHER, "Other"),
-        (GENDER_NOT_TO_SAY, "Prefer not to say"),
-        (GENDER_NON_BINARY, "Non-binary"),
-        (GENDER_SELF_DESCRIBE, "Prefer to self-describe"),
-    ]
-
-    ASSISTANT_MODEL_CHOICES = [
-        ("spouse", "Spouse"),
-        ("friend", "Friend"),
-        ("coach", "Coach"),
-        ("therapist", "Therapist"),
-    ]
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="user_profile"
     )
-    name = models.CharField(max_length=50, blank=True)
+    name = models.CharField(
+        max_length=50,
+        blank=False,
+        validators=[
+            MinLengthValidator(2),
+            RegexValidator(
+                regex=r"^[A-Za-z ]+$",
+                message="Name must contain only letters and spaces.",
+                code="invalid_name",
+            ),
+        ],
+    )
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES, blank=False)
-    custom_gender = models.CharField(max_length=20, blank=True)
+    custom_gender = models.CharField(
+        max_length=50,
+        blank=True,
+        validators=[
+            MinLengthValidator(2),
+            RegexValidator(
+                regex=r"^[A-Za-z ]+$",
+                message="Custom gender must contain only letters and spaces.",
+                code="invalid_gender",
+            ),
+        ],
+    )
     birth_date = models.DateField(null=True, blank=False)
+    age_range = models.IntegerField(
+        choices=AGE_RANGE_CHOICES,
+        default=AGE_RANGE_PREFER_NOT_TO_SAY,
+    )
     notification_preferences = models.CharField(
         max_length=255, default="Push notifications"
     )
@@ -323,3 +334,6 @@ class UserBalance(models.Model):
 
     def __str__(self):
         return f"{self.user_profile} - {self.life_sphere.title}: {self.score}"
+
+
+
