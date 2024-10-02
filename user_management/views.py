@@ -9,7 +9,7 @@ from rest_framework.mixins import (
     CreateModelMixin,
     UpdateModelMixin,
 )
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.filters import SearchFilter
