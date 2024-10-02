@@ -1,4 +1,4 @@
-
+from datetime import datetime
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
@@ -54,13 +54,27 @@ class JourneyService(JourneyBaseService):
                                                 is_completed=False
                                                 ).exists()
 
-    def _finished_journeys(self):
-        return UserJourneyStatus.objects.filter(
-            user_profile=self.user_profile
-        ).count()
 
     def _finished_journey(self):
-        return UserJourneyStatus.objects.filter(user_profile=self.user_profile, is_completed=True).count()
+        return UserJourneyStatus.objects.filter(user_profile=self.user_profile,
+                                                is_completed=True).count()
+
+    def initialize_next_journey_step(self, journey):
+        progress = UserJourneyStatus.objects.filter(user_profile=self.user_profile)
+        next_step = JourneyStep.objects.filter(journey=journey)
+        if next_step:
+            progress.current_step = next_step
+            progress.completed_steps += 1
+            progress.save()
+        else:
+            progress.is_completed = True
+            progress.completed_at = datetime.now()
+            progress.save()
+        return progress
+
+
+
+
 
 
 

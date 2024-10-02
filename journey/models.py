@@ -65,6 +65,7 @@ class UserJourneyStatus(ProgressModel, StartEndModel, CompletedModel):
     )
     journey = models.ForeignKey(Journey, on_delete=models.CASCADE, related_name='statuses')
     current_step = models.ForeignKey(JourneyStep, on_delete=models.CASCADE)
+    completed_steps = models.IntegerField(default=0)
     paused = None
     ended_at = None
 
