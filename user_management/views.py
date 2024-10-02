@@ -3,6 +3,7 @@ from django.db import transaction
 from django.db.models import F
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
+
 from rest_framework.mixins import (
     RetrieveModelMixin,
     ListModelMixin,
@@ -46,7 +47,6 @@ class UserProfileViewSet(
         if self.request.method == "PUT":
             return EditUserProfileSerializer
         return UserProfileSerializer
-
 
 class UserProfileImageViewSet(ModelViewSet):
     serializer_class = UserImageProfileSerializer

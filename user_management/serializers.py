@@ -276,9 +276,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "user",
             "name",
             "gender",
-            "profile_image",
-            "birth_date",
-        ]
+            "custom_gender",
+            "profile_image"
+
 
 
 class UserBalanceSerializer(serializers.ModelSerializer):
