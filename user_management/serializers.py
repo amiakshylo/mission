@@ -132,7 +132,7 @@ class CreateUserRoleSerializer(serializers.ModelSerializer):
 
 
 class UserAreaSerializer(serializers.ModelSerializer):
-    area = AreaSerializer()
+    area = serializers.StringRelatedField()
 
     class Meta:
         model = UserArea
@@ -224,6 +224,7 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = [
+            "name",
             "gender",
             "custom_gender",
             "birth_date",
@@ -233,6 +234,22 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
         if value is not None and value > datetime.date.today():
             raise serializers.ValidationError("Birth date cannot be in the future.")
         return value
+
+    def validate(self, attrs):
+        gender = attrs.get("gender")
+        custom_gender = attrs.get("custom_gender")
+
+        if gender == "Self describe" and not custom_gender:
+            raise serializers.ValidationError(
+                "Custom gender must be provided if you prefer to self-describe."
+            )
+
+        if gender != "Self describe" and custom_gender:
+            raise serializers.ValidationError(
+                "Custom gender should only be set when you prefer to self-describe."
+            )
+
+        return attrs
 
 
 class UserImageProfileSerializer(serializers.ModelSerializer):
@@ -257,11 +274,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "user",
+            "name",
             "gender",
             "custom_gender",
             "profile_image"
-            "birth_date",
-        ]
+
 
 
 class UserBalanceSerializer(serializers.ModelSerializer):
