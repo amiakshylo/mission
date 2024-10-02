@@ -8,7 +8,7 @@ router.register("", views.LifeSphereViewSet, basename="life-spheres")
 
 # Create a nested router for areas within life_spheres
 life_sphere_router = routers.NestedDefaultRouter(router, "", lookup="life_sphere")
-life_sphere_router.register("area", views.AreaViewSet, basename="areas")
+life_sphere_router.register("areas", views.AreaViewSet, basename="life-sphere-areas")
 
 # Register both base and nested routes
 urlpatterns = [

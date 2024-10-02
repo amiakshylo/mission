@@ -1,9 +1,16 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinLengthValidator, RegexValidator
 from datetime import date
 from django.db import models
 from django.db.models import UniqueConstraint
 from rest_framework.exceptions import ValidationError
 
+from core.choices import (
+    AGE_RANGE_CHOICES,
+    AGE_RANGE_PREFER_NOT_TO_SAY,
+    GENDER_CHOICES,
+    ASSISTANT_MODEL_CHOICES,
+)
 from core.models import (
     TimeStampedModel,
     CompletedModel,
@@ -41,44 +48,39 @@ class UserProfile(models.Model):
     A model representing additional profile information for the user.
     """
 
-    GENDER_MALE = "Male"
-    GENDER_FEMALE = "Female"
-    GENDER_OTHER = "Other"
-    GENDER_NON_BINARY = "Non-binary"
-    GENDER_NOT_TO_SAY = "Prefer not to say"
-    GENDER_SELF_DESCRIBE = "Self describe"
-
-    GENDER_CHOICES = [
-        (GENDER_MALE, "Male"),
-        (GENDER_FEMALE, "Female"),
-        (GENDER_OTHER, "Other"),
-        (GENDER_NOT_TO_SAY, "Prefer not to say"),
-        (GENDER_NON_BINARY, "Non-binary"),
-        (GENDER_SELF_DESCRIBE, "Prefer to self-describe")
-    ]
-
-    ASSISTANT_MODEL_CHOICES = [
-        ("spouse", "Spouse"),
-        ("friend", "Friend"),
-        ("coach", "Coach"),
-        ("therapist", "Therapist"),
-    ]
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="user_profile"
     )
-    name = models.CharField(max_length=50, blank=True)
-    gender = models.CharField(
-        max_length=20, choices=GENDER_CHOICES, blank=False
+    name = models.CharField(
+        max_length=50,
+        blank=False,
+        validators=[
+            MinLengthValidator(2),
+            RegexValidator(
+                regex=r"^[A-Za-z ]+$",
+                message="Name must contain only letters and spaces.",
+                code="invalid_name",
+            ),
+        ],
     )
-    custom_gender = models.CharField(max_length=20, blank=True)
-    birth_date = models.DateField(null=True, blank=False)
-    location = models.CharField(max_length=255, blank=True)
-    profile_picture = models.ImageField(
-        upload_to="profile_picture/",
+    gender = models.CharField(max_length=20, choices=GENDER_CHOICES, blank=False)
+    custom_gender = models.CharField(
+        max_length=50,
         blank=True,
-        null=False,
-        validators=[validate_profile_image],
-    )  # add user id
+        validators=[
+            MinLengthValidator(2),
+            RegexValidator(
+                regex=r"^[A-Za-z ]+$",
+                message="Custom gender must contain only letters and spaces.",
+                code="invalid_gender",
+            ),
+        ],
+    )
+    birth_date = models.DateField(null=True, blank=False)
+    age_range = models.IntegerField(
+        choices=AGE_RANGE_CHOICES,
+        default=AGE_RANGE_PREFER_NOT_TO_SAY,
+    )
     notification_preferences = models.CharField(
         max_length=255, default="Push notifications"
     )
@@ -101,7 +103,9 @@ class UserProfile(models.Model):
         return
 
     def __str__(self):
-        return self.user.email
+        if self.custom_gender:
+            return self.custom_gender
+        return self.gender
 
     def is_profile_complete(self):
         required_fields = [
@@ -117,8 +121,27 @@ class UserProfile(models.Model):
                 return False
         return True
 
-    def is_owner(self, user):
-        return self.user == user or user.is_staff
+    def save(self, *args, **kwargs):
+        custom_gender = self.custom_gender
+        if custom_gender:
+            self.gender = custom_gender
+
+        super(UserProfile, self).save(*args, **kwargs)
+
+
+class UserProfileImage(models.Model):
+    user_profile = models.OneToOneField(
+        UserProfile, on_delete=models.CASCADE, related_name="profile_image"
+    )
+    profile_image = models.ImageField(
+        upload_to="profile_picture/",
+        blank=True,
+        null=False,
+        validators=[validate_profile_image],
+    )
+
+    class Meta:
+        unique_together = ["user_profile", "profile_image"]
 
 
 class UserArea(TimeStampedModel):
@@ -177,12 +200,13 @@ class Role(TimeStampedModel):
     type = models.CharField(max_length=50, choices=ROLE_TYPE_CHOICES)
     description = models.TextField(blank=True)
     user_profile = models.ManyToManyField(UserProfile, related_name="roles")
-    custom_title = models.CharField(max_length=50, unique=True, null=True, blank=True, default="Default Title")
+    custom_title = models.CharField(
+        max_length=50, unique=True, null=True, blank=True, default="Default Title"
+    )
     is_custom = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
-
 
 
 class UserGoal(TimeStampedModel, CompletedModel, ProgressModel, DueDateModel):

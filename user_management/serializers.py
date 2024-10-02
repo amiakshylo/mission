@@ -11,7 +11,15 @@ from goal_task_management.serializers import GoalSerializer
 
 from life_sphere.models import Area
 from life_sphere.serializers import AreaSerializer
-from .models import User, UserProfile, Role, UserGoal, UserArea, UserBalance
+from .models import (
+    User,
+    UserProfile,
+    Role,
+    UserGoal,
+    UserArea,
+    UserBalance,
+    UserProfileImage,
+)
 
 
 class UserCreateSerializer(BaseUserCreateSerializer):
@@ -124,7 +132,7 @@ class CreateUserRoleSerializer(serializers.ModelSerializer):
 
 
 class UserAreaSerializer(serializers.ModelSerializer):
-    area = AreaSerializer()
+    area = serializers.StringRelatedField()
 
     class Meta:
         model = UserArea
@@ -132,17 +140,15 @@ class UserAreaSerializer(serializers.ModelSerializer):
 
 
 class CreateUserAreaSerializer(serializers.ModelSerializer):
-    area = serializers.PrimaryKeyRelatedField(
-        queryset=Area.objects.all(), required=False, allow_null=True
-    )
 
     class Meta:
         model = UserArea
-        fields = ["id", "area"]
+        fields = ['area']
 
     def validate(self, data):
+        area = data.get("area")
         if UserArea.objects.filter(
-            user_profile=self.context.get("user_profile"), area=data.get("area")
+            user_profile=self.context.get("user_profile"), area=area
         ).exists():
             raise serializers.ValidationError(
                 "This area of improvement is already set up by you,"
@@ -155,7 +161,6 @@ class CreateUserAreaSerializer(serializers.ModelSerializer):
         if not user_profile:
             raise ValidationError("User profile is required.")
 
-        # Your business logic here, using the user_profile or other data
         user_area = UserArea.objects.create(
             user_profile_id=user_profile.id, area=validated_data.get("area")
         )
@@ -212,31 +217,13 @@ class CreateUserGoalSerializer(serializers.ModelSerializer):
         return data
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    roles = UserRoleSerializer(many=True, read_only=True)
-    user = UserSerializer(read_only=True)
-
-    class Meta:
-        model = UserProfile
-        fields = [
-            "id",
-            "user",
-            "gender",
-            "custom_gender",
-            "location",
-            "profile_picture",
-            "birth_date",
-            "roles",
-        ]
-
-
 class EditUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = [
+            "name",
             "gender",
             "custom_gender",
-            "profile_picture",
             "birth_date",
         ]
 
@@ -244,6 +231,51 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
         if value is not None and value > datetime.date.today():
             raise serializers.ValidationError("Birth date cannot be in the future.")
         return value
+
+    def validate(self, attrs):
+        gender = attrs.get("gender")
+        custom_gender = attrs.get("custom_gender")
+
+        if gender == "Self describe" and not custom_gender:
+            raise serializers.ValidationError(
+                "Custom gender must be provided if you prefer to self-describe."
+            )
+
+        if gender != "Self describe" and custom_gender:
+            raise serializers.ValidationError(
+                "Custom gender should only be set when you prefer to self-describe."
+            )
+
+        return attrs
+
+
+class UserImageProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfileImage
+        fields = ["id", "profile_image"]
+
+    def create(self, validated_data):
+        user_profile = self.context.get("user_profile_id")
+        user_image = UserProfileImage.objects.create(
+            user_profile_id=user_profile, **validated_data
+        )
+        return user_image
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    profile_image = UserImageProfileSerializer()
+
+    class Meta:
+        model = UserProfile
+        fields = [
+            "id",
+            "user",
+            "name",
+            "gender",
+            "custom_gender",
+            "profile_image"
+
 
 
 class UserBalanceSerializer(serializers.ModelSerializer):
