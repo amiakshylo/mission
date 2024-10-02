@@ -192,14 +192,15 @@ class UserGoalViewSet(ModelViewSet):
         )
 
 
-class UserAreaViewSet(ListModelMixin, RetrieveModelMixin, CreateModelMixin, GenericViewSet):
+class UserAreaViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_class = UserAreaFilter
 
     def get_queryset(self):
         user_profile = self.request.user.user_profile
-        return UserArea.objects.filter(user_profile=user_profile).select_related('area__life_sphere')
-
+        return UserArea.objects.filter(user_profile=user_profile).select_related(
+            "area__life_sphere"
+        )
 
     def get_serializer_class(self):
         if self.request.method == "POST":
