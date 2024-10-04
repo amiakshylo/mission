@@ -74,5 +74,8 @@ class UserJourneyStatus(StartEndModel, CompletedModel):
         return f"{self.user_profile.name} - {self.journey.title} - {'Completed' if self.is_completed else 'Active'}"
 
     class Meta:
-        unique_together = ("user_profile", "journey")
+        unique_together = [
+            ("user_profile", "journey"),
+            ("user_profile", "is_completed", "journey"),
+        ]
         ordering = ["journey"]
