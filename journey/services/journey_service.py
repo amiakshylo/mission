@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.db import transaction
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 
@@ -52,20 +53,28 @@ class JourneyService(JourneyBaseService):
 
         if not created and not journey_status.is_completed:
             pass
-        elif not created and journey_status.is_completed:
-            raise ValidationError(
-                f"Journey {self.journey.journey_number} has already been completed."
-            )
+        else:
+            first_step = self.journey.steps.first()
+            journey_status.is_completed = False
+            journey_status.current_step = first_step
+            journey_status.completed_steps = 0
+            journey_status.started_at = datetime.now()
+            journey_status.completed_at = None
+            journey_status.save()
+            return journey_status
 
         return journey_status
 
-    def get_current_journey_status(self):
-        user_journey_status = get_object_or_404(
-            UserJourneyStatus, user_profile=self.user_profile, is_completed=False
-        )
-        if user_journey_status:
+    def get_journey_status(self):
+        try:
+            user_journey_status = get_object_or_404(
+                UserJourneyStatus.objects.select_related("journey"),
+                user_profile=self.user_profile,
+                journey=self.journey,
+            )
             return user_journey_status
-        raise ValidationError("You have not started any journey")
+        except Http404:
+            raise Http404({"not found": "You have not started this journey"})
 
 
 class JourneyStepService(JourneyBaseService):

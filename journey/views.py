@@ -1,5 +1,6 @@
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -36,11 +37,12 @@ class JourneyViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
         serializer = UserJourneyStatusSerializer(journey_status)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    @action(detail=False, methods=["get"], url_path="status")
+    @action(detail=True, methods=["get"], url_path="status")
     def journey_status(self, request, pk=None):
         user_profile = self.request.user.user_profile
-        services = JourneyService(user_profile, None)
-        journey_status = services.get_current_journey_status()
+        journey = get_object_or_404(Journey, pk=pk)
+        services = JourneyService(user_profile, journey)
+        journey_status = services.get_journey_status()
         serializer = UserJourneyStatusSerializer(journey_status)
         return Response(serializer.data, status.HTTP_200_OK)
 
