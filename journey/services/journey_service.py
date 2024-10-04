@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from django.db import transaction
-from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 
 from journey.models import UserJourneyStatus, JourneyStep
@@ -53,11 +52,12 @@ class JourneyService(JourneyBaseService):
         return journey_status
 
     def get_current_journey_status(self):
-        journey_status = get_object_or_404(
-            UserJourneyStatus.objects.select_related("journey"),
-            user_profile=self.user_profile,
+        user_journey_status = UserJourneyStatus.objects.get(
+            user_profile=self.user_profile, is_completed=False
         )
-        return journey_status
+        if user_journey_status:
+            return user_journey_status
+        raise ValidationError("You have not started any journey")
 
 
 class JourneyStepService(JourneyBaseService):

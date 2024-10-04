@@ -1,7 +1,7 @@
 from django.db import models
-from django.utils import timezone
-from user_management.models import UserProfile
+
 from core.models import ProgressModel, StartEndModel, CompletedModel
+from user_management.models import UserProfile
 
 
 class Journey(models.Model):
@@ -17,8 +17,7 @@ class Journey(models.Model):
         return f"Journey {self.journey_number}: {self.title}"
 
     class Meta:
-        ordering = ['journey_number']
-
+        ordering = ["journey_number"]
 
 
 class JourneyStep(models.Model):
@@ -36,8 +35,8 @@ class JourneyStep(models.Model):
         return self.title
 
     class Meta:
-        ordering = ['step_number']
-        unique_together = ('journey', 'step_number')
+        ordering = ["step_number"]
+        unique_together = ("journey", "step_number")
 
 
 class UserJourneyStepStatus(CompletedModel, StartEndModel):
@@ -63,7 +62,9 @@ class UserJourneyStatus(StartEndModel, CompletedModel):
     user_profile = models.ForeignKey(
         UserProfile, on_delete=models.CASCADE, related_name="journey_statuses"
     )
-    journey = models.ForeignKey(Journey, on_delete=models.CASCADE, related_name='statuses')
+    journey = models.ForeignKey(
+        Journey, on_delete=models.CASCADE, related_name="statuses"
+    )
     current_step = models.ForeignKey(JourneyStep, on_delete=models.CASCADE)
     completed_steps = models.IntegerField(default=0)
     paused = None
@@ -73,4 +74,5 @@ class UserJourneyStatus(StartEndModel, CompletedModel):
         return f"{self.user_profile.name} - {self.journey.title} - {'Completed' if self.is_completed else 'Active'}"
 
     class Meta:
-        unique_together = ('user_profile', 'journey')
+        unique_together = ("user_profile", "journey")
+        ordering = ["journey"]
