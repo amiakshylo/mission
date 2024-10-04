@@ -63,9 +63,11 @@ class JourneyStepViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
         journey = self.kwargs.get("journey_pk")
         user_profile = self.request.user.user_profile
         service = JourneyStepService(user_profile, journey)
-        next_step, is_completed = service.initialize_next_journey_step()
-        serializer = NextStepSerializer(next_step)
+        next_step, is_completed = service.complete_journey_step()
+        NextStepSerializer(next_step)
         if is_completed:
-            return Response(f"There are no more steps in journey {journey}")
+            return Response(
+                {"info": f"You have successfully completed Journey {journey}"}
+            )
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"info": f"Step completed"}, status=status.HTTP_200_OK)

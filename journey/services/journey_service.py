@@ -79,13 +79,14 @@ class JourneyService(JourneyBaseService):
 
 class JourneyStepService(JourneyBaseService):
 
-    def initialize_next_journey_step(self):
+    def complete_journey_step(self):
+
         try:
             progress = UserJourneyStatus.objects.get(
                 user_profile=self.user_profile, journey=self.journey
             )
         except UserJourneyStatus.DoesNotExist:
-            return ValidationError("You need to complete previous journey")
+            raise ValidationError({"error": "You need to start journey first"})
 
         current_step = progress.current_step
 
@@ -94,11 +95,7 @@ class JourneyStepService(JourneyBaseService):
                 journey=self.journey, step_number=current_step.step_number + 1
             ).first()
         else:
-            next_step = (
-                JourneyStep.objects.filter(journey=self.journey)
-                .order_by("step_number")
-                .first()
-            )
+            next_step = JourneyStep.objects.filter(journey=self.journey).first()
 
         if next_step:
             progress.current_step = next_step
@@ -106,8 +103,11 @@ class JourneyStepService(JourneyBaseService):
             progress.save()
             return progress, False
         else:
+            count_of_steps_in_journey = JourneyStep.objects.filter(
+                journey=self.journey
+            ).count()
             progress.is_completed = True
-            progress.completed_steps += 1
+            progress.completed_steps = count_of_steps_in_journey
             progress.completed_at = datetime.now()
             progress.save()
             return progress, True
