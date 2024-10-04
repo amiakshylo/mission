@@ -6,11 +6,10 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from rest_framework.exceptions import ValidationError
 
-from core.choices import (
-    AGE_RANGE_CHOICES,
-    AGE_RANGE_PREFER_NOT_TO_SAY,
-    GENDER_CHOICES,
-    ASSISTANT_MODEL_CHOICES,
+from core.model_choices import (
+    GoalTypeChoices,
+    RoleChoices,
+    UserProfileChoices,
 )
 from core.models import (
     TimeStampedModel,
@@ -64,7 +63,9 @@ class UserProfile(models.Model):
             ),
         ],
     )
-    gender = models.CharField(max_length=20, choices=GENDER_CHOICES, blank=False)
+    gender = models.CharField(
+        max_length=20, choices=UserProfileChoices.GENDER_CHOICES, blank=False
+    )
     custom_gender = models.CharField(
         max_length=50,
         blank=True,
@@ -85,14 +86,14 @@ class UserProfile(models.Model):
     )
     birth_date = models.DateField(null=True, blank=False)
     age_range = models.IntegerField(
-        choices=AGE_RANGE_CHOICES,
-        default=AGE_RANGE_PREFER_NOT_TO_SAY,
+        choices=UserProfileChoices.AGE_RANGE_CHOICES,
+        default=UserProfileChoices.AGE_RANGE_PREFER_NOT_TO_SAY,
     )
     notification_preferences = models.CharField(
         max_length=255, default="Push notifications"
     )
     ai_assistant_model = models.CharField(
-        choices=ASSISTANT_MODEL_CHOICES, max_length=255
+        choices=UserProfileChoices.ASSISTANT_MODEL_CHOICES, max_length=255
     )
     dashboard_customization = models.TextField(blank=True)
 
@@ -177,22 +178,8 @@ class Role(TimeStampedModel):
     A model representing user roles, either predefined or custom.
     """
 
-    PROFESSIONAL = "Professional Roles"
-    PERSONAL = "Personal Roles"
-    SELF_IMPROVEMENT = "Self-Improvement Roles"
-    COMMUNITY_SOCIAL_IMPACT = "Community and Social Impact Roles"
-    WELLNESS_SPIRITUAL = "Wellness and Spiritual Roles"
-
-    ROLE_TYPE_CHOICES = [
-        (PROFESSIONAL, "Professional Roles"),
-        (PERSONAL, "Personal Roles"),
-        (SELF_IMPROVEMENT, "Self-Improvement Roles"),
-        (COMMUNITY_SOCIAL_IMPACT, "Community and Social Impact Roles"),
-        (WELLNESS_SPIRITUAL, "Wellness and Spiritual Roles"),
-    ]
-
     title = models.CharField(max_length=50, unique=True, blank=True)
-    type = models.CharField(max_length=50, choices=ROLE_TYPE_CHOICES)
+    type = models.CharField(max_length=50, choices=RoleChoices.ROLE_TYPE_CHOICES)
     description = models.TextField(blank=True)
     user_profile = models.ManyToManyField(UserProfile, related_name="roles")
     custom_title = models.CharField(
@@ -209,21 +196,14 @@ class UserGoal(TimeStampedModel, CompletedModel, ProgressModel, DueDateModel):
     A model representing goals that users have chosen or created.
     """
 
-    TYPE_LONG_TERM = (
-        "long_term"  # Long-term goals are goals that take a long time to achieve
-    )
-    TYPE_SHORT_TERM = "short_term"  # Short-term goals are goals that can be achieved in a short period of time
-
-    GOAL_TYPE_CHOICES = ((TYPE_SHORT_TERM, "Short-term"), (TYPE_LONG_TERM, "Long-term"))
-
     user_profile = models.ForeignKey(
         UserProfile, on_delete=models.CASCADE, related_name="goals"
     )
     goal = models.ForeignKey(
-        "goal_task_management.Goal", on_delete=models.CASCADE, null=True, blank=True
+        "goal_task_management.Goal", on_delete=models.CASCADE, blank=True
     )
     custom_goal = models.CharField(max_length=255, blank=True)
-    goal_type = models.CharField(choices=GOAL_TYPE_CHOICES)
+    goal_type = models.CharField(choices=GoalTypeChoices.GOAL_TYPE_CHOICES)
     is_custom = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 

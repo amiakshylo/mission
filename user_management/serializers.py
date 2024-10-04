@@ -225,7 +225,7 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
         ]
 
     def validate_birth_date(self, value):
-        if value is not None and value > datetime.date.today():
+        if value and value > datetime.date.today():
             raise serializers.ValidationError("Birth date cannot be in the future.")
         return value
 
