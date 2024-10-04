@@ -7,16 +7,15 @@ from user_management.models import UserProfile
 class OnboardingQuestion(models.Model):
     text = models.TextField()
     life_sphere = models.ForeignKey(
-        "life_sphere.LifeSphere", on_delete=models.CASCADE, related_name="questions"
+        LifeSphere, on_delete=models.CASCADE, related_name="onboarding_questions"
     )
-    is_followup = models.BooleanField(default=False)
-    triggering_options = models.ManyToManyField(
-        "AnswerOption", blank=True, related_name="triggered_questions"
-    )
-    order = models.IntegerField(default=0)
+    order = models.PositiveIntegerField(null=True)
+
+    class Meta:
+        ordering = ["order"]
 
     def __str__(self):
-        return self.text
+        return f"Question {self.order}: {self.text}"
 
 
 class AnswerOption(models.Model):
@@ -25,6 +24,13 @@ class AnswerOption(models.Model):
     )
     answer = models.CharField(max_length=255)
     points = models.IntegerField(default=0)
+    tailored_question = models.ForeignKey(
+        "OnboardingQuestion",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="next_question_options",
+    )
 
     def __str__(self):
         return self.answer
@@ -49,7 +55,6 @@ class OnboardingProgress(models.Model):
     user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
     completed_questions = models.IntegerField(default=0)
     last_updated = models.DateTimeField(auto_now=True)
-
 
     def calculate_remaining_questions(self):
         questions_remain = 13 - self.completed_questions
