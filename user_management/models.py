@@ -99,9 +99,7 @@ class UserProfile(models.Model):
         return
 
     def __str__(self):
-        if self.custom_gender:
-            return self.custom_gender
-        return self.gender
+        return self.user
 
     def is_profile_complete(self):
         required_fields = [
