@@ -11,7 +11,6 @@ router.register("area", views.UserAreaViewSet, basename="user_area")
 router.register("balance", views.UserBalanceViewSet, basename="user_balance")
 
 profile_router = routers.NestedDefaultRouter(router, "profile", lookup="user_profile")
-profile_router.register("image", views.UserProfileImageViewSet, basename="image")
 profile_router.register("role", views.UserRoleViewSet, basename="role")
 
 urlpatterns = [

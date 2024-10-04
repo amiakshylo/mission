@@ -8,9 +8,6 @@ from rest_framework.exceptions import ValidationError
 
 from goal_task_management.models import Goal
 from goal_task_management.serializers import GoalSerializer
-
-from life_sphere.models import Area
-from life_sphere.serializers import AreaSerializer
 from .models import (
     User,
     UserProfile,
@@ -18,7 +15,6 @@ from .models import (
     UserGoal,
     UserArea,
     UserBalance,
-    UserProfileImage,
 )
 
 
@@ -143,7 +139,7 @@ class CreateUserAreaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserArea
-        fields = ['area']
+        fields = ["area"]
 
     def validate(self, data):
         area = data.get("area")
@@ -223,6 +219,7 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
         fields = [
             "name",
             "gender",
+            "profile_image",
             "custom_gender",
             "birth_date",
         ]
@@ -249,22 +246,8 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
         return attrs
 
 
-class UserImageProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfileImage
-        fields = ["id", "profile_image"]
-
-    def create(self, validated_data):
-        user_profile = self.context.get("user_profile_id")
-        user_image = UserProfileImage.objects.create(
-            user_profile_id=user_profile, **validated_data
-        )
-        return user_image
-
-
 class UserProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
-    profile_image = UserImageProfileSerializer()
 
     class Meta:
         model = UserProfile
@@ -273,9 +256,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "user",
             "name",
             "gender",
+            "profile_image",
             "custom_gender",
-            "profile_image"]
-
+            "profile_image",
+        ]
 
 
 class UserBalanceSerializer(serializers.ModelSerializer):

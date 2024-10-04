@@ -1,8 +1,7 @@
-import os.path
 from django.db import transaction
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
-
+from rest_framework.filters import SearchFilter
 from rest_framework.mixins import (
     RetrieveModelMixin,
     ListModelMixin,
@@ -10,13 +9,12 @@ from rest_framework.mixins import (
     CreateModelMixin,
     UpdateModelMixin,
 )
-
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from rest_framework.filters import SearchFilter
+
 from goal_task_management.models import Goal
 from .filters import RoleFilter, UserAreaFilter
-from .models import UserProfile, UserGoal, Role, UserArea, UserBalance, UserProfileImage
+from .models import UserProfile, UserGoal, Role, UserArea, UserBalance
 from .pagination import DefaultPagination
 from .serializers import (
     UserProfileSerializer,
@@ -30,7 +28,6 @@ from .serializers import (
     UserAreaSerializer,
     CreateUserAreaSerializer,
     UserBalanceSerializer,
-    UserImageProfileSerializer,
 )
 
 
@@ -47,50 +44,32 @@ class UserProfileViewSet(
             return EditUserProfileSerializer
         return UserProfileSerializer
 
-class UserProfileImageViewSet(ModelViewSet):
-    serializer_class = UserImageProfileSerializer
-
-    def get_queryset(self):
-        user_profile_pk = self.request.user.user_profile.id
-        return UserProfileImage.objects.filter(user_profile=user_profile_pk)
-
-    def create(self, request, *args, **kwargs):
-        user_profile = self.kwargs.get("user_profile_pk")
-
-        serializer = self.get_serializer(
-            data=request.data, context={"user_profile_id": user_profile}
-        )
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        profile_image = instance.profile_image
-
-        if profile_image:
-            image_path = profile_image.path
-
-            if os.path.isfile(image_path):
-                try:
-                    os.remove(image_path)
-                    instance.delete()
-                    return Response(
-                        "Image deleted successfully", status=status.HTTP_204_NO_CONTENT
-                    )
-                except Exception as e:
-                    return Response(
-                        {"error": str(e)}, status=status.HTTP_400_BAD_REQUEST
-                    )
-            else:
-                return Response(
-                    "Image file does not exist", status=status.HTTP_404_NOT_FOUND
-                )
-
-        return Response(
-            "No image associated with this profile", status=status.HTTP_404_NOT_FOUND
-        )
+    # def destroy(self, request, *args, **kwargs):
+    #     instance = self.get_object()
+    #     profile_image = instance.profile_image
+    #
+    #     if profile_image:
+    #         image_path = profile_image.path
+    #
+    #         if os.path.isfile(image_path):
+    #             try:
+    #                 os.remove(image_path)
+    #                 instance.delete()
+    #                 return Response(
+    #                     "Image deleted successfully", status=status.HTTP_204_NO_CONTENT
+    #                 )
+    #             except Exception as e:
+    #                 return Response(
+    #                     {"error": str(e)}, status=status.HTTP_400_BAD_REQUEST
+    #                 )
+    #         else:
+    #             return Response(
+    #                 "Image file does not exist", status=status.HTTP_404_NOT_FOUND
+    #             )
+    #
+    #     return Response(
+    #         "No image associated with this profile", status=status.HTTP_404_NOT_FOUND
+    #     )
 
 
 class RoleViewSet(ListModelMixin, GenericViewSet):

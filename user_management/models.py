@@ -1,6 +1,7 @@
+from datetime import date
+
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinLengthValidator, RegexValidator
-from datetime import date
 from django.db import models
 from django.db.models import UniqueConstraint
 from rest_framework.exceptions import ValidationError
@@ -76,6 +77,12 @@ class UserProfile(models.Model):
             ),
         ],
     )
+    profile_image = models.ImageField(
+        upload_to="profile_picture/",
+        blank=True,
+        null=False,
+        validators=[validate_profile_image],
+    )
     birth_date = models.DateField(null=True, blank=False)
     age_range = models.IntegerField(
         choices=AGE_RANGE_CHOICES,
@@ -128,20 +135,8 @@ class UserProfile(models.Model):
 
         super(UserProfile, self).save(*args, **kwargs)
 
-
-class UserProfileImage(models.Model):
-    user_profile = models.OneToOneField(
-        UserProfile, on_delete=models.CASCADE, related_name="profile_image"
-    )
-    profile_image = models.ImageField(
-        upload_to="profile_picture/",
-        blank=True,
-        null=False,
-        validators=[validate_profile_image],
-    )
-
     class Meta:
-        unique_together = ["user_profile", "profile_image"]
+        unique_together = ["user", "profile_image"]
 
 
 class UserArea(TimeStampedModel):
@@ -334,6 +329,3 @@ class UserBalance(models.Model):
 
     def __str__(self):
         return f"{self.user_profile} - {self.life_sphere.title}: {self.score}"
-
-
-
