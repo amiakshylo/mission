@@ -33,12 +33,6 @@ class CompletedModel(models.Model):
     class Meta:
         abstract = True
 
-    def update_status_to_complete(self):
-        """Mark the item as complete if it's not already."""
-        if not self.is_completed:
-            self.is_completed = True
-            self.completed_at = timezone.now()
-            self.save(update_fields=["completes", "completed_at"])
 
 
 class ProgressModel(models.Model):
@@ -54,9 +48,6 @@ class ProgressModel(models.Model):
     class Meta:
         abstract = True
 
-    def update_progress(self):
-        """This method updates progress, can be overridden in inheriting classes"""
-        pass  # Base method does nothing or contains base logic
 
 
 class DueDateModel(models.Model):

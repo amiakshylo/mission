@@ -1,9 +1,10 @@
 from datetime import datetime
+
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 
-from journey.models import UserJourneyStatus, JourneyStep, Journey
+from journey.models import UserJourneyStatus, JourneyStep
 
 
 class JourneyBaseService:
@@ -19,65 +20,77 @@ class JourneyService(JourneyBaseService):
         if not self.journey:
             raise ValidationError("Journey not specified.")
 
-        if self.journey.pk - self._finished_journey() > 1:
-            raise ValidationError(
-                f'Cannot start journey {self.journey.journey_number} until previous is uncompleted ')
+        uncompleted_previous_journeys = UserJourneyStatus.objects.filter(
+            user_profile=self.user_profile,
+            is_completed=False,
+            journey__journey_number__lt=self.journey.journey_number,
+        )
 
-        first_step = self.journey.steps.order_by('step_number').first()
+        count_user_journey_statuses = UserJourneyStatus.objects.filter(
+            user_profile=self.user_profile
+        ).count()
+
+        if uncompleted_previous_journeys.exists() and count_user_journey_statuses != 0:
+            raise ValidationError(
+                f"You cannot start Journey {self.journey.journey_number} because you have uncompleted previous "
+                f"journey(s)"
+            )
+
+        first_step = self.journey.steps.first()
         journey_status, created = UserJourneyStatus.objects.get_or_create(
             user_profile=self.user_profile,
             journey=self.journey,
-            current_step=first_step
+            defaults={"current_step": first_step, "is_completed": False},
         )
 
-        if not created:
-            raise ValidationError(f'Journey {self.journey.journey_number} is already started.')
-
-        if self._has_incomplete_journey():
+        if not created and not journey_status.is_completed:
+            pass
+        elif not created and journey_status.is_completed:
             raise ValidationError(
-                'Cannot start new journey until previous is uncompleted.'
+                f"Journey {self.journey.journey_number} has already been completed."
             )
 
         return journey_status
 
-
     def get_current_journey_status(self):
         journey_status = get_object_or_404(
-            UserJourneyStatus.objects.select_related('journey'),
-            user_profile=self.user_profile
+            UserJourneyStatus.objects.select_related("journey"),
+            user_profile=self.user_profile,
         )
         return journey_status
 
 
-    def _has_incomplete_journey(self):
-        return UserJourneyStatus.objects.filter(user_profile=self.user_profile,
-                                                is_completed=False
-                                                ).exists()
+class JourneyStepService(JourneyBaseService):
 
+    def initialize_next_journey_step(self):
+        try:
+            progress = UserJourneyStatus.objects.get(
+                user_profile=self.user_profile, journey=self.journey
+            )
+        except UserJourneyStatus.DoesNotExist:
+            return ValidationError("You need to complete previous journey")
 
-    def _finished_journey(self):
-        return UserJourneyStatus.objects.filter(user_profile=self.user_profile,
-                                                is_completed=True).count()
+        current_step = progress.current_step
 
-    def initialize_next_journey_step(self, journey):
-        progress = UserJourneyStatus.objects.filter(user_profile=self.user_profile)
-        next_step = JourneyStep.objects.filter(journey=journey)
+        if current_step:
+            next_step = JourneyStep.objects.filter(
+                journey=self.journey, step_number=current_step.step_number + 1
+            ).first()
+        else:
+            next_step = (
+                JourneyStep.objects.filter(journey=self.journey)
+                .order_by("step_number")
+                .first()
+            )
+
         if next_step:
             progress.current_step = next_step
             progress.completed_steps += 1
             progress.save()
+            return progress, False
         else:
             progress.is_completed = True
+            progress.completed_steps += 1
             progress.completed_at = datetime.now()
             progress.save()
-        return progress
-
-
-
-
-
-
-
-
-
-
+            return progress, True

@@ -29,7 +29,7 @@ class JourneyStep(models.Model):
     journey = models.ForeignKey(Journey, on_delete=models.CASCADE, related_name="steps")
 
     title = models.CharField(max_length=255)
-    step_number = models.PositiveIntegerField(unique=True)
+    step_number = models.PositiveIntegerField()
     description = models.TextField()
 
     def __str__(self):
@@ -55,7 +55,7 @@ class UserJourneyStepStatus(CompletedModel, StartEndModel):
     ended_at = None
 
 
-class UserJourneyStatus(ProgressModel, StartEndModel, CompletedModel):
+class UserJourneyStatus(StartEndModel, CompletedModel):
     """
     A model representing the status of a user's journey.
     """

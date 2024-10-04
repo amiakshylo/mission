@@ -50,10 +50,8 @@ class UserJourneyStatusSerializer(serializers.ModelSerializer):
             'journey',
             'started_at',
             'is_completed',
-            'progress',
-            'ended_at',
+            'completed_steps',
             'current_step'
-
         ]
 
 
@@ -63,3 +61,14 @@ class UserJourneyStartSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserJourneyStatus
         fields = ['journey', 'started_at']
+
+
+class NextStepSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = UserJourneyStatus
+        fields = ['id']
+
+
+
