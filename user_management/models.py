@@ -37,11 +37,6 @@ class User(AbstractUser):
             self.username = self.email
         super().save(*args, **kwargs)
 
-    def get_full_name_or_email(self):
-        if self.first_name and self.last_name:
-            return f"{self.first_name} {self.last_name}"
-        return self.email
-
 
 class UserProfile(models.Model):
     """
@@ -89,13 +84,6 @@ class UserProfile(models.Model):
         choices=UserProfileChoices.AGE_RANGE_CHOICES,
         default=UserProfileChoices.AGE_RANGE_PREFER_NOT_TO_SAY,
     )
-    notification_preferences = models.CharField(
-        max_length=255, default="Push notifications"
-    )
-    ai_assistant_model = models.CharField(
-        choices=UserProfileChoices.ASSISTANT_MODEL_CHOICES, max_length=255
-    )
-    dashboard_customization = models.TextField(blank=True)
 
     def get_age(self):
         if self.birth_date:
@@ -118,9 +106,7 @@ class UserProfile(models.Model):
     def is_profile_complete(self):
         required_fields = [
             "birth_date",
-            "location",
             "profile_picture",
-            "notification_preferences",
             "user_profile__user_role",
             "user_profile__user_goal",
         ]
@@ -164,9 +150,7 @@ class UserMission(TimeStampedModel):
         UserProfile, on_delete=models.CASCADE, related_name="user_missions"
     )
     mission_statement = models.TextField(blank=True)
-    tailored_by_ai = models.BooleanField(
-        default=False
-    )  # Indicates if the mission was tailored by AI
+    tailored_by_ai = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
