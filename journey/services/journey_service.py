@@ -1,9 +1,10 @@
 from datetime import datetime
 
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 
-from journey.models import UserJourneyStatus, JourneyStep
+from journey.models import UserJourneyStatus, JourneyStep, Journey
 
 
 class JourneyBaseService:
@@ -19,20 +20,27 @@ class JourneyService(JourneyBaseService):
         if not self.journey:
             raise ValidationError("Journey not specified.")
 
-        uncompleted_previous_journeys = UserJourneyStatus.objects.filter(
-            user_profile=self.user_profile,
-            is_completed=False,
-            journey__journey_number__lt=self.journey.journey_number,
+        previous_journeys = Journey.objects.filter(
+            journey_number__lt=self.journey.journey_number
         )
 
-        count_user_journey_statuses = UserJourneyStatus.objects.filter(
-            user_profile=self.user_profile
-        ).count()
+        completed_journey_ids = UserJourneyStatus.objects.filter(
+            user_profile=self.user_profile,
+            is_completed=True,
+            journey__in=previous_journeys,
+        ).values_list("journey_id", flat=True)
 
-        if uncompleted_previous_journeys.exists() and count_user_journey_statuses != 0:
+        uncompleted_previous_journeys = previous_journeys.exclude(
+            id__in=completed_journey_ids
+        )
+
+        if uncompleted_previous_journeys.exists():
+            uncompleted_journey_numbers = uncompleted_previous_journeys.values_list(
+                "journey_number", flat=True
+            )
             raise ValidationError(
                 f"You cannot start Journey {self.journey.journey_number} because you have uncompleted previous "
-                f"journey(s)"
+                f"journey(s): {', '.join(map(str, uncompleted_journey_numbers))}."
             )
 
         first_step = self.journey.steps.first()
@@ -52,8 +60,8 @@ class JourneyService(JourneyBaseService):
         return journey_status
 
     def get_current_journey_status(self):
-        user_journey_status = UserJourneyStatus.objects.get(
-            user_profile=self.user_profile, is_completed=False
+        user_journey_status = get_object_or_404(
+            UserJourneyStatus, user_profile=self.user_profile, is_completed=False
         )
         if user_journey_status:
             return user_journey_status
