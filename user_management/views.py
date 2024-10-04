@@ -44,32 +44,32 @@ class UserProfileViewSet(
             return EditUserProfileSerializer
         return UserProfileSerializer
 
-    # def destroy(self, request, *args, **kwargs):
-    #     instance = self.get_object()
-    #     profile_image = instance.profile_image
-    #
-    #     if profile_image:
-    #         image_path = profile_image.path
-    #
-    #         if os.path.isfile(image_path):
-    #             try:
-    #                 os.remove(image_path)
-    #                 instance.delete()
-    #                 return Response(
-    #                     "Image deleted successfully", status=status.HTTP_204_NO_CONTENT
-    #                 )
-    #             except Exception as e:
-    #                 return Response(
-    #                     {"error": str(e)}, status=status.HTTP_400_BAD_REQUEST
-    #                 )
-    #         else:
-    #             return Response(
-    #                 "Image file does not exist", status=status.HTTP_404_NOT_FOUND
-    #             )
-    #
-    #     return Response(
-    #         "No image associated with this profile", status=status.HTTP_404_NOT_FOUND
-    #     )
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        profile_image = instance.profile_image
+
+        if profile_image:
+            image_path = profile_image.path
+
+            if os.path.isfile(image_path):
+                try:
+                    os.remove(image_path)
+                    instance.delete()
+                    return Response(
+                        "Image deleted successfully", status=status.HTTP_204_NO_CONTENT
+                    )
+                except Exception as e:
+                    return Response(
+                        {"error": str(e)}, status=status.HTTP_400_BAD_REQUEST
+                    )
+            else:
+                return Response(
+                    "Image file does not exist", status=status.HTTP_404_NOT_FOUND
+                )
+
+        return Response(
+            "No image associated with this profile", status=status.HTTP_404_NOT_FOUND
+        )
 
 
 class RoleViewSet(ListModelMixin, GenericViewSet):
