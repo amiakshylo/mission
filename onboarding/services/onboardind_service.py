@@ -1,53 +1,40 @@
 from django.db import transaction
-from django.db.models import F, Sum
-from django.utils.functional import cached_property
+from django.db.models import Sum, F
 
 from life_sphere.models import LifeSphere
-
-from onboarding.models import OnboardingQuestion, UserResponse, OnboardingProgress
+from onboarding.models import OnboardingQuestion, OnboardingProgress, UserResponse, AnswerOption
 from user_management.models import UserBalance
 
 
 class OnboardingService:
     def __init__(self, user_profile):
         self.user_profile = user_profile
+        self.last_response = self.user_profile.responses.select_related('user_answer').first()
         self.answered_question_ids = self.user_profile.responses.values_list('question_id', flat=True)
-        self.last_response = self.user_profile.responses.select_related('user_answer').order_by("-timestamp").first()
 
-    def _get_follow_up_question(self):
-        """
-        Attempts to find a follow-up question triggered by the user's last answer.
-        """
+    def _get_tailored_question(self):
         if self.last_response:
-            follow_up_question = OnboardingQuestion.objects.filter(
-                is_followup=True,
-                triggering_options=self.last_response.user_answer
-            ).exclude(
-                id__in=self.answered_question_ids
-            ).first()
-            return follow_up_question
-        return None
+            user_answer_id = self.last_response.user_answer_id
+            answer_option = AnswerOption.objects.get(id=user_answer_id)
+            tailored_question = answer_option.tailored_question
+            if answer_option.tailored_question:
+                return tailored_question
+            return None
 
     def _get_next_unanswered_question(self):
-        """
-        Retrieves the next unanswered non-follow-up question.
-        """
-        next_question = OnboardingQuestion.objects.filter(
-            is_followup=False
-        ).exclude(
-            id__in=self.answered_question_ids
-        ).order_by('order').first()
+        next_question = (OnboardingQuestion.objects.filter(
+            order__gt=0
+        ).
+                         exclude(
+            id__in=self.answered_question_ids,
+        ).first())
         return next_question
 
-    def next_question(self):
-        """
-        Determines the next question to present to the user.
-        """
+    def get_next_question(self):
         if self.last_response:
-            next_question = self._get_follow_up_question()
+            next_question = self._get_tailored_question()
             if next_question:
                 return next_question
-
         return self._get_next_unanswered_question()
 
     def update_onboarding_progress(self):
@@ -58,82 +45,51 @@ class OnboardingService:
         onboarding_progress.completed_questions += 1
         onboarding_progress.save()
 
-
-
-
-    @cached_property
-    def initial_user_balance(self):
+    def save_initial_user_balance(self):
         """
-        Calculates and caches the total points per life sphere.
+        Calculates the total points per life sphere and saves the initial user balance.
         """
-        return self.calculate_total_points_per_life_sphere()
-
-    def calculate_total_points_per_life_sphere(self):
-        """
-        Aggregates total points per life sphere for the user's responses.
-        """
+        # Aggregate total points per life sphere for the user's responses
         life_sphere_points = (
-            UserResponse.objects.filter(user_profile=self.user_profile)
-            .values(life_sphere_id=F('question__life_sphere__id'), life_sphere_title=F('question__life_sphere__title'))
+            UserResponse.objects
+            .filter(user_profile=self.user_profile)
+            .values(
+                life_sphere_id=F('question__life_sphere__id'),
+                life_sphere_title=F('question__life_sphere__title')
+            )
             .annotate(total_points=Sum('user_answer__points'))
         )
 
-        life_sphere_points_dict = {
-            item['life_sphere_title']: item['total_points'] or 0
+        if not life_sphere_points:
+            return
+
+        life_sphere_scores = {
+            item['life_sphere_id']: item['total_points'] or 0
             for item in life_sphere_points
         }
 
-        return life_sphere_points_dict
+        life_spheres = LifeSphere.objects.filter(id__in=life_sphere_scores.keys())
+        life_sphere_map = {ls.id: ls for ls in life_spheres}
 
-    def save_initial_user_balance(self):
-        """
-        Saves the initial user balance using the calculated life sphere points.
-        """
-        initial_user_balance = self.initial_user_balance
-        life_sphere_titles = initial_user_balance.keys()
-
-
-        life_spheres = LifeSphere.objects.filter(title__in=life_sphere_titles)
-        life_sphere_map = {ls.title: ls for ls in life_spheres}
-
-
-        user_balances_to_create = []
-        user_balances_to_update = []
-
-        existing_balances = UserBalance.objects.filter(
-            user_profile=self.user_profile,
-            life_sphere__in=life_spheres
-        )
-        existing_balance_map = {ub.life_sphere_id: ub for ub in existing_balances}
-
-
-        for life_sphere_title, score in initial_user_balance.items():
-            life_sphere = life_sphere_map.get(life_sphere_title)
-            if life_sphere:
-                existing_balance = existing_balance_map.get(life_sphere.id)
-                if existing_balance:
-                    existing_balance.score = score
-                    user_balances_to_update.append(existing_balance)
-                else:
-                    user_balances_to_create.append(UserBalance(
-                        user_profile=self.user_profile,
-                        life_sphere=life_sphere,
-                        score=score
-                    ))
+        user_balances = [
+            UserBalance(
+                user_profile=self.user_profile,
+                life_sphere=life_sphere_map[ls_id],
+                score=score
+            )
+            for ls_id, score in life_sphere_scores.items()
+            if ls_id in life_sphere_map
+        ]
 
         with transaction.atomic():
-            if user_balances_to_create:
-                UserBalance.objects.bulk_create(user_balances_to_create)
-            if user_balances_to_update:
-                UserBalance.objects.bulk_update(user_balances_to_update, ['score'])
+            UserBalance.objects.filter(
+                user_profile=self.user_profile,
+                life_sphere__in=life_spheres
+            ).delete()
+            UserBalance.objects.bulk_create(user_balances)
 
     def complete_onboarding(self):
         """
         Handles actions to perform when the user completes the onboarding questionnaire.
         """
         self.save_initial_user_balance()
-
-
-
-
-

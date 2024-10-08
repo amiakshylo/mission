@@ -40,15 +40,16 @@ class UserResponse(models.Model):
     user_profile = models.ForeignKey(
         UserProfile, on_delete=models.CASCADE, related_name="responses"
     )
-    question = models.ForeignKey(OnboardingQuestion, on_delete=models.CASCADE)
-    user_answer = models.ForeignKey(AnswerOption, on_delete=models.CASCADE, null=True)
+    question = models.OneToOneField(OnboardingQuestion, on_delete=models.CASCADE, unique=True)
+    user_answer = models.OneToOneField(AnswerOption, on_delete=models.CASCADE, unique=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user_profile} - {self.question} - {self.user_answer}"
 
     class Meta:
-        unique_together = ("user_profile", "question")
+        unique_together = [("user_profile", "question")]
+        ordering = ['-timestamp']
 
 
 class OnboardingProgress(models.Model):
@@ -57,5 +58,5 @@ class OnboardingProgress(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
 
     def calculate_remaining_questions(self):
-        questions_remain = 13 - self.completed_questions
+        questions_remain = 11 - self.completed_questions
         return questions_remain

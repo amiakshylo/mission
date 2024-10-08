@@ -2,8 +2,6 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.mixins import CreateModelMixin
-
-
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -34,13 +32,13 @@ class OnboardingViewSet(CreateModelMixin, GenericViewSet):
     def next_question(self, request):
         user_profile = request.user.user_profile
         service = OnboardingService(user_profile)
-        next_question = service.next_question()
+        next_question = service.get_next_question()
 
         if not next_question:
             service.complete_onboarding()
             return Response(
                 {
-                    "message": f"All questions are answered. Current life sphere balance: {service.initial_user_balance}"
+                    "message": f"All questions have been answered"
                 },
                 status=status.HTTP_200_OK,
             )
