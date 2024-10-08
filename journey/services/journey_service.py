@@ -40,7 +40,7 @@ class JourneyService(JourneyBaseService):
                 "journey_number", flat=True
             )
             raise ValidationError(
-                f"You cannot start Journey {self.journey.journey_number} because you have uncompleted previous "
+                f"You cannot start Journey {self.journey.journey_number} because you have uncompleted "
                 f"journey(s): {', '.join(map(str, uncompleted_journey_numbers))}."
             )
 
@@ -101,7 +101,7 @@ class JourneyStepService(JourneyBaseService):
             progress.current_step = next_step
             progress.completed_steps += 1
             progress.save()
-            return progress, False
+            return current_step, False
         else:
             count_of_steps_in_journey = JourneyStep.objects.filter(
                 journey=self.journey
@@ -110,4 +110,4 @@ class JourneyStepService(JourneyBaseService):
             progress.completed_steps = count_of_steps_in_journey
             progress.completed_at = datetime.now()
             progress.save()
-            return progress, True
+            return current_step, True

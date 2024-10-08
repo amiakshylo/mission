@@ -13,8 +13,7 @@ from journey.serializers import (
     JourneySerializer,
     JourneyStepSerializer,
     UserJourneyStatusSerializer,
-    NextStepSerializer,
-)
+    NextStepSerializer, StartJourneySerializer, )
 from journey.services.journey_service import JourneyService, JourneyStepService
 
 
@@ -23,19 +22,16 @@ class JourneyViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
 
     def get_serializer_class(self):
         if self.request.method == "POST":
-            return UserJourneyStatusSerializer
+            return StartJourneySerializer
         return JourneySerializer
 
     @action(detail=True, url_path="start", methods=["post"])
     def start_journey(self, request, pk=None):
         user_profile = request.user.user_profile
         journey = self.get_object()
-
         services = JourneyService(user_profile, journey)
-        journey_status = services.start_journey()
-
-        serializer = UserJourneyStatusSerializer(journey_status)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        services.start_journey()
+        return Response(f'{journey} has been started', status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=["get"], url_path="status")
     def journey_status(self, request, pk=None):
@@ -67,7 +63,8 @@ class JourneyStepViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
         NextStepSerializer(next_step)
         if is_completed:
             return Response(
-                {"info": f"You have successfully completed Journey {journey}"}
+                {"info": f"You have successfully completed last step: : '{next_step}' in journey {journey}"}
             )
 
-        return Response({"info": f"Step completed"}, status=status.HTTP_200_OK)
+        return Response({"info": f"Step '{next_step.step_number}', '{next_step}' completed"},
+                        status=status.HTTP_200_OK)

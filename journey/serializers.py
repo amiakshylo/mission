@@ -28,9 +28,9 @@ class MinimalJourneyStepSerializer(serializers.ModelSerializer):
         fields = ['step_number', 'title']
 
 
-class StartJourneyStepSerializer(serializers.ModelSerializer):
+class StartJourneySerializer(serializers.ModelSerializer):
     class Meta:
-        model = JourneyStep
+        model = Journey
         fields = ["id"]
 
 
@@ -69,6 +69,3 @@ class NextStepSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserJourneyStatus
         fields = ['id']
-
-
-
