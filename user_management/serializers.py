@@ -6,6 +6,7 @@ from djoser.serializers import UserSerializer as BaseUserSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from core.model_choices import UserProfileChoices
 from goal_task_management.models import Goal
 from goal_task_management.serializers import GoalSerializer
 from .models import (
@@ -136,7 +137,6 @@ class UserAreaSerializer(serializers.ModelSerializer):
 
 
 class CreateUserAreaSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserArea
         fields = ["area"]
@@ -144,7 +144,7 @@ class CreateUserAreaSerializer(serializers.ModelSerializer):
     def validate(self, data):
         area = data.get("area")
         if UserArea.objects.filter(
-            user_profile=self.context.get("user_profile"), area=area
+                user_profile=self.context.get("user_profile"), area=area
         ).exists():
             raise serializers.ValidationError(
                 "This area of improvement is already set up by you,"
@@ -204,7 +204,7 @@ class CreateUserGoalSerializer(serializers.ModelSerializer):
         if data.get("custom_goal") and not data.get("category"):
             raise serializers.ValidationError("Select a category for your custom goal")
         if UserGoal.objects.filter(
-            user_profile=self.context.get("user_profile"), goal=data.get("goal")
+                user_profile=self.context.get("user_profile"), goal=data.get("goal")
         ).exists():
             raise serializers.ValidationError(
                 "This goal is already set up by you, please choose another goal or create"
@@ -214,6 +214,8 @@ class CreateUserGoalSerializer(serializers.ModelSerializer):
 
 
 class EditUserProfileSerializer(serializers.ModelSerializer):
+    age_range = serializers.ChoiceField(choices=UserProfileChoices.AGE_RANGE_CHOICES, required=True)
+
     class Meta:
         model = UserProfile
         fields = [
@@ -221,6 +223,7 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
             "gender",
             "profile_image",
             "custom_gender",
+            "age_range",
             "birth_date",
         ]
 
@@ -258,7 +261,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "gender",
             "profile_image",
             "custom_gender",
-            "profile_image",
+            "age_range",
         ]
 
 

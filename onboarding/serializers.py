@@ -1,5 +1,4 @@
-from rest_framework import serializers, status
-from rest_framework.response import Response
+from rest_framework import serializers
 
 from onboarding.models import OnboardingQuestion, AnswerOption, UserResponse, OnboardingProgress
 
@@ -58,7 +57,7 @@ class OnboardingProgressSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OnboardingProgress
-        fields = ['completed_questions', 'questions_remain']
+        fields = ['completed_questions', 'questions_remain', 'is_completed']
 
     def get_questions_remain(self, obj: OnboardingProgress):
         return obj.calculate_remaining_questions()

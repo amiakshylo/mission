@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import UniqueConstraint
 
 from life_sphere.models import LifeSphere
 from user_management.models import UserProfile
@@ -40,23 +41,37 @@ class UserResponse(models.Model):
     user_profile = models.ForeignKey(
         UserProfile, on_delete=models.CASCADE, related_name="responses"
     )
-    question = models.OneToOneField(OnboardingQuestion, on_delete=models.CASCADE, unique=True)
-    user_answer = models.OneToOneField(AnswerOption, on_delete=models.CASCADE, unique=True)
+    question = models.ForeignKey(
+        OnboardingQuestion, on_delete=models.PROTECT, related_name="user_responses"
+    )
+    user_answer = models.ForeignKey(
+        AnswerOption, on_delete=models.PROTECT, related_name="user_responses"
+    )
     timestamp = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user_profile} - {self.question} - {self.user_answer}"
+        return f"Response by {self.user_profile.user.username} to '{self.question.text}': {self.user_answer}"
 
     class Meta:
-        unique_together = [("user_profile", "question")]
+        constraints = [
+            UniqueConstraint(fields=['user_profile', 'question'], name='unique_user_question')
+        ]
         ordering = ['-timestamp']
 
 
 class OnboardingProgress(models.Model):
     user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
     completed_questions = models.IntegerField(default=0)
+    is_completed = models.BooleanField(default=False)
     last_updated = models.DateTimeField(auto_now=True)
 
     def calculate_remaining_questions(self):
-        questions_remain = 11 - self.completed_questions
-        return questions_remain
+        total_questions = OnboardingQuestion.objects.count()
+        questions_remain = total_questions - self.completed_questions
+        return max(questions_remain, 0)
+
+    def save(self, *args, **kwargs):
+        total_questions = OnboardingQuestion.objects.count()
+        self.is_completed = self.completed_questions >= total_questions
+        super().save(*args, **kwargs)

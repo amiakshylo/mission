@@ -32,44 +32,14 @@ from .serializers import (
 
 
 class UserProfileViewSet(
-    ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet
+    RetrieveModelMixin, UpdateModelMixin, GenericViewSet
 ):
-
-    def get_queryset(self):
-        user_id = self.request.user
-        return UserProfile.objects.filter(user=user_id).select_related("user")
+    queryset = UserProfile.objects.select_related('user').all()
 
     def get_serializer_class(self):
         if self.request.method == "PUT":
             return EditUserProfileSerializer
         return UserProfileSerializer
-
-    # def destroy(self, request, *args, **kwargs):
-    #     instance = self.get_object()
-    #     profile_image = instance.profile_image
-    #
-    #     if profile_image:
-    #         image_path = profile_image.path
-    #
-    #         if os.path.isfile(image_path):
-    #             try:
-    #                 os.remove(image_path)
-    #                 instance.delete()
-    #                 return Response(
-    #                     "Image deleted successfully", status=status.HTTP_204_NO_CONTENT
-    #                 )
-    #             except Exception as e:
-    #                 return Response(
-    #                     {"error": str(e)}, status=status.HTTP_400_BAD_REQUEST
-    #                 )
-    #         else:
-    #             return Response(
-    #                 "Image file does not exist", status=status.HTTP_404_NOT_FOUND
-    #             )
-    #
-    #     return Response(
-    #         "No image associated with this profile", status=status.HTTP_404_NOT_FOUND
-    #     )
 
 
 class RoleViewSet(ListModelMixin, GenericViewSet):
@@ -193,7 +163,10 @@ class UserAreaViewSet(ModelViewSet):
 
 
 class UserBalanceViewSet(ListModelMixin, GenericViewSet):
-    queryset = UserBalance.objects.select_related("user_profile").prefetch_related(
-        "life_sphere"
-    )
     serializer_class = UserBalanceSerializer
+
+    def get_queryset(self):
+        user_profile = self.request.user.user_profile
+        return UserBalance.objects.filter(user_profile=user_profile).select_related("user_profile").prefetch_related(
+            "life_sphere"
+        )

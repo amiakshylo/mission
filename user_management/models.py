@@ -48,7 +48,7 @@ class UserProfile(models.Model):
     )
     name = models.CharField(
         max_length=50,
-        blank=False,
+        blank=True,
         validators=[
             MinLengthValidator(2),
             RegexValidator(
@@ -59,7 +59,8 @@ class UserProfile(models.Model):
         ],
     )
     gender = models.CharField(
-        max_length=20, choices=UserProfileChoices.GENDER_CHOICES, blank=False
+        max_length=20,
+        choices=UserProfileChoices.GENDER_CHOICES,
     )
     custom_gender = models.CharField(
         max_length=50,
@@ -80,26 +81,23 @@ class UserProfile(models.Model):
         validators=[validate_profile_image],
     )
     birth_date = models.DateField(null=True, blank=False)
-    age_range = models.IntegerField(
-        choices=UserProfileChoices.AGE_RANGE_CHOICES,
-        default=UserProfileChoices.AGE_RANGE_PREFER_NOT_TO_SAY,
-    )
+    age_range = models.IntegerField(null=True)
 
     def get_age(self):
         if self.birth_date:
             today = date.today()
             return (
-                today.year
-                - self.birth_date.year
-                - (
-                    (today.month, today.day)
-                    < (self.birth_date.month, self.birth_date.day)
-                )
+                    today.year
+                    - self.birth_date.year
+                    - (
+                            (today.month, today.day)
+                            < (self.birth_date.month, self.birth_date.day)
+                    )
             )
         return
 
     def __str__(self):
-        return self.user
+        return self.user, self.age_range
 
     def is_profile_complete(self):
         required_fields = [
