@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from onboarding.models import OnboardingQuestion, AnswerOption, UserResponse, OnboardingProgress
+from onboarding.models import OnboardingQuestion, AnswerOption, UserResponse
 
 
 class AnswerOptionSerializer(serializers.ModelSerializer):
@@ -50,14 +50,3 @@ class UserResponseSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data["user_profile"] = self.context["user_profile"]
         return UserResponse.objects.create(**validated_data)
-
-
-class OnboardingProgressSerializer(serializers.ModelSerializer):
-    questions_remain = serializers.SerializerMethodField()
-
-    class Meta:
-        model = OnboardingProgress
-        fields = ['completed_questions', 'questions_remain', 'is_completed']
-
-    def get_questions_remain(self, obj: OnboardingProgress):
-        return obj.calculate_remaining_questions()

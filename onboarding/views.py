@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.mixins import CreateModelMixin
@@ -6,11 +5,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from onboarding.models import UserResponse, OnboardingProgress
+from onboarding.models import UserResponse
 from onboarding.serializers import (
     UserResponseSerializer,
     QuestionSerializer,
-    OnboardingProgressSerializer,
+
 )
 from .services.onboardind_service import OnboardingService
 
@@ -50,12 +49,3 @@ class OnboardingViewSet(CreateModelMixin, GenericViewSet):
     def get_serializer_context(self):
         user_profile = self.request.user.user_profile
         return {"user_profile": user_profile}
-
-    @action(detail=False, methods=["get"], url_path="progress")
-    def onboarding_progress(self, request):
-        user_profile = self.request.user.user_profile
-        onboarding_progress = get_object_or_404(
-            OnboardingProgress, user_profile=user_profile
-        )
-        serializer = OnboardingProgressSerializer(onboarding_progress)
-        return Response(serializer.data)

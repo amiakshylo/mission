@@ -58,20 +58,3 @@ class UserResponse(models.Model):
             UniqueConstraint(fields=['user_profile', 'question'], name='unique_user_question')
         ]
         ordering = ['-timestamp']
-
-
-class OnboardingProgress(models.Model):
-    user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
-    completed_questions = models.IntegerField(default=0)
-    is_completed = models.BooleanField(default=False)
-    last_updated = models.DateTimeField(auto_now=True)
-
-    def calculate_remaining_questions(self):
-        total_questions = OnboardingQuestion.objects.count()
-        questions_remain = total_questions - self.completed_questions
-        return max(questions_remain, 0)
-
-    def save(self, *args, **kwargs):
-        total_questions = OnboardingQuestion.objects.count()
-        self.is_completed = self.completed_questions >= total_questions
-        super().save(*args, **kwargs)
