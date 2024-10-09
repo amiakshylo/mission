@@ -4,9 +4,9 @@ from principle_management.models import RoleModel, Principle
 
 
 class PrincipleSerializer(ModelSerializer):
-    class Meya:
+    class Meta:
         model = Principle
-        fields = ["title", "description"]
+        fields = ['id', "title", "description"]
 
 
 class RoleModelSerializer(ModelSerializer):

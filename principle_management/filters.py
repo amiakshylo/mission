@@ -24,14 +24,14 @@ class TrigramSimilaritySearchFilter(SearchFilter):
                 queryset = queryset.annotate(
                     **{f'{field_name}_agg': StringAgg(field, delimiter=' ', output_field=CharField())}
                 )
-                similarity_annotations[f'similarity_{field_name}'] = TrigramSimilarity(f'{field_name}_agg', search_term)
+                similarity_annotations[f'similarity_{field_name}'] = TrigramSimilarity(f'{field_name}_agg',
+                                                                                       search_term)
             else:
                 similarity_annotations[f'similarity_{idx}'] = TrigramSimilarity(field, search_term)
 
         queryset = queryset.annotate(**similarity_annotations)
         similarity_fields = list(similarity_annotations.keys())
 
-        # Handle cases where there's only one similarity field
         if len(similarity_fields) == 1:
             similarity_score = list(similarity_annotations.values())[0]
             queryset = queryset.annotate(similarity=similarity_score)
