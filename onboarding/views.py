@@ -19,14 +19,6 @@ class OnboardingViewSet(CreateModelMixin, GenericViewSet):
     serializer_class = UserResponseSerializer
     permission_classes = [IsAuthenticated]
 
-    def create(self, request, *args, **kwargs):
-        response = super().create(request, *args, **kwargs)
-        if response.status_code == status.HTTP_201_CREATED:
-            user_profile = request.user.user_profile
-            service = OnboardingService(user_profile)
-            service.update_onboarding_progress()
-        return response
-
     @action(detail=False, methods=["get"], url_path="next-question")
     def next_question(self, request):
         user_profile = request.user.user_profile

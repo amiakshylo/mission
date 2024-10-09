@@ -2,7 +2,7 @@ from django.db import transaction
 from django.db.models import Sum, F
 
 from life_sphere.models import LifeSphere
-from onboarding.models import OnboardingQuestion, OnboardingProgress, UserResponse, AnswerOption
+from onboarding.models import OnboardingQuestion, UserResponse, AnswerOption
 from user_management.models import UserBalance
 
 
@@ -36,14 +36,6 @@ class OnboardingService:
             if next_question:
                 return next_question
         return self._get_next_unanswered_question()
-
-    def update_onboarding_progress(self):
-        onboarding_progress, created = OnboardingProgress.objects.get_or_create(
-            user_profile=self.user_profile,
-            defaults={'completed_questions': 0}
-        )
-        onboarding_progress.completed_questions += 1
-        onboarding_progress.save()
 
     def save_initial_user_balance(self):
         """
