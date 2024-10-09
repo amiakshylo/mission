@@ -64,3 +64,14 @@ class RoleChoices:
         (COMMUNITY_SOCIAL_IMPACT, "Community and Social Impact Roles"),
         (WELLNESS_SPIRITUAL, "Wellness and Spiritual Roles"),
     ]
+
+
+class GenderChoices:
+    MAIL = "Mail"
+    FEMAIL = "Femail"
+
+    GENDER_TYPE_CHOICES = [
+        (MAIL, "Mail"),
+        (FEMAIL, "Femail")
+
+    ]
