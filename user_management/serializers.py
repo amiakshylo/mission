@@ -1,6 +1,7 @@
 import datetime
 
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer
 from djoser.serializers import UserSerializer as BaseUserSerializer
 from rest_framework import serializers
@@ -9,14 +10,14 @@ from rest_framework.exceptions import ValidationError
 from core.model_choices import UserProfileChoices
 from goal_task_management.models import Goal
 from goal_task_management.serializers import GoalSerializer
+from principle_management.models import Principle
 from .models import (
     User,
     UserProfile,
     Role,
     UserGoal,
     UserArea,
-    UserBalance,
-)
+    UserBalance, UserPrinciple, )
 
 
 class UserCreateSerializer(BaseUserCreateSerializer):
@@ -271,3 +272,43 @@ class UserBalanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserBalance
         fields = ["life_sphere", "score"]
+
+
+class PrincipleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Principle
+        fields = ['title', 'description']
+
+
+class CreateUserPrincipleSerializer(serializers.ModelSerializer):
+    principle_id = serializers.IntegerField(write_only=True)
+
+    class Meta:
+        model = UserPrinciple
+        fields = ["principle_id"]
+
+    def validate(self, attrs):
+        principle_id = attrs.get('principle_id')
+        user_profile = self.context.get("user_profile")
+        principle = get_object_or_404(Principle, id=principle_id)
+
+        if UserPrinciple.objects.filter(user_profile=user_profile, principle=principle).exists():
+            raise serializers.ValidationError({"error": "You have already adopted this principle."})
+        return attrs
+
+    def create(self, validated_data):
+        principle_id = validated_data.pop('principle_id')
+        user_profile_id = self.context.get('user_profile')
+        principle = get_object_or_404(Principle, id=principle_id)
+        instance = UserPrinciple.objects.create(user_profile=user_profile_id,
+                                                principle=principle,
+                                                **validated_data)
+        return instance
+
+
+class UserPrincipleSerializer(serializers.ModelSerializer):
+    principle = PrincipleSerializer()
+
+    class Meta:
+        model = UserPrinciple
+        fields = ['id', 'principle']

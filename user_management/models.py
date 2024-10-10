@@ -246,13 +246,11 @@ class UserPrinciple(TimeStampedModel):
         UserProfile, on_delete=models.CASCADE, related_name="principles"
     )
     principle = models.ForeignKey(
-        Principle, on_delete=models.CASCADE, null=True, blank=True
+        Principle, on_delete=models.DO_NOTHING, blank=True
     )
-    is_custom = models.BooleanField(default=False)
 
     def __str__(self):
-        user_email = self.user_profile.user.email if self.user_profile else "No User"
-        return f"{self.principle.title} ({user_email})"
+        return self.principle
 
     class Meta:
         constraints = [
