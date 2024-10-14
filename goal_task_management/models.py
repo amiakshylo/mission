@@ -1,12 +1,11 @@
 from django.conf import settings
 from django.db import models
 
-
 from core.models import TimeStampedModel, CompletedModel, PriorityModel
 from user_management.models import UserProfile, Role
 
 
-class Goal(models.Model):
+class Goal(TimeStampedModel):
     TYPE_LONG_TERM = (
         "long_term"  # Long-term goals are goals that take a long time to achieve
     )

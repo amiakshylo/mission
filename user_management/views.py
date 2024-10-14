@@ -14,7 +14,7 @@ from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
 from goal_task_management.models import Goal
 from .filters import RoleFilter, UserAreaFilter
-from .models import UserProfile, UserGoal, Role, UserArea, UserBalance
+from .models import UserGoal, Role, UserArea, UserBalance, UserProfile
 from .pagination import DefaultPagination
 from .serializers import (
     UserProfileSerializer,
@@ -31,10 +31,12 @@ from .serializers import (
 )
 
 
-class UserProfileViewSet(
-    RetrieveModelMixin, UpdateModelMixin, GenericViewSet
-):
-    queryset = UserProfile.objects.select_related('user').all()
+class UserProfileViewSet(ListModelMixin,
+                         UpdateModelMixin, GenericViewSet
+                         ):
+    def get_queryset(self):
+        user_profile = self.request.user.user_profile.id
+        return UserProfile.objects.filter(id=user_profile).select_related('user')
 
     def get_serializer_class(self):
         if self.request.method == "PUT":
