@@ -70,9 +70,8 @@ class UserRoleViewSet(
         return UserRoleSerializer
 
     def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context["user_profile"] = self.request.user.user_profile
-        return context
+        user_profile = self.request.user.user_profile
+        return {"user_profile": user_profile}
 
     def destroy(self, request, *args, **kwargs):
         user_profile = self.request.user.user_profile
@@ -158,7 +157,6 @@ class UserAreaViewSet(ModelViewSet):
 
     def get_serializer_context(self):
         user_profile = self.request.user.user_profile
-
         return {"user_profile": user_profile}
 
 
