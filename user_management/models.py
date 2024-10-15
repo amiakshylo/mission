@@ -243,39 +243,21 @@ class UserPrinciple(TimeStampedModel):
     """
 
     user_profile = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, related_name="user_principles"
+        UserProfile, on_delete=models.CASCADE, related_name="principles"
     )
     principle = models.ForeignKey(
-        Principle, on_delete=models.CASCADE, null=True, blank=True
+        Principle, on_delete=models.DO_NOTHING, blank=True
     )
-    custom_principle = models.CharField(max_length=255, blank=True)
-    is_custom = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        user_email = self.user_profile.user.email if self.user_profile else "No User"
-        if self.principle:
-            return f"{self.principle.title} ({user_email})"
-        return f"{self.custom_principle} ({user_email})"
+        return self.principle
 
     class Meta:
         constraints = [
             UniqueConstraint(
                 fields=["user_profile", "principle"], name="unique_user_principle"
-            ),
-            UniqueConstraint(
-                fields=["user_profile", "custom_principle"],
-                name="unique_user_custom_principle",
-            ),
-        ]
-
-    def clean(self):
-        if not self.principle and not self.custom_principle:
-            raise ValidationError("Either principle or custom_principle must be set.")
-        if self.principle and self.custom_principle:
-            raise ValidationError(
-                "Both principle and custom_principle cannot be set at the same time."
             )
+        ]
 
 
 class UserBalance(models.Model):

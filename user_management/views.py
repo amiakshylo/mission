@@ -14,7 +14,7 @@ from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
 from goal_task_management.models import Goal
 from .filters import RoleFilter, UserAreaFilter
-from .models import UserGoal, Role, UserArea, UserBalance, UserProfile
+from .models import UserProfile, UserGoal, Role, UserArea, UserBalance, UserPrinciple
 from .pagination import DefaultPagination
 from .serializers import (
     UserProfileSerializer,
@@ -27,7 +27,7 @@ from .serializers import (
     RoleSerializer,
     UserAreaSerializer,
     CreateUserAreaSerializer,
-    UserBalanceSerializer,
+    UserBalanceSerializer, CreateUserPrincipleSerializer, UserPrincipleSerializer,
 )
 
 
@@ -169,4 +169,32 @@ class UserBalanceViewSet(ListModelMixin, GenericViewSet):
         user_profile = self.request.user.user_profile
         return UserBalance.objects.filter(user_profile=user_profile).select_related("user_profile").prefetch_related(
             "life_sphere"
+        )
+
+
+class UserPrincipleViewSet(ListModelMixin, RetrieveModelMixin, CreateModelMixin, DestroyModelMixin, GenericViewSet):
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return CreateUserPrincipleSerializer
+        return UserPrincipleSerializer
+
+    def get_queryset(self):
+        user_profile = self.request.user.user_profile
+        return UserPrinciple.objects.filter(user_profile=user_profile).prefetch_related('principle')
+
+    def get_serializer_context(self):
+        user_profile = self.request.user.user_profile
+        return {"user_profile": user_profile}
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        instance = serializer.save()
+        response_serializer = self.get_serializer(instance)
+
+        return Response(
+            {
+                "message": f"You successfully adopted principle: {instance.principle.title}",
+            },
+            status=status.HTTP_201_CREATED
         )
