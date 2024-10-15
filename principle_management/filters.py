@@ -41,3 +41,7 @@ class TrigramSimilaritySearchFilter(SearchFilter):
         queryset = queryset.filter(similarity__gt=0.2).order_by('-similarity')
 
         return queryset.distinct()
+
+
+def test(self):
+    pass
