@@ -31,10 +31,12 @@ from .serializers import (
 )
 
 
-class UserProfileViewSet(
-    RetrieveModelMixin, UpdateModelMixin, GenericViewSet
-):
-    queryset = UserProfile.objects.select_related('user').all()
+class UserProfileViewSet(ListModelMixin,
+                         UpdateModelMixin, GenericViewSet
+                         ):
+    def get_queryset(self):
+        user_profile = self.request.user.user_profile.id
+        return UserProfile.objects.filter(id=user_profile).select_related('user')
 
     def get_serializer_class(self):
         if self.request.method == "PUT":
@@ -70,9 +72,8 @@ class UserRoleViewSet(
         return UserRoleSerializer
 
     def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context["user_profile"] = self.request.user.user_profile
-        return context
+        user_profile = self.request.user.user_profile
+        return {"user_profile": user_profile}
 
     def destroy(self, request, *args, **kwargs):
         user_profile = self.request.user.user_profile
@@ -158,7 +159,6 @@ class UserAreaViewSet(ModelViewSet):
 
     def get_serializer_context(self):
         user_profile = self.request.user.user_profile
-
         return {"user_profile": user_profile}
 
 

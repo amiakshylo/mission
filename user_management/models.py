@@ -97,7 +97,7 @@ class UserProfile(models.Model):
         return
 
     def __str__(self):
-        return self.user, self.age_range
+        return self.user
 
     def is_profile_complete(self):
         required_fields = [
