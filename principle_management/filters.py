@@ -6,12 +6,12 @@ from rest_framework.filters import SearchFilter
 
 
 class TrigramSimilaritySearchFilter(SearchFilter):
-    search_param = 'search'  # Use 'q' if you prefer
+    search_param = 'search'
 
     def filter_queryset(self, request, queryset, view):
         search_fields = getattr(view, 'search_fields', [])
         search_terms = self.get_search_terms(request)
-        search_term = ' '.join(search_terms)  # Combine terms into a single string
+        search_term = ' '.join(search_terms)
 
         if not search_fields or not search_term:
             return queryset
