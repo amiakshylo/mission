@@ -25,11 +25,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 4: Build and push the Docker image
-      - name: Build and push Docker image
+      # Step 4: Build and push the Docker image for multiple platforms
+      - name: Build and push multi-platform Docker image
         uses: docker/build-push-action@v3
         with:
           context: .
+          platforms: linux/amd64,linux/arm64  # Specify multiple platforms
           push: true
           tags: |
             andrewocean/mission_app:web
@@ -37,11 +38,11 @@ jobs:
 
       # Step 5: Send notification to Telegram
       - name: Notify via Telegram
-        if: success()
+        if: success()  # Only send the message if the build and push succeed
         run: |
           curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
           -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-          -d text="Automaticaly message for dev and testers 🚀:  Docker images for 'andrewocean/mission_app' have been updated successfully! Tags: 'web' and 'postgres'. Please, pull new images from Docker hub."
+          -d text="🚀 Automaticaly message for testers: Docker images for 'andrewocean/mission_app' have been updated successfully! Tags: 'web' and 'postgres'. Please, pull new images from Docker hub."
 
       # Step 6 (Optional): Clean up Docker resources
       - name: Clean up Docker images
