@@ -1,7 +1,6 @@
 import torch
 from rest_framework import status
 from rest_framework.mixins import CreateModelMixin
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
@@ -23,7 +22,7 @@ class GoalSuggestionsViewset(CreateModelMixin, GenericViewSet):
     """
     Viewset for goal suggestions.
     """
-    permission_classes = [IsAuthenticated]
+
     serializer_class = GoalSuggestionInputSerializer
     queryset = Goal.objects.all()
 
