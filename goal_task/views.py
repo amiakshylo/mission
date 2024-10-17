@@ -4,18 +4,18 @@ from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from goal_task_management.ml.goal_suggestion_ml import (
+from goal_task.ml.goal_suggestion_ml import (
     preprocess_user_data,
     reverse_goal_mapping,
     validate_model_output_size,
 )
-from goal_task_management.models import Goal, GoalSuggestionLog
-from goal_task_management.openai.goal_suggestion_ai import generate_goal_with_openai
-from goal_task_management.serializers import (
+from goal_task.models import Goal, GoalSuggestionLog
+from goal_task.openai.goal_suggestion_ai import generate_goal_with_openai
+from goal_task.serializers import (
     GoalSuggestionInputSerializer,
     GoalSerializer,
 )
-from goal_task_management.services.text_utils import lemmatize_title, are_titles_similar, normalize_text
+from goal_task.services.text_utils import lemmatize_title, are_titles_similar, normalize_text
 
 
 class GoalSuggestionsViewset(CreateModelMixin, GenericViewSet):

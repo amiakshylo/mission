@@ -18,7 +18,7 @@ from core.models import (
     PriorityModel,
     DueDateModel,
 )
-from principle_management.models import Principle
+from principle.models import Principle
 from .managers import CustomUserManager
 from .validators import validate_profile_image
 
@@ -180,7 +180,7 @@ class UserGoal(TimeStampedModel, CompletedModel, ProgressModel, DueDateModel):
         UserProfile, on_delete=models.CASCADE, related_name="goals"
     )
     goal = models.ForeignKey(
-        "goal_task_management.Goal", on_delete=models.CASCADE, blank=True
+        "goal_task.Goal", on_delete=models.CASCADE, blank=True
     )
     custom_goal = models.CharField(max_length=255, blank=True)
     goal_type = models.CharField(choices=GoalTypeChoices.GOAL_TYPE_CHOICES)
@@ -225,7 +225,7 @@ class UserTask(TimeStampedModel, CompletedModel, PriorityModel):
     user_profile = models.ForeignKey(
         UserProfile, on_delete=models.CASCADE, related_name="user_tasks"
     )
-    task = models.ForeignKey("goal_task_management.Task", on_delete=models.CASCADE)
+    task = models.ForeignKey("goal_task.Task", on_delete=models.CASCADE)
     custom_name = models.CharField(max_length=255, blank=True)
     progress = models.FloatField(default=0)
     is_active = models.BooleanField(default=True)

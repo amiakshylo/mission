@@ -5,9 +5,8 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('goal_task_management', '0003_initial'),
+        ('goal_task', '0003_initial'),
     ]
 
     operations = [

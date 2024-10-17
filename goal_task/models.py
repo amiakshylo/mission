@@ -34,7 +34,7 @@ class GoalSuggestionLog(models.Model):
         UserProfile, on_delete=models.CASCADE, related_name="suggestions"
     )
     goal = models.ForeignKey(
-        "goal_task_management.Goal", on_delete=models.CASCADE, null=True, blank=True
+        "goal_task.Goal", on_delete=models.CASCADE, null=True, blank=True
     )
     role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True, blank=True)
     suggestion_source = models.CharField(max_length=255)  # 'openai' or 'ml_model'
@@ -54,7 +54,7 @@ class Task(TimeStampedModel, CompletedModel, PriorityModel):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True
     )
     goal = models.ForeignKey(
-        "goal_task_management.Goal", on_delete=models.CASCADE, null=True, blank=True
+        "goal_task.Goal", on_delete=models.CASCADE, null=True, blank=True
     )
     is_predefined = models.BooleanField(default=True)
 

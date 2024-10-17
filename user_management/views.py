@@ -1,7 +1,6 @@
 from django.db import transaction
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
-from rest_framework.filters import SearchFilter
 from rest_framework.mixins import (
     RetrieveModelMixin,
     ListModelMixin,
@@ -12,10 +11,9 @@ from rest_framework.mixins import (
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
-from goal_task_management.models import Goal
-from .filters import RoleFilter, UserAreaFilter
+from goal_task.models import Goal
+from .filters import UserAreaFilter
 from .models import UserProfile, UserGoal, Role, UserArea, UserBalance, UserPrinciple
-from .pagination import DefaultPagination
 from .serializers import (
     UserProfileSerializer,
     EditUserProfileSerializer,
@@ -24,7 +22,6 @@ from .serializers import (
     UserGoalSerializer,
     CreateUserGoalSerializer,
     EditUserGoalSerializer,
-    RoleSerializer,
     UserAreaSerializer,
     CreateUserAreaSerializer,
     UserBalanceSerializer, CreateUserPrincipleSerializer, UserPrincipleSerializer,
@@ -42,15 +39,6 @@ class UserProfileViewSet(ListModelMixin,
         if self.request.method == "PUT":
             return EditUserProfileSerializer
         return UserProfileSerializer
-
-
-class RoleViewSet(ListModelMixin, GenericViewSet):
-    queryset = Role.objects.all()
-    serializer_class = RoleSerializer
-    pagination_class = DefaultPagination
-    filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_class = RoleFilter
-    search_fields = ["title"]
 
 
 class UserRoleViewSet(

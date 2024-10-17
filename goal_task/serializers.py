@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from goal_task_management.models import Goal
+from goal_task.models import Goal
 from user_management.models import Role
 
 

@@ -4,9 +4,8 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('principle_management', '0004_rolemodel_gender'),
+        ('principle', '0004_rolemodel_gender'),
     ]
 
     operations = [

@@ -17,7 +17,7 @@ class Principle(models.Model):
 class RoleModel(models.Model):
     character_name = models.CharField(max_length=50, unique=True)
     description = models.TextField(max_length=255)
-    principle = models.ManyToManyField(Principle, related_name='characters')
+    principle = models.ManyToManyField(Principle, related_name='rolemodels')
     gender = models.CharField(choices=GenderChoices.GENDER_TYPE_CHOICES)
 
     class Meta:

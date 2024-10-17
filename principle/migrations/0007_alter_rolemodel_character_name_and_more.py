@@ -5,9 +5,8 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('principle_management', '0006_alter_rolemodel_character_name'),
+        ('principle', '0006_alter_rolemodel_character_name'),
     ]
 
     operations = [
@@ -18,6 +17,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name='rolemodel',
-            index=django.contrib.postgres.indexes.GinIndex(fields=['character_name'], name='rolemodel_name_trigram', opclasses=['gin_trgm_ops']),
+            index=django.contrib.postgres.indexes.GinIndex(fields=['character_name'], name='rolemodel_name_trigram',
+                                                           opclasses=['gin_trgm_ops']),
         ),
     ]

@@ -6,11 +6,10 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('goal_task_management', '0002_initial'),
+        ('goal_task', '0002_initial'),
         ('user_management', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
@@ -19,7 +18,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='goal',
             name='created_by',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                    to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='goal',
@@ -29,17 +29,20 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='goalsuggestionlog',
             name='goal',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='goal_task_management.goal'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    to='goal_task.goal'),
         ),
         migrations.AddField(
             model_name='goalsuggestionlog',
             name='role',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='user_management.role'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    to='user_management.role'),
         ),
         migrations.AddField(
             model_name='goalsuggestionlog',
             name='user_profile',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='suggestions', to='user_management.userprofile'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='suggestions',
+                                    to='user_management.userprofile'),
         ),
         migrations.AddField(
             model_name='subtask',
@@ -49,16 +52,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='task',
             name='goal',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='goal_task_management.goal'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    to='goal_task.goal'),
         ),
         migrations.AddField(
             model_name='task',
             name='user',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='subtask',
             name='task',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sub_tasks', to='goal_task_management.task'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sub_tasks',
+                                    to='goal_task.task'),
         ),
     ]

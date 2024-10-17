@@ -2,9 +2,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.viewsets import GenericViewSet
 
-from principle_management.filters import TrigramSimilaritySearchFilter
-from principle_management.models import RoleModel, Principle
-from principle_management.serializers import RoleModelSerializer, PrincipleSerializer
+from principle.filters import TrigramSimilaritySearchFilter
+from principle.models import RoleModel, Principle
+from principle.serializers import RoleModelSerializer, PrincipleSerializer
 
 
 class RoleModelViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):

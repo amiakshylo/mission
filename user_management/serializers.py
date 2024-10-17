@@ -8,9 +8,9 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from core.model_choices import UserProfileChoices
-from goal_task_management.models import Goal
-from goal_task_management.serializers import GoalSerializer
-from principle_management.models import Principle
+from goal_task.models import Goal
+from goal_task.serializers import GoalSerializer
+from principle.models import Principle
 from .models import (
     User,
     UserProfile,

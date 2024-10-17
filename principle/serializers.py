@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from principle_management.models import RoleModel, Principle
+from principle.models import RoleModel, Principle
 
 
 class PrincipleSerializer(ModelSerializer):

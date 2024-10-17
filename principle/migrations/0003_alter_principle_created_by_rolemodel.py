@@ -5,9 +5,8 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('principle_management', '0002_initial'),
+        ('principle', '0002_initial'),
         ('user_management', '0030_alter_userprofile_age_range'),
     ]
 
@@ -22,7 +21,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('character_name', models.CharField(max_length=50, unique=True)),
-                ('principle', models.ManyToManyField(related_name='characters', to='principle_management.principle')),
+                ('principle', models.ManyToManyField(related_name='characters', to='principle.principle')),
             ],
         ),
     ]

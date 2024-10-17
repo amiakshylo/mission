@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from core.model_choices import GenderChoices
-from principle_management.models import Principle, RoleModel
+from principle.models import Principle, RoleModel
 from user_management.models import UserProfile
 
 

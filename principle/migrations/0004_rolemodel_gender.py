@@ -4,9 +4,8 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('principle_management', '0003_alter_principle_created_by_rolemodel'),
+        ('principle', '0003_alter_principle_created_by_rolemodel'),
     ]
 
     operations = [
