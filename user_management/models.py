@@ -97,7 +97,7 @@ class UserProfile(models.Model):
         return
 
     def __str__(self):
-        return self.user
+        return self.name.strip() if self.name else "Unnamed User Profile"
 
     def is_profile_complete(self):
         required_fields = [

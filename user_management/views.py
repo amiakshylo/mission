@@ -98,7 +98,7 @@ class UserGoalViewSet(ModelViewSet):
         return UserGoalSerializer
 
     def get_queryset(self):
-        user_profile = self.request.user.user_profiley
+        user_profile = self.request.user.user_profile
         return user_profile.goals.prefetch_related("goal")
 
     def get_serializer_context(self, *args, **kwargs):
