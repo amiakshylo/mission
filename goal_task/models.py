@@ -15,9 +15,6 @@ class Goal(TimeStampedModel):
 
     title = models.CharField(max_length=255, blank=False)
     description = models.TextField()
-    created_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True
-    )
     is_custom = models.BooleanField(default=False, null=True)
     impact_score = models.IntegerField(null=True, blank=True)
     goal_type = models.CharField(choices=GOAL_TYPE_CHOICES, null=True, blank=True)
