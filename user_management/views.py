@@ -31,6 +31,7 @@ from .serializers import (
 class UserProfileViewSet(ListModelMixin,
                          UpdateModelMixin, GenericViewSet
                          ):
+
     def get_queryset(self):
         user_profile = self.request.user.user_profile.id
         return UserProfile.objects.filter(id=user_profile).select_related('user')

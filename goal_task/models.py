@@ -34,7 +34,7 @@ class GoalSuggestionLog(models.Model):
         "goal_task.Goal", on_delete=models.CASCADE, null=True, blank=True
     )
     role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True, blank=True)
-    suggestion_source = models.CharField(max_length=255)  # 'openai' or 'ml_model'
+    suggestion_source = models.CharField(max_length=255)  # 'ai' or 'ml_model'
     suggested_at = models.DateTimeField(auto_now_add=True)
     user_feedback = models.CharField(
         max_length=255, null=True, blank=True

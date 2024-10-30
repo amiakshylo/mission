@@ -76,7 +76,7 @@ out as a valuable tool for individuals striving for personal growth and positive
     │   ├── migrations
     │   ├── ml
     │   ├── models.py
-    │   ├── openai
+    │   ├── ai
     │   ├── serializers.py
     │   ├── tests
     │   ├── urls.py

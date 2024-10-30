@@ -20,6 +20,8 @@ services:
       - db
     environment:
       - DATABASE_URL=postgres://u54s56clafoj5v:p10e9cbe68f2d6074ffdb2e540db79a87e5d4119b6fe0a083fc1748d5d4640a3e@db:5432/d6isjt4kk01s7e
+    env_file:
+      - .env
 
 volumes:
   postgres_data:
