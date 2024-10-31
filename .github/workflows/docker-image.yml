@@ -44,7 +44,7 @@ jobs:
           -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
           -d text="🚀 Automaticaly message from dev theam:
           Docker images for 'andrewocean/mission_app' have been updated successfully! Tags: 'web' and 'postgres'.
-          Please, pull new images from Docker hub. We have to be on the same page. 😀 "
+          Please, pull new images from Docker hub. We have to be on the same page.😀 "
 
       # Step 6 (Optional): Clean up Docker resources
       - name: Clean up Docker images
