@@ -461,7 +461,7 @@ Build the project from source:
 2. Navigate to the project directory:
 
 ```sh
-❯ cd 7habits
+❯ cd mission
 ```
 
 3. Install the required dependencies:

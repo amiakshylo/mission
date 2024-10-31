@@ -1,9 +1,7 @@
-import logging
 import os
 from datetime import timedelta
 from pathlib import Path
 
-import dj_database_url
 import openai
 from dotenv import load_dotenv
 
@@ -155,7 +153,7 @@ AUTH_PASSWORD_VALIDATORS = [
 #         },
 #         'file': {
 #             'class': 'logging.FileHandler',
-#             'filename': '/Users/andrewdev/PycharmProjects/7habits/problems.log',  # Specify the path to your log file
+#             'filename': '/Users/andrewdev/PycharmProjects/mission/problems.log',  # Specify the path to your log file
 #         },
 #     },
 #     'loggers': {
@@ -187,3 +185,5 @@ STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# DEBUG_TOOLBAR_CONFIG['IS_RUNNING_TESTS'] = False
