@@ -19,17 +19,20 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    # jwt urls
+    path("api/v1/auth/", include("djoser.urls")),
+    path("api/v1/auth/", include("djoser.urls.jwt")),
+    path("__debug__/", include(debug_toolbar.urls)),
+    # app urls
     path("admin/", admin.site.urls),
     path("api/v1/user/", include("user_management.urls")),
     path("api/v1/role/", include("role.urls")),
     path("api/v1/principle/", include("principle.urls")),
     path("api/v1/life_sphere/", include("life_sphere.urls")),
     path("api/v1/goal_task/", include("goal_task.urls")),
-    path("__debug__/", include(debug_toolbar.urls)),
-    path("api/v1/auth/", include("djoser.urls")),
-    path("api/v1/auth/", include("djoser.urls.jwt")),
     path("api/v1/journey/", include("journey.urls")),
     path("api/v1/onboarding/", include("onboarding.urls")),
+
     path(
         "swagger/",
         schema_view.with_ui("swagger", cache_timeout=0),
@@ -41,7 +44,9 @@ urlpatterns = [
     path(
         "swagger.json/", schema_view.without_ui(cache_timeout=0), name="schema-json"
     ),  # OpenAPI schema in YAML format
+
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += [path('silk/', include('silk.urls', namespace='silk'))]

@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "debug_toolbar",
     "rest_framework",
+    'silk',
     "rest_framework_simplejwt",
     "djoser",
     "life_sphere",
@@ -58,6 +59,8 @@ SWAGGER_SETTINGS = {
 
 REST_FRAMEWORK = {
     "COERCE_DECIMAL_TO_STRING": False,
+
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
@@ -86,6 +89,7 @@ DJOSER = {
 
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    'silk.middleware.SilkyMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -185,5 +189,3 @@ STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# DEBUG_TOOLBAR_CONFIG['IS_RUNNING_TESTS'] = False
