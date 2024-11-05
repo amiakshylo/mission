@@ -1,8 +1,9 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
-from rest_framework.mixins import CreateModelMixin, ListModelMixin
+from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+from silk.profiling.profiler import silk_profile
 
 from goal_task.models import Goal, GoalSuggestionLog
 from goal_task.openai.goal_suggestion_ai import generate_goal_with_openai
@@ -122,8 +123,16 @@ class GoalSuggestionsViewset(CreateModelMixin, GenericViewSet):
         return top_n
 
 
-class GoalViewSet(ListModelMixin, GenericViewSet):
+class GoalViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
+    """
+    List of all existing goals on the DB.
+    Can be filtered by role ID because each role has own predefined goals.
+    """
     queryset = Goal.objects.all()
     serializer_class = GoalSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['role']
+
+    @silk_profile(name='Goals_profiler_list')
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
