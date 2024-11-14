@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
 from goal_task.models import Goal
+from user_management.tasks import notify_customers
 from .filters import UserAreaFilter
 from .models import UserProfile, UserGoal, Role, UserArea, UserBalance, UserPrinciple
 from .serializers import (
@@ -50,6 +51,7 @@ class UserRoleViewSet(
 ):
 
     def get_queryset(self):
+        notify_customers.delay('Hello')
         user_profile = self.request.user.user_profile
 
         return Role.objects.filter(user_profile=user_profile)
