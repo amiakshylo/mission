@@ -1,4 +1,5 @@
 services:
+
   db:
     image: postgres:13
     volumes:
@@ -16,6 +17,7 @@ services:
       - .:/app
     ports:
       - "8000:8000"
+    image: mission_app
     depends_on:
       - db
     environment:
