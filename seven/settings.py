@@ -38,9 +38,7 @@ INSTALLED_APPS = [
     "role",
     "goal_task",
     "principle",
-    "metrics",
     "journey",
-    "user_feedback",
     "user_management.apps.UserManagementConfig",
 ]
 
@@ -63,8 +61,6 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-    "DEFAULT_PAGINATION_CLASS": ("rest_framework.pagination.PageNumberPagination"),
-    "PAGE_SIZE": 10
 }
 
 SIMPLE_JWT = {
@@ -186,6 +182,4 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
 CELERY_BROKER_URL = 'redis://localhost:6379/1'
-

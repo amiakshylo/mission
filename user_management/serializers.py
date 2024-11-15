@@ -197,21 +197,23 @@ class CreateUserGoalSerializer(serializers.ModelSerializer):
         model = UserGoal
         fields = ["id", "goal", "custom_goal", "goal_type", "due_date"]
 
-    def validate(self, data):
-        if not data.get("goal") and not data.get("custom_goal"):
+    def validate(self, attr):
+        if not attr.get("goal") and not attr.get("custom_goal"):
             raise serializers.ValidationError(
                 "Either 'goal' or 'custom_goal' must be provided."
             )
-        if data.get("custom_goal") and not data.get("category"):
-            raise serializers.ValidationError("Select a category for your custom goal")
         if UserGoal.objects.filter(
-                user_profile=self.context.get("user_profile"), goal=data.get("goal")
+                user_profile=self.context.get("user_profile"), goal=attr.get("goal")
         ).exists():
             raise serializers.ValidationError(
                 "This goal is already set up by you, please choose another goal or create"
                 " a new one."
             )
-        return data
+        if Goal.objects.filter(title=attr.get('custom_goal')).exists():
+            raise serializers.ValidationError(
+                "This goal already exist, select from list"
+            )
+        return attr
 
 
 class EditUserProfileSerializer(serializers.ModelSerializer):

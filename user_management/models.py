@@ -18,6 +18,7 @@ from core.models import (
     PriorityModel,
     DueDateModel,
 )
+from goal_task.models import Goal
 from principle.models import Principle
 from .managers import CustomUserManager
 from .validators import validate_profile_image
@@ -215,6 +216,27 @@ class UserGoal(TimeStampedModel, CompletedModel, ProgressModel, DueDateModel):
         else:
             self.is_active = True
         super().save(*args, **kwargs)
+
+    @classmethod
+    def create_user_goal(cls, user_profile, validated_data):
+        custom_goal_title = validated_data.get("custom_goal")
+        goal = validated_data.get("goal")
+
+        if custom_goal_title:
+            goal = Goal.objects.create(
+                title=custom_goal_title,
+                description=custom_goal_title,
+                goal_type=validated_data.get('goal_type'),
+                is_custom=True,
+                created_by=user_profile.id
+            )
+
+        return cls.objects.create(
+            user_profile=user_profile,
+            goal=goal,
+            goal_type=validated_data.get("goal_type"),
+            due_date=validated_data.get("due_date")
+        )
 
 
 class UserTask(TimeStampedModel, CompletedModel, PriorityModel):
