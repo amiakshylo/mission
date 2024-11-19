@@ -5,11 +5,9 @@ from user_management.models import Role
 
 
 class GoalSerializer(serializers.ModelSerializer):
-    sub_category = serializers.StringRelatedField()
-
     class Meta:
         model = Goal
-        fields = ["id", "title", "description", "sub_category"]
+        fields = ["id", "title", "description"]
 
 
 class GoalSuggestionInputSerializer(serializers.ModelSerializer):

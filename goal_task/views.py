@@ -126,4 +126,4 @@ class GoalViewSet(ListModelMixin, GenericViewSet):
     queryset = Goal.objects.all()
     serializer_class = GoalSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['role']
+    filterset_fields = ['role__id']
